@@ -1,0 +1,37 @@
+name: Deploy Sphinx documentation to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Or your main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5.4.0
+        with:
+          python-version: '3.12'  # Or your Python version
+
+      - name: Install dependencies
+        run: |
+          cd docs
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Build Sphinx documentation
+        run: |
+          cd docs
+          make html
+    
+      - name: GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v4.1.0
+        with:
+            build_dir: docs/build/html

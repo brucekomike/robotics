@@ -1,0 +1,37 @@
+/* Start footer contribute link */
+/*https://projects.blender.org/blender/blender-manual/src/branch/main/build_files/theme/css/theme_overrides.css*/
+.footer-contribute {
+	display: block;
+	font-size: var(--font-size--small);
+}
+
+.bottom-of-page {
+	padding-bottom: 0;
+}
+
+.footer-contribute ul {
+	display: flex;
+	gap: 1.5rem;
+	margin: 0;
+	padding: 0;
+	padding-bottom: 1rem
+}
+
+.footer-contribute li {
+	list-style-type: none;
+}
+
+@media (max-width: 46em) {
+	.footer-contribute > ul {
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+@media print {
+	.footer-contribute {
+		display: none;
+	}
+}
+
+/* End footer contribute link */
