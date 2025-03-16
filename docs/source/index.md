@@ -7,13 +7,15 @@ hide-toc: true
 :end-before: <!-- end elevator-pitch -->
 ```
 ```{toctree}
-:caption: Getting Started
-tutorial/index
+:caption: 基础内容
+:maxdepth: 2
+01-math/index
+02-linar/index
 ```
 ```{toctree}
-:caption: Development
-:hidden:
+:caption: 机器人学
 :maxdepth: 2
-manual/index
-reference/index
+50-mechanic/index
+55-multibody/index
+60-programming/index
 ```

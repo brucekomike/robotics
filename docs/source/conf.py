@@ -6,11 +6,11 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'template-intergrated'
+project = 'robotics'
 copyright = '2025, brucekomike'
 author = 'brucekomike'
-release = 'v0.2.0'
-language='en'
+release = 'v0.1.0'
+language='zh_CN'
 # 'en' 'jp' 'zh_CN'
 
 # -- General configuration ---------------------------------------------------
@@ -57,21 +57,21 @@ exclude_patterns = ['_build', 'build', 'Thumbs.db',
 
 html_theme = 'furo'
 html_static_path = ['_static']
-html_title = "furo template"
+html_title = "机器人学"
 html_last_updated_fmt = ''
 html_css_files = [
         "footer.css",
 ]
 html_theme_options = {
-    "source_repository": "https://github.com/brucekomike/furo-embeded",
+    "source_repository": "https://github.com/brucekomike/robotics",
     "source_branch": "main",
     "source_directory": "docs/source/",
     "navigation_with_keys": True,
 }
 highlight_language = 'text'
 #html_logo = '_static/logo.svg'
-ogp_site_url = 'https://brucekomike.github.io/furo-embeded/'
+ogp_site_url = 'https://brucekomike.github.io/robotics/'
 #ogp_image = '_static/logo.svg'
 #ogp_image_alt = 'site logo'
-ogp_site_name = 'furo template'
+ogp_site_name = '机器人学'
 ogp_use_first_image = True
