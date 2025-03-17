@@ -43,4 +43,30 @@ fun4=[r32;a3];
 
 fun_c=[fun1;fun2;fun3;fun4]
 
+qi=a1;
+qd=[R1;R2;a2;R3;a3]
+
+dqi=da1;
+dqd=[dR1;dR2;da2;dR3;da3];
+
+qn=[qi;qd];
+dqn=[dqi;dqd];
+ddqi=dda1;
+
+yd1=solve(fun_c,qd)
+/*
+r11=yd1.r11
+r12=yd1.r12
+r21=yd1.r21
+r22=yd1.r22
+a2=yd1.a2
+r31=yd1.r31
+r32=yd1.r32
+a3=yd1.a3
+*/
+
+Cqd=jacobian(fun_c,qd);
+Qci=jacobian(fun_c,qi);
+
+
 ```
