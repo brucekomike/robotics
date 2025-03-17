@@ -21,6 +21,7 @@ extensions = ["sphinx_inline_tabs",
 'sphinx_copybutton',
 'myst_parser',
 'sphinx.ext.githubpages',
+'sphinx.ext.mathjax',
 ]
 myst_enable_extensions = [
     "amsmath",
@@ -43,7 +44,7 @@ source_suffix = {
    '.md': 'markdown',
    '': 'markdown',
 }
-
+mathjax_path = 'tex-svg-full.js'
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'build', 'Thumbs.db',  
   '.gitignore', '.gitattributes', '.git', 'Makefile', 
