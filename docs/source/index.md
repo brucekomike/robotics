@@ -19,3 +19,10 @@ hide-toc: true
 55-multibody/index
 60-programming/index
 ```
+```{toctree}
+:caption: 相关软件
+:maxdepth: 2
+
+80-model/index
+90-sim/index
+```
