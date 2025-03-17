@@ -3,5 +3,6 @@
 ```{toctree}
 :maxdepth: 2
 01-freecad/index
-02-belender/index
+02-blender/index
+03-inkscape/index
 ```
