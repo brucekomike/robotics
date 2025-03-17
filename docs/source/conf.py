@@ -58,7 +58,7 @@ exclude_patterns = ['_build', 'build', 'Thumbs.db',
 
 html_theme = 'furo'
 html_static_path = ['_static']
-html_title = "机器人学"
+html_title = "机器人工程"
 html_last_updated_fmt = ''
 html_css_files = [
         "footer.css",
@@ -75,6 +75,6 @@ ogp_site_url = 'https://brucekomike.github.io/robotics/'
 html_favicon = '_static/logo.svg'
 ogp_image = '_static/logo.svg'
 ogp_image_alt = 'site logo'
-ogp_site_name = '机器人学'
+ogp_site_name = '机器人工程'
 ogp_use_first_image = True
 
