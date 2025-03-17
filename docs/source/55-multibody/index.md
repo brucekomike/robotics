@@ -3,6 +3,7 @@
 ```{toctree}
 :maxdepth: 2
 50-sim/index
+98-speedmatrix
 99-matlab
 ```
 

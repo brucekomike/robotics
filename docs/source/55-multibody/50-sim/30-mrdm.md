@@ -7,8 +7,8 @@ pkg load symbolic
 % pkg install -forge symbolic
 
 % 函数封装
-Rx= @(r1, r2)[r1;r2];
-qx= @(R, a) [R; a];% 结构变量
+Rx= @(r1, r2)[r1;r2]; % 位置变量
+qx= @(R, a) [R; a];% 构型变量
 Ax= @(a) [[cos(a) -sin(a)];[sin(a) cos(a)]];
 u_x = @(L) [(1/2)*L; 0];
 rx = @(r1, r2, a, L) Rx(r1, r2) + Ax(a)*u_x(L);
