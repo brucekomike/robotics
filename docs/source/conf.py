@@ -23,6 +23,7 @@ extensions = ["sphinx_inline_tabs",
 'sphinx.ext.githubpages',
 'sphinx.ext.mathjax',
 ]
+mathjax_path = 'tex-svg-full.js'
 myst_enable_extensions = [
     "amsmath",
     "colon_fence",
@@ -44,7 +45,6 @@ source_suffix = {
    '.md': 'markdown',
    '': 'markdown',
 }
-mathjax_path = 'tex-svg-full.js'
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'build', 'Thumbs.db',  
   '.gitignore', '.gitattributes', '.git', 'Makefile', 
@@ -70,9 +70,11 @@ html_theme_options = {
     "navigation_with_keys": True,
 }
 highlight_language = 'text'
-#html_logo = '_static/logo.svg'
+html_logo = '_static/logo.svg'
 ogp_site_url = 'https://brucekomike.github.io/robotics/'
-#ogp_image = '_static/logo.svg'
-#ogp_image_alt = 'site logo'
+html_favicon = '_static/logo.svg'
+ogp_image = '_static/logo.svg'
+ogp_image_alt = 'site logo'
 ogp_site_name = '机器人学'
 ogp_use_first_image = True
+
