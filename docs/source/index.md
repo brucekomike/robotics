@@ -18,6 +18,7 @@ hide-toc: true
 50-mechanic/index
 55-multibody/index
 60-programming/index
+65-manufacture/index
 ```
 ```{toctree}
 :caption: 相关软件
