@@ -54,7 +54,7 @@ dqn=[dqi;dqd];
 ddqi=dda1;
 
 yd1=solve(fun_c,qd)
-/*
+%{
 r11=yd1.r11
 r12=yd1.r12
 r21=yd1.r21
@@ -63,10 +63,18 @@ a2=yd1.a2
 r31=yd1.r31
 r32=yd1.r32
 a3=yd1.a3
-*/
+%}
 
 Cqd=jacobian(fun_c,qd);
-Qci=jacobian(fun_c,qi);
+Cqi=jacobian(fun_c,qi);
 
+Qc =jacobian(jacobian(fun_c,qn)*dqn, qn)*dqn;
+Qdi=-simplify(inv(Cqd)*Cqi)
+
+yd2=Cdi*dqi
+
+yd3=Cdi*ddqi+inv(Cqd)*Qc
+
+yd={yd1;yd2;yd3};
 
 ```
