@@ -39,10 +39,12 @@ System.out.println("分页内容 3");
 ```
 
 3. 添加参考文献章节：
+````
+# deprecated
 ```{bibliography}
 :filter: cited
 ```
-
+````
 ## 2. 高级指令系统
 
 ### 可折叠区块
@@ -129,14 +131,14 @@ CH_3COOH ⇌ H^+ + CH_3COO^-
 ```
 
 ### 自动编号公式
-```markdown
+````markdown
 ```{math}
 :label: eq1
 E = mc^2
 ```
 
 引用公式 {eq}`eq1`
-```
+````
 
 ## 7. 自定义扩展
 

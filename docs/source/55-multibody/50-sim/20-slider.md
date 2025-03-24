@@ -1,8 +1,7 @@
 # 曲柄滑块
 机构具备多个内容
 ```matlab
-clear all
-clc
+function yd=slider(L1,L2)
 pkg load symbolic
 % pkg install -forge symbolic
 
@@ -71,10 +70,11 @@ Cqi=jacobian(fun_c,qi);
 Qc =jacobian(jacobian(fun_c,qn)*dqn, qn)*dqn;
 Qdi=-simplify(inv(Cqd)*Cqi)
 
-yd2=Cdi*dqi
+yd2=Cqi*dqi
 
-yd3=Cdi*ddqi+inv(Cqd)*Qc
+yd3=Cqi*ddqi+inv(Cqd)*Qc
 
 yd={yd1;yd2;yd3};
 
+end
 ```
