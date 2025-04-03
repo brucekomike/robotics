@@ -55,7 +55,7 @@ def M(m,L):
 
   # 计算积分并简化
   M1_1 = sp.simplify(m1 / L * sp.integrate(G1.T * G1, (x1, -0.5 * L, 0.5 * L)))
-  M1_2 = sp.simplify(m1 * sp.integrate(G1.T * G1, (x1, -0.2 * L, 0.8 * L)))
+  M1_2 = sp.simplify(m1 /L * sp.integrate(G1.T * G1, (x1, -0.2 * L, 0.8 * L)))
 
   # 打印结果
   print("M1{1}:")

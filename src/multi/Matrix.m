@@ -49,7 +49,7 @@ function Matrix(m, L)
 
     % Compute and simplify integrals
     M1_1 = simplify(m1 / L * int(G1.' * G1, x1, -0.5 * L, 0.5 * L));
-    M1_2 = simplify(m1 * int(G1.' * G1, x1, -0.2 * L, 0.8 * L));
+    M1_2 = simplify(m1 / L * int(G1.' * G1, x1, -0.2 * L, 0.8 * L));
 
     % Display results
     disp('M1{1}:');
