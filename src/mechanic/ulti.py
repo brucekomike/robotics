@@ -33,7 +33,7 @@ def adjust_target(init_pos, theta):
         return init_x, init_y
 
     sqrt_discriminant = np.sqrt(discriminant)
-    t_max = max((-b + sqrt_discriminant)/(2*a), (-b - sqrt_discriminant)/(2*a))
+    t_max = max((-b + sqrt_discriminant)/(2*a), (-b - sqrt_discriminant)/(2*a)) - 0.01
     return (init_x + t_max * np.cos(theta), 
             init_y + t_max * np.sin(theta))
 
