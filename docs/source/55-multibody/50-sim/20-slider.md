@@ -16,6 +16,6 @@
 
 ## 主函数
 ```{literalinclude} ../../../../src/multi/main.m
-:caption: main.m
+:caption: ms.m
 :language: matlab
 ```
