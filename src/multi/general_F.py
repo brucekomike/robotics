@@ -40,6 +40,6 @@ def generalized_force(m, L, F, G1):
 
 # 使用示例
 F = [sp.symbols('f1'), sp.symbols('f2')]
-G1 = sp.Matrix([0, -sp.symbols('mg')])
+G1 = sp.Matrix([0, -sp.symbols('m') * sp.symbols('g')])
 
 generalized_force(m=1, L=1, F=F, G1=G1)
