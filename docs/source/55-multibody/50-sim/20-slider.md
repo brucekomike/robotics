@@ -15,7 +15,7 @@
 `````
 
 ## 主函数
-```{literalinclude} ../../../../src/multi/main.m
+```{literalinclude} ../../../../src/multi/ms.m
 :caption: ms.m
 :language: matlab
 ```
