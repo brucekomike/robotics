@@ -2,4 +2,5 @@
 
 ```{toctree}
 50-sims/index
+60-errors
 ```
