@@ -22,6 +22,7 @@ extensions = ["sphinx_inline_tabs",
 'myst_parser',
 'sphinx.ext.githubpages',
 'sphinx.ext.mathjax',
+'sphinx_design',
 ]
 mathjax_path = 'tex-svg-full.js'
 myst_enable_extensions = [

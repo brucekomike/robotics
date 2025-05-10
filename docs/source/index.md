@@ -19,11 +19,12 @@ hide-toc: true
 55-multibody/index
 60-programming/index
 65-manufacture/index
+70-ai/index
 ```
 ```{toctree}
 :caption: 相关软件
 :maxdepth: 2
-
+75-coding/index
 80-model/index
 90-sim/index
 ```
