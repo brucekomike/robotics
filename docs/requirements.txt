@@ -7,3 +7,5 @@ sphinxext-opengraph
 sphinx-copybutton
 sphinx-autobuild
 sphinx-design
+sphinx-mermaid
+sphinxcontrib-mermaid

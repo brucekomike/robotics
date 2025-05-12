@@ -23,6 +23,8 @@ extensions = ["sphinx_inline_tabs",
 'sphinx.ext.githubpages',
 'sphinx.ext.mathjax',
 'sphinx_design',
+'sphinxcontrib.mermaid',
+'sphinxmermaid'
 ]
 mathjax_path = 'tex-svg-full.js'
 myst_enable_extensions = [
