@@ -20,6 +20,7 @@ hide-toc: true
 60-programming/index
 65-manufacture/index
 70-ai/index
+80-interg/index
 ```
 ```{toctree}
 :caption: 相关软件
