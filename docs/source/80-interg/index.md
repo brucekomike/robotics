@@ -2,4 +2,5 @@
 
 ```{toctree}
 scara
+scara2
 ```

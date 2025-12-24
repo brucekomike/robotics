@@ -15,6 +15,7 @@ hide-toc: true
 ```{toctree}
 :caption: 机器人学
 :maxdepth: 2
+40-autocon/index
 50-mechanic/index
 55-multibody/index
 60-programming/index
