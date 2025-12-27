@@ -2,33 +2,46 @@
 
 ## 复变量与复变函数
 复变量
- $$s = \sigma + j\omega$$
-复变函数
-$$ G (s ) = U ( σ , ω ) + jV ( σ , ω )$$
-欧拉公式
+
 $$
- cos \theta = \frac{1}{2} (
- e ^{j\theta}
- + e ^{− j\theta}
- )
+s = \sigma + j\omega
+$$
+
+复变函数
+
+$$ 
+G (s) = U (\sigma, \omega) + jV(\sigma,\omega)
+$$
+
+欧拉公式
+
+$$
+cos \theta = 
+\frac{1}{2}(e^{j\theta}+ e^{−j\theta})
 $$
 
 $$
 sin \theta =
- \frac{1}{2 j}(
- e^{j\theta}
- − e^{− j\theta}
- )
+ \frac{1}{2j}(e^{j\theta}−e^{−j\theta})
 $$
 
 ## 拉普拉斯变换概念
-- 时域中的微分方程变换成复数域中的代数方程
-- 傅里叶变换：
-  - 区域内连续、有限个第一类间断点
-  - 有限个极大极小值
-  - 绝对可积
-- 拉普拉斯变换：
- 
+> 时域中的微分方程变换成复数域中的代数方程
+  
+> 傅里叶变换：
+>- 区域内连续、有限个第一类间断点
+>- 有限个极大极小值
+>- 绝对可积
+
+> 拉普拉斯变换： 
+> 
+> $$
+\varphi(t)\rightarrow
+\varphi(t)\mu(t)e^{-\beta t}\\
+\Downarrow\\
+\int_{-\infty}^{+\infty} \varphi(t) u(t) e^{-\beta t} e^{-j\omega t} dt
+$$
+
 ## 拉普拉斯变换性质
 ## 拉普拉斯逆变换
 ## 卷积
