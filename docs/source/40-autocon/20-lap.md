@@ -49,8 +49,8 @@ $$
 - $F(s)$成为像函数，$f(t)$成为原函数
 
 $$ F(s) = L[f(t)]
-= \int_{0}^{\infin}e^{-st}\text{d}t[f(t)]
-= \int_{0}^{\infin}f(t)e^{-st}\text{d}t
+= \int_{0}^{\infty }e^{-st}\text{d}t[f(t)]
+= \int_{0}^{\infty }f(t)e^{-st}\text{d}t
 $$
 
 ### 拉氏逆变换
@@ -60,13 +60,13 @@ $$
 $$
 L^{-1}[F(s)]=f(t)
 = \frac{1}{2\pi j}
-\int_{\beta-j\infin}^{\beta*j\infin}F(s)e^{st}\text{d}s (t\geq0)
+\int_{\beta-j\infty }^{\beta*j\infty }F(s)e^{st}\text{d}s (t\geq0)
 $$
 ### 存在定理
 1. 当$t\geq 0$时，$f(t)$在任一有限区间上是分段连续的；
-2. 当$t\rightarrow \infin$时$f(t)$的增长速度不超过某一指数函数，即存在常数$M>0$,及$c\geq 0$，使得：
+2. 当$t\rightarrow \infty $时$f(t)$的增长速度不超过某一指数函数，即存在常数$M>0$,及$c\geq 0$，使得：
 $$|f(t)|\leq M e^{ct},0\leq t<0$$
-$$\int_{0}^{\infin}f(t)e^{-st}\text{d}t,f(t)=\varphi(t)u(t)$$
+$$\int_{0}^{\infty }f(t)e^{-st}\text{d}t,f(t)=\varphi(t)u(t)$$
 ### 常用的拉氏变换
 #### 1指数函数
 $$
@@ -80,7 +80,7 @@ $$
 $A$和$\alpha$为常数
 
 $$L[f(t)]=L[Ae^{-\alpha t}]\\
-=\int_{0}^{+\infin}Ae^{-e t}e^{-s t}\text{d}t=A\int_{0}^{+\infin}e^{-(\alpha+s)t}\text{d}t=\frac{A}{s+\alpha}$$
+=\int_{0}^{+\infty }Ae^{-e t}e^{-s t}\text{d}t=A\int_{0}^{+\infty }e^{-(\alpha+s)t}\text{d}t=\frac{A}{s+\alpha}$$
 
 其中，$Re(s+\alpha)>0$,即$Re(s)>-\alpha$
 
@@ -99,7 +99,7 @@ $$
 $A$为常数
 
 $$
-L[f(t)]=L[A]=\int_{0}^{+\infin}Ae^{-st}\text{d}t=\frac{A}{s}$$
+L[f(t)]=L[A]=\int_{0}^{+\infty }Ae^{-st}\text{d}t=\frac{A}{s}$$
 
 > 单位阶跃函数 $A=1 \rightarrow u(t) $ 
 > $$
@@ -151,7 +151,7 @@ $$
 $A,\omega$为常数,
 > 欧拉公式：$\sin{\omega t}=\frac{1}{2j}(e^{j\omega t}-e^{-j\omega t})$
 $$
-L[A\sin{\omega t}]=\frac{A}{2j}\int_{0}^{+\infin}(e^{j\omega t}-e^{-j\omega t})e^{-st}\text{d}t\\
+L[A\sin{\omega t}]=\frac{A}{2j}\int_{0}^{+\infty }(e^{j\omega t}-e^{-j\omega t})e^{-st}\text{d}t\\
 =\frac{A}{2j}\frac{1}{s-j\omega}-\frac{A}{2j}\frac{1}{s+j\omega}\\
 =\frac{A\omega}{s^2+\omega^2}
 $$
@@ -202,8 +202,8 @@ $$
 $A$为常数
 
 $$
-L[At^2]=\int_{0}^{+\infin}At^2e^{-st}\text{d}t\\
-=\frac{A}{s}\bigg[t^2e^{-st}\Big|_0^{+\infin}-2\int_0^{+\infin}te^{-st}\text{d}t\bigg]\\
+L[At^2]=\int_{0}^{+\infty }At^2e^{-st}\text{d}t\\
+=\frac{A}{s}\bigg[t^2e^{-st}\Big|_0^{+\infty }-2\int_0^{+\infty }te^{-st}\text{d}t\bigg]\\
 =2A\frac{1}{s^2}
 $$
 
@@ -222,8 +222,8 @@ L\bigg[\frac{1}{2}t^2\bigg]=\frac{1}{s^3}$$
 
 $$
 L[K_1f(t)\pm K_2f_2(t)]\\
-=\int_{0}^{+\infin}[K_1f_1(t)\pm K_2f_2(t)]e^{-st}\text{d}t\\
-=\int_{0}^{+\infin}K_1f_1(t)e^{-st}\text{d}t\pm\int_{0}^{+\infin}K_2f_2(t)e^{-st}\text{d}t\\
+=\int_{0}^{+\infty }[K_1f_1(t)\pm K_2f_2(t)]e^{-st}\text{d}t\\
+=\int_{0}^{+\infty }K_1f_1(t)e^{-st}\text{d}t\pm\int_{0}^{+\infty }K_2f_2(t)e^{-st}\text{d}t\\
 =K_1F_1(s)\pm K_2F_2(s)
 $$
 
