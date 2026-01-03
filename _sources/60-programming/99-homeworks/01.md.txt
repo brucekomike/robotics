@@ -1,0 +1,188 @@
+# 第一次作业
+Word报告：
+1. 坐标系建立描述、公式推导过程，给出$r_A3=f(l_i,\theta_i)$的解析表达式
+2. 用Matlab编写计算程序，带入给定数值后，得出计算结果，程序放在
+附录中。
+3. 思考$\theta_i=f(l_i,r_A3)$如何推导得到?
+## notation 
+### 矩阵定义
+$$
+  R_x(\theta) =
+  \begin{bmatrix}
+  R_{xx} & R_{xy} & R_{xz} & T_x \\
+  R_{yx} & R_{yy} & R_{yz} & T_y \\
+  R_{zx} & R_{zy} & R_{zz} & T_z \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+$$ (eqn:def)
+
+### 拆解
+X轴旋转
+
+$$
+  R_x(\theta) =
+  \begin{bmatrix}
+  1 & 0 & 0 & 0 \\
+  0 & \cos \theta_3 & -\sin \theta_3 & 0 \\
+  0 & \sin \theta_3 & \cos \theta_3 & 0 \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+$$ (eqn:rx)
+
+Y轴旋转
+
+$$
+  R_y(\theta) = 
+  \begin{bmatrix}
+  \cos \theta_1 & & 0 \sin \theta_1 & 0 \\
+  0 & 1 & 0 & 0 \\
+  -\sin \theta_1 & 0 & \cos \theta_1 & 0 \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+$$ (eqn:ry)
+
+Z轴旋转
+
+$$
+  R_z(\theta) = 
+  \begin{bmatrix}
+  \cos \theta_1 & -\sin \theta_1 & 0 & 0 \\
+  \sin \theta_1 & \cos \theta_1 & 0 & 0 \\
+  0 & 0 & 1 & 0 \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+$$  (eqn:rz)
+
+位移
+
+$$
+  T(x, y, z) =
+  \begin{bmatrix}
+  1 & 0 & 0 & x \\
+  0 & 1 & 0 & y \\
+  0 & 0 & 1 & z \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+$$  (eqn:t)
+
+## 示例过程
+### 给定参数
+$$
+  l_1 = 240, \quad l_2 = 60, \quad l_3 = 150, \quad l_4 = 70 \\
+  \theta_1 = 35^\circ, \quad \theta_2 = 40^\circ, \quad \theta_3 = -25^\circ
+$$  (eqn:values)
+
+### A0-A1
+（theta1，l1，l2）
+
+$$
+  R_z(\theta_1) = \begin{bmatrix}
+  \cos \theta_1 & -\sin \theta_1 & 0 & 0 \\
+  \sin \theta_1 & \cos \theta_1 & 0 & 0 \\
+  0 & 0 & 1 & 0 \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+$$  (eqn:r01)
+
+$$
+  T(-l_2, 0, l_1) = \begin{bmatrix}
+  1 & 0 & 0 & -l_2 \\
+  0 & 1 & 0 & 0 \\
+  0 & 0 & 1 & l_1 \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+$$  (eqn:t01)
+
+### A1-A2
+$$
+  R_y(\theta_2) = \begin{bmatrix}
+  \cos \theta_2 & 0 & \sin \theta_2 & 0 \\
+  0 & 1 & 0 & 0 \\
+  -\sin \theta_2 & 0 & \cos \theta_2 & 0 \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+$$ (eqn:r12)
+
+$$
+   T(0, l_3, 0) = \begin{bmatrix}
+   1 & 0 & 0 & 0 \\
+   0 & 1 & 0 & l_3 \\
+   0 & 0 & 1 & 0 \\
+   0 & 0 & 0 & 1
+   \end{bmatrix}
+$$  (eqn:t12)
+
+### A2-A3
+$$
+   R_y(\theta_3) = \begin{bmatrix}
+   \cos \theta_3 & 0 & \sin \theta_3 & 0 \\
+   0 & 1 & 0 & 0 \\
+   -\sin \theta_3 & 0 & \cos \theta_3 & 0 \\
+   0 & 0 & 0 & 1
+   \end{bmatrix}
+$$ (eqn:e23)
+
+$$
+   T(0, l_4, 0) = \begin{bmatrix}
+   1 & 0 & 0 & 0 \\
+   0 & 1 & 0 & l_4 \\
+   0 & 0 & 1 & 0 \\
+   0 & 0 & 0 & 1
+   \end{bmatrix}
+$$ (eqn:t23)
+
+### 组合
+$$
+  T_1 = R_z(\theta_1) \cdot T(-l_2, 0, l_1)
+$$ (eqn:t1)
+
+$$
+  T_2 = R_y(\theta_2) \cdot T(0, l_3, 0)
+$$ (eqn:t2)
+
+$$
+  T_3 = R_y(\theta_3) \cdot T(0, l_4, 0)
+$$ (eqn:t3)
+
+$$
+T_{total} = T_1 \cdot T_2 \cdot T_3
+$$ (eqn:tt)
+
+$$
+T_{total} = R_z(\theta_1)T(-l_2,0,l_1)R_y(\theta_2)T(0,l_3,0)R_y(\theta_3)T(0,l_4,0)
+$$ (eqn:tt2)
+### 结果
+$$
+ T_{12}=\begin{bmatrix}
+\cos(\theta_1) & -\sin(\theta_1)\cos(\theta_2) & \sin(\theta_1)\sin(\theta_2) & l_2\cos(\theta_1) - l_3\sin(\theta_1)\cos(\theta_2) \\
+\sin(\theta_1) & \cos(\theta_1)\cos(\theta_2) & -\sin(\theta_2)\cos(\theta_1) & l_2\sin(\theta_1) + l_3\cos(\theta_1)\cos(\theta_2) \\
+0 & \sin(\theta_2) & \cos(\theta_2) & l_1 + l_3\sin(\theta_2) \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$ (eqn:tt12)
+
+$$
+T_{23} =
+{\begin{bmatrix}
+\cos(\theta_1) & \sin(\theta_1)\sin(\theta_2)\sin(\theta_3) - \sin(\theta_1)\cos(\theta_2)\cos(\theta_3) & \sin(\theta_1)\sin(\theta_2)\cos(\theta_3) + \sin(\theta_1)\sin(\theta_3)\cos(\theta_2) & -l_2\cos(\theta_1) - l_3\sin(\theta_1)\cos(\theta_2) + l_4\sin(\theta_1)\sin(\theta_2)\sin(\theta_3) - l_4\sin(\theta_1)\cos(\theta_2)\cos(\theta_3) \\
+\sin(\theta_1) & -\sin(\theta_2)\sin(\theta_3)\cos(\theta_1) + \cos(\theta_1)\cos(\theta_2)\cos(\theta_3) & -\sin(\theta_2)\cos(\theta_1)\cos(\theta_3) - \sin(\theta_3)\cos(\theta_1)\cos(\theta_2) & -l_2\sin(\theta_1) + l_3\cos(\theta_1)\cos(\theta_2) - l_4\sin(\theta_2)\sin(\theta_3)\cos(\theta_1) + l_4\cos(\theta_1)\cos(\theta_2)\cos(\theta_3) \\
+0 & \sin(\theta_2)\cos(\theta_3) + \sin(\theta_3)\cos(\theta_2) & -\sin(\theta_2)\sin(\theta_3) + \cos(\theta_2)\cos(\theta_3) & l_1 + l_3\sin(\theta_2) + l_4\sin(\theta_2)\cos(\theta_3) + l_4\sin(\theta_3)\cos(\theta_2) \\
+0 & 0 & 0 & 1
+\end{bmatrix}}
+$$ (eqn:tt23)
+
+$$
+\text{Position} = \begin{bmatrix} x \\ y \\ z \end{bmatrix} = T_{03}(1:3, 4)
+$$ (eqn:p)
+## matlab/octave
+```{literalinclude} ../../../../src/sim/DH.m
+:caption: DH in octave or matlab
+:language: matlab
+```
+
+## python
+```{literalinclude} ../../../../src/sim/DH.py
+:caption: DH in python
+:language: python3
+```
+

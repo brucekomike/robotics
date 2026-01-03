@@ -1,0 +1,23 @@
+# 实验课2
+## 一些信息
+
+````{tab} 课程名称
+```text
+机器人离线编程与仿真
+```
+````
+
+````{tab} 课程代号
+```text
+0167103
+```
+````
+## 解析
+[见此页](988.md)
+## 代码
+
+```{literalinclude} ../../../../src/sim/exp/02-s_cruve2.py
+:caption: kinematic_invforw2_detail.py
+:language: matlab
+```
+

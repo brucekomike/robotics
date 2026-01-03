@@ -1,0 +1,409 @@
+# 第九章 工业机器人在线编程与控制
+
+## 本章学习要点
+
+### 本章学习提要:
+第五、六、七、八章介绍了RAPID语言的数据结构、编程基础、高级编程以及仿真软件高级应用，其中RAPID语言的数据结构、编程基础、高级编程既可用于离线编程仿真，也可用于在线编程与控制。在此方面，本章将重点介绍ABB机器人的基于示教器的在线编程以及基于RobotStudio的在线编程与控制技术。
+
+---
+
+## 内容简介
+
+1.  **示教编程**
+2.  **在线编程与控制**
+
+---
+
+## 1. 示教编程
+
+### 1.1 示教编程
+
+早期的机器人编程几乎都是采用示教编程方法，而且它仍是目前工业机器人使用最普遍的方法。采用这种方法时，程序编制是在机器人现场进行的。如图6-1所示，为示教再现式机器人控制系统的工作原理图，其工作过程分为“示教”和“再现”两个阶段。
+
+**图6-1 示教再现式机器人控制系统工作原理**
+
+*(Diagram showing Teach Pendant -> Memory Device -> Servo Amplifier -> Working Device, with "Teach Part", "Reproduce Part", and "Common Part" indicated.)*
+
+### 优点与缺点
+
+**优点:**
+
+*   操作简单、易于掌握
+*   示教再现过程很快，示教之后即可应用
+*   随时监视机器人动作，避免发生错误指令
+
+**缺点:**
+
+*   编程占用机器人作业时间
+*   很难规划复杂的运动轨迹以及准确的直线运动
+*   难以与传感信息相配合
+*   难以与其他操作同步
+
+### 1.2 机器人语言编程
+
+机器人语言编程实现了计算机编程，它具有良好的通用性，同一种机器人语言可用于不同类型的机器人。此外，机器人编程语言可解决多台机器人之间协调工作的问题。既适用于前面讲授的离线编程，也适用于在线编程。
+
+*(Image of two robotic arms holding a banner that says "机器人语言编程".)*
+
+### 1.3 移动命令
+
+为了使机器人能够进行再现示教的动作，就必须把机器人运动命令编成程序。控制机器人运动的命令就是移动命令。在移动命令中，记录有移动到的位置坐标、插补方式、再现速度等参数。
+
+*   **位置坐标:** 描述机器人 TCP (工具中心点) 的 6 个自由度。
+*   **插补方式:** 机器人再现时，决定程序点之间采取何种轨迹移动的方式。常用的 3 种插补方式有：关节插补、直线插补、圆弧插补。
+*   **再现速度:** 机器人再现时，程序点之间的移动速度。
+
+*(Diagram with "移动命令" (Movement Command) in the center, with arrows pointing to "位置坐标" (Position Coordinates), "插补方式" (Interpolation Method), and "再现速度" (Reproduction Speed).)*
+
+### 1.4 空走点/作业点
+
+机器人再现时，决定从当前程序点到下一个程序点是否实施作业。
+
+*   **空走点 (Free Point):** 从当前程序点移动到下一个程序点的整个过程不需要实施作业，主要用于示教作业开始点和作业中间点之外的程序点。
+*   **作业点 (Work Point):** 从当前程序点移动到下一个程序点的整个过程需要实施作业，主要用于作业开始点和作业中间点两种情况。
+
+---
+
+### 1.5 ABB 工业机器人示教器
+
+ABB 工业机器人示教器分为按键、触摸屏和手动操作遥杆三部分组成，如下图所示。
+
+*(Image of the front and back of an ABB teach pendant, with labels for screen, enable button, emergency stop, joystick, and keys.)*
+
+#### 按键与按钮介绍
+
+| 按键/按钮                   | 功能说明                                                                     | 按键/按钮                   | 功能说明              |
+| :-------------------------- | :--------------------------------------------------------------------------- | :-------------------------- | :-------------------- |
+| **【使能按键】**            | 为了保证操作人员的人身安全而设置，按住才能手动移动机器人。                       | **【I/O 快捷键】**          | 设置 I/O 口           |
+| **【急停按钮】**            | 用于使机器人紧急停止。                                                       | **【机器人/外轴切换】**     | 切换成外部轴          |
+| **【线型/重复定位运动切换】** | 机器人线性，切换重复定位的模式。                                             | **【关节运动轴切换】**      | 切换运动的轴          |
+| **【启动程序】**            | 手动运行程序时，启动程序或继续程序。                                         | **【单步前进】**            | 机器人单步前进，按住则连续执行。 |
+| **【单步后退】**            | 机器人单步后退。                                                             | **【停止】**                | 在机器人执行程序时使机器人停止。 |
+| **【增量开/关】**           | 增量调节，控制手动移动机器人时的速度。                                       | **【手动操作摇杆】**        | 用于机器人六个轴的运动，每次最多可以使三个轴运动，摇杆的摆动幅度越大，轴移动的速度越快。 |
+
+#### 1.5.1 示教器显示屏的界面介绍
+
+**(1) 操作界面及说明:**
+
+*(Image of the ABB teach pendant's graphical user interface, showing menus like HotEdit, Input/Output, Manual Operation, Automatic Production Window, Program Editor, Program Data, etc.)*
+
+| 选项名称         | 说明                                                         |
+| :--------------- | :----------------------------------------------------------- |
+| **HotEdit**      | 程序模块下轨迹点位置的补偿设置窗口                           |
+| **输入输出**     | 设备及查看 I/O 视图窗口                                      |
+| **手动操纵**     | 动作模式设置、坐标系选择、操纵杆锁定及载荷属性的更改窗口，也可显示实际位置 |
+| **自动生产窗口** | 在自动模式下，可直接调试程序并运行                           |
+| **程序编辑器**   | 建立程序模块及例行程序的窗口                                 |
+| **程序数据**     | 选择编程时所需程序数据的窗口                                 |
+| **备份与恢复**   | 可备份和恢复系统                                             |
+| **校准**         | 进行转数计数器和电机校准的窗口                               |
+| **控制面板**     | 进行示教器的相关设定                                         |
+| **事件日志**     | 查看系统出现的各种提示信息                                   |
+| **资源管理器**   | 查看系统的系统文件                                           |
+| **系统信息**     | 查看控制器及当前系统的相关信息                               |
+
+**(2) 控制面板及说明:**
+
+ABB 机器人的控制面板包含了对机器人和示教器进行设定的相关功能，如图所示。
+
+*(Image of the ABB control panel interface, showing options like Appearance, Monitoring, FlexPendant, I/O, Language, etc.)*
+
+| 选项名称     | 说明                                                               |
+| :----------- | :----------------------------------------------------------------- |
+| **外观**     | 可自定义显示器的亮度和设置左手或右手的操作习惯                   |
+| **监控**     | 动作触碰监控设置和执行设置                                         |
+| **FlexPendant** | 示教器操作特性的设置                                               |
+| **I/O**      | 配置常用 I/O 列表，在输入输出选项中显示                            |
+| **语言**     | 控制器当前语言的设置                                               |
+| **ProgKeys** | 为指定输入输出信号配置快捷键                                       |
+| **日期和时间** | 控制器的日期和时间配置                                             |
+| **诊断**     | 创建诊断文件                                                       |
+| **配置**     | 系统参数设置                                                       |
+| **触摸屏**   | 触摸屏重新校准                                                     |
+
+### 1.6 机器人基本指令
+
+**(1) MoveJ 运动指令:**
+
+*   **功能:** 点到点运动。
+*   **格式:** `MoveJ [\Conc] ToPoint [\ID] Speed [\V] | [\T] Zone [\Z] [\Inpos] Tool [\WObj]`
+*   **示例:**
+    *   `MoveJ p1, vmax, z30, tool2` //工具tool2的TCP沿着一个非线性路径到位置p1，速度数据是vmax，zone数据是z30
+    *   `MoveJ*, vmax \T:=5, fine, grip3` //工具grip3的TCP沿着一个非线性路径运动到存储在指令中的停止点（用*标记），整个运动需要5秒钟
+
+**(2) MoveL 运动指令:**
+
+*   **功能:** 直线运动。
+*   **格式:** `MoveL [\Conc] ToPoint [\ID] Speed [\V] | [ \T] Zone [\Z] [\Inpos] Tool [\WObj] [\Corr]`
+*   **示例:**
+    *   `MoveL*, v2000\V:=2200, z40 \Z:=45, grip3`
+    *   `MoveL start, v2000, z40, grip3 \WObj:=fixture`
+
+**(3) MoveC 运动指令:**
+
+*   **功能:** 圆弧运动。
+*   **格式:** `MoveC [\Conc] CirPoint ToPoint [\ID] Speed [\V] | [\T] Zone [\z] [\Inpos] Tool [\Wobj] [\Corr]`
+*   **示例:**
+    *   `MoveLp1, v500, fine, tool1` //移动到圆弧的第一个点
+    *   `MoveC p2, p3, v500, z20, tool1` //画第一个半圆
+    *   `MoveCp4, p1, v500, fine, tool1` //画第二个半圆和第一个圆弧组成一个圆
+    *   `MoveCp5, p6, v2000, fine\Inpos:=inpos50, grip3` //Grip3的TCP圆周运动到停止点p6,当停止点fine的50%的位置条件和50%的速度条件满足的时候,机器人认为它到达该点,它等待条件满足最多等两秒
+
+**(4) Compact IF 运动指令:**
+
+*   **功能:** 当前指令是指令 IF 的简化，判断条件后只允许跟一名指令，如果有多句指令需要执行，必须采用指令 IF。
+*   **格式:** `IF Condition...`
+*   **Condition:** 判断条件 (bool)
+
+**(5) IF 指令:**
+
+*   **功能:** 当前指令通过判断相应条件, 控制需要执行的相应指令, 是机器人程序流程基本指令。
+*   **格式:** `IF Condition THEN... {ELSEIF Condition THEN...} [ELST...] ENDIF`
+*   **Condition:** 判断条件 (bool)
+*   **示例:**
+    ```
+    IF reg1>5 THEN
+      set do1
+      set do2
+    ELSE
+      Reset do1
+      Reset do2
+    ENDIF
+    ```
+
+**(6) WHILE 指令:**
+
+*   **功能:** 当前指令通过判断相应条件, 如果符合判断条件执行循环内指令, 直至判断条件不满足才跳出循环, 继续执行循环以后指令, 需要注意, 当前指令存在死循环。
+*   **格式:** `WHILE Condition DO ... ENDWHILE`
+*   **Condition:** 判断条件 (bool)
+
+**(7) FOR 指令:**
+
+*   **功能:** 当前指令通过循环判断标识从初始值逐渐更改最终值, 从而控制程序相应循环次数。
+*   **格式:** `FOR Loop counter FROM Start value TO End value [STEP Step value] DO ... ENDFOR`
+*   **Loop counter:** 循环计数标识 (identifier)
+*   **Start value:** 标识初始值 (num)
+*   **End value:** 标识最终值 (num)
+*   **[STEP Step value]:** 计数更改值 (num)
+    *   如果不使用参变量 `[STEP]`, 循环标识每次更改值为 1。
+    *   如果使用参变量 `[STEP]`, 循环标识每次更改值为参变量相应设置。
+    *   通常情况下, 初始值、最终值与更改值为整数, 循环判断标识使用 i, j, k 等小写字母。
+
+**(8) Reset 指令:**
+
+*   **功能:** 将机器人相应数字输出信号值置为 0, 与指令 Set 相对应, 是自动化重要组成部分。
+*   **格式:** `Reset signal`
+*   **signal:** 输出信号名称 (signaldo)
+*   **示例:** `Reset do12`
+
+**(9) Set 指令:**
+
+*   **功能:** 将机器人相应数字输出信号值置为 1, 与指令 Reset 相对应, 是自动化重要组成部分。
+*   **格式:** `Set signal`
+*   **signal:** 机器人输出信号名称 (signaldo)
+
+**(10) WaitDI 指令:**
+
+*   **功能:** 等待数字输入信号满足相应值, 达到通信目的, 是自动化生产的重要组成部分。
+*   **格式:** `WaitDI Signal, Value [\MaxTime][\TimeFlag]`
+*   **signal:** 输出信号名称 (signaldo)
+*   **Value:** 输出信号值 (dionum)
+*   **[\MaxTime]:** 最长等待时间 (num)
+*   **[\TimeFlag]:** 超出逻辑量 (bool)
+*   **示例:** `WaitDI di_Ready, 1` //机器人等待输入信号, 直到信号 di_Ready 值为 1, 才执行随后指令
+
+**(11) WaitDO 指令:**
+
+*   **功能:** 等待数字输出信号满足相应值, 达到通信目的, 因为输出信号一般情况下受程序控制, 此指令很少使用。
+*   **格式:** `WaitDO Signal,Value [\MaxTime][\TimeFlag]`
+
+**(12) Accset 指令:**
+
+*   **功能:** 当机器人运行速度改变时, 对所产生的相应加速度进行限制, 使机器人高速运行时更平缓, 但会延长循环时间, 系统默认值为 `AccSet100,100`。
+*   **格式:** `AccSet Acc, Ramp`
+*   **Acc:** 机器人加速度百分比 (num)
+*   **Ramp:** 机器人加速度坡度 (num)
+    *   机器人加速度百分率值最小为 20, 小于 20 以 20 计。
+    *   机器人加速度坡度值最小为 10, 小于 10 以 10 计。
+*   **示例:** `AccSet 80,100`
+
+**(13) Add 指令:**
+
+*   **功能:** 在一个数字数据上增加相应的值, 可以用赋值指令替代。
+*   **格式:** `Add Name, AddValue`
+*   **Name:** 数据名称 (num)
+*   **AddValue:** 增加的值 (num)
+*   **示例:**
+    *   `Add reg1,3` // 等同于 `reg1:=reg1+3`
+    *   `Add reg1,-reg2` // 等同于 `reg1:=reg1-reg2`
+
+**(14) Clear 指令:**
+
+*   **功能:** 将一个数字数据的值归零, 可以用赋值指令替代。
+*   **格式:** `Clear Name`
+*   **Name:** 数据名称 (num)
+
+**(15) Incr 指令:**
+
+*   **功能:** 将一个数字数据值上增加 1, 可以用赋值指令替代, 一般用于产量计数。
+*   **格式:** `Incr Name`
+*   **Name:** 数据名称 (num)
+
+**(16) Decr 指令:**
+
+*   **功能:** 在数字数据值上增加 1, 可以用赋值指令替代, 一般用于产量计数。
+*   **格式:** `Decr Name`
+*   **示例:** `Decr Name`
+*   **Name:** 数据名称 (num)
+
+### 示例：轨迹运动
+
+**要求:** 按如图所示要求, 编程使机器人按照图中所示的轨迹: 起点 - P1 - P2 - P3 进行运动。
+
+*(Diagram showing a robot arm's trajectory with points P1, P2, and P3. Speeds of 200mm/s and 100mm/s are indicated.)*
+
+**参考程序一:**
+
+*   **指令:** `MoveL p1, v200, z10, tool1\Wobj:=wobj1;` // 机器人的 TCP 从当前位置向 p1 点以线性运动方式前进, 速度是 200mm/s, 转弯区数据是 10mm, 距离 p1 点还有 10mm 的时候开始转弯, 使用的工具数据是 tool1, 工件坐标数据是 wobj1。
+*   **指令:** `MoveL p2, v100, fine, tool1\Wobj:=wobj1;` // 机器人的 TCP 从 p1 向 p2 点 (图 6-11) 以线性运动方式前进, 速度是 100mm/s, 转弯区数据是 fine, 机器人在 p2 点稍作停顿, 使用的工具数据是 tool1, 工件坐标数据是 wobj1。
+*   **指令:** `MoveJ p3, v500, fine, tool1\Wobj:=wobj1;` // 机器人的 TCP 从 p2 向 p3 点 (图 6-11) 以关节运动方式前进, 速度是 100mm/s, 转弯区数据是 fine, 机器人在 p3 点停止, 使用的工具数据是 tool1, 工件坐标数据是 wobj1。
+
+---
+
+## 工业机器人在线控制与编程
+
+### 1. 建立连接
+
+工业机器人在线编程与控制式通过运行仿真软件的计算机与真实工业机器人控制系统的通讯实现的。
+
+**建立连接的步骤:** 标准网线的一端连接到计算机的网卡网络端口，可以选择为连接至控制器的 PC 指定固定的 IP 地址，参见下表。网线的另一端连接到控制柜面板的网线端口，连接后图中的“X2”的“Service”端口，见下表。
+
+**PC机 I/O 地址表:**
+
+| 属性     | 值                    |
+| :------- | :-------------------- |
+| IP 地址  | 192.168.125.2 ~255    |
+| 默认网关 | 192.168.125.1         |
+| 子网掩码 | 255.255.255.0         |
+
+**机器人控制器端口说明表:**
+
+| 端口    | 说明                   |
+| :------ | :--------------------- |
+| X1      | 电源                   |
+| X2 (黄) | Service (PC 连接)      |
+| X3 (绿) | LAN1 (连接 FlexPendant) |
+| X4      | LAN2 (连接基于以太网的选件) |
+| X5      | LAN3 (连接基于以太网的选件) |
+| X6      | WAN (连接基于以太网的选件) |
+| X7 (蓝) | 面板                   |
+| X9 (红) | 轴计算机               |
+| X10, X11 | USB 端口 (4 端口)      |
+
+*(Diagram showing the ports on a robot controller and screenshots of RobotStudio interface for connecting to a controller.)*
+
+### 2. 获取权限
+
+RobotStudio仿真软件可在线对机器人进行监控与查看，防止在RobotStudio中错误修改数据，造成不必要的损失，保证操作安全性。首先将机器人状态钥匙开关切换到“手动”。在【控制器】功能选项卡中，单击【请求写权限】。
+
+*(Screenshot showing the RobotStudio interface with the "Request write permission" button highlighted.)*
+
+然后接着在示教器界面弹出确认请求写权限菜单，单击【同意】进行确认。
+
+*(Screenshot of the teach pendant showing a "Request write permission" dialog box with "Agree" and "Reject" buttons.)*
+
+### 3. 备份与恢复
+
+单击【控制器】功能选项卡下单击【备份】，选择【创建备份...】或者【从备份中恢复...】。备份时候，选择相应的文件夹的名称，不能有中文。在【位置】下指定备份文件夹的存放位置。选择可用备份，单击【确定】。恢复时候，找到前面备份的文件夹即可，选择可用备份，单击恢复。
+
+*(Screenshot showing the RobotStudio interface with the "Backup" and "Restore from backup" options.)*
+
+### 4. 在线编程
+
+在工业机器人的实际使用过程中, 专业工程师经常会使用仿真软件对机器人程序进行在线编辑或修改, 编辑完成后, 再使用示教器对具体点位的位置进行调节校准即可, 这样可以大大提高编程效率。
+
+ABB 机器人获取写权限后, 在“RAPID”窗口双击要修改的程序模块, 在程序编辑窗口对程序进行需要的修改, 修改完成后, 单击【应用】, 收回写权限, 控制器中的指令已被修改完成, 对 RAPID 程序进行备注处理并应用。
+
+*(Screenshot showing the RAPID editor in RobotStudio with program code and options for editing and applying changes.)*
+
+RAPID 选项卡中的程序编辑器, 里的所有的指令和语句都可以通过键盘输入, 同时也可以像通过示教器编辑程序一样, 通过【指令】工具按钮群, 选择需要输入的指令。
+
+*(Screenshot of the RAPID editor showing the "Instructions" menu with various commands like MoveAbsJ, MoveC, MoveJ, MoveL, Reset, Set, etc.)*
+
+### 5. 配置信号
+
+可以使用仿真软件, 通过在线方式对机器人控制系统的 I/O 信号进行配置, 创建两个 DSQC652 型号的 I/O 单元, DSQC652 参数设定见下表。
+
+首先要建立起 RobotStudio 与机器人的连接。获取写权限后, 单击【控制器】功能选项卡下【配置编辑器】中的【I/O System】, 右击【DeviceNet Device】, 创建 I/O 单元, 设置好名称和地址。
+
+**I/O 单元需求表:**
+
+| 名称 (Name)             | 参数 (Parameter) |
+| :---------------------- | :--------------- |
+| **板卡型号**            | DSQC 652         |
+| **Name (I/O 单元名称)** | Board10          |
+| **DeviceNet Address (I/O 单元所占用总线地址)** | 10 和 11         |
+
+*(Screenshot showing the RobotStudio interface for configuring I/O System and DeviceNet Device.)*
+
+数字输入信号的参数设定见下表: 单击【I/O System】, 右击【Signal】, 新建 I/O 信号, 设置好相应的名称, 信号性质, 通讯板卡, 地址等参数, 在设置之前一定要了解板卡信号开始数值是“0” 地址为起始地址。
+
+**I/O 信号需求表:**
+
+| 名称 (Name (I/O 信号名称)) | 参数 (Parameter)              |
+| :------------------------- | :---------------------------- |
+| **Type of Signal (I/O 信号类型)** | Digital Input                 |
+| **Assigned to Unit (I/O 信号所在 I/O 单元)** | Board10                       |
+| **Unit Mapping (I/O 信号所占用单元地址)** | 0                             |
+
+*(Screenshot of the teach pendant interface showing input/output signals and a dialog for creating a new I/O signal.)*
+
+### 6. 文件传送
+
+使用仿真软件获取机器人的写权限后, 就可以对机器人进行文件传送操作, 即将文件从计算机发送到机器人控制硬盘上。单击【控制器】功能选项卡中的【文件传送】, 通过选择计算机中的文件进行传输, 文件传输不支持虚拟示教器。
+
+*(Screenshot showing the RobotStudio interface with the "File Transfer" option and file explorers for both PC and controller.)*
+
+### 7. 在线监控
+
+#### 在线监控机器人
+
+单击【控制器】/【在线监视器】, 窗口显示的就是实时的机器人姿态状态。
+
+*(Screenshot showing the RobotStudio interface with the "Online Monitor" option and a 3D view of the robot.)*
+
+#### 在线监控示教器
+
+在取得写权限后, 打开【控制器】功能选项卡, 单击【示教器查看器】。可设定画面采样刷新的时间, 同样不支持虚拟示教器。
+
+*(Screenshot showing the RobotStudio interface with the "Teach Pendant Viewer" option and a dialog for remote access to the teach pendant.)*
+
+### 8. 示教器权限
+
+#### 1. 添加管理员权限
+
+首先软件需要获取机器人的“写权限”, 单击【控制器】/【用户管理】按钮, 单击【编辑用户组】。
+
+*(Screenshot showing the RobotStudio interface with the "User Management" and "Edit User Groups" options.)*
+
+实际生产中, 生产线工人的误操作可能导致机器人系统的错乱, 影响机器人的正常运行。因此, 有必要为示教器设置不同等级的用户操作权限。
+
+用户使用密码登陆后可以控制示教器及机器人, 其权限大小由其所属的“组”来决定, 可以增加或减少“组”的权限, 但必须保证管理员所属的组拥有全部的控制权限。可以创建新用户, 或者编辑、删除用户, 但出于安全考虑, 要始终保留一个管理员权限用户。
+
+为一台新机器人设置示教器用户操作权限的要点如下:
+(1) 为示教器添加一个管理员操作权限;
+(2) 设定所需的用户操作权限;
+(3) 更改 Default User 的用户组。
+
+*(Screenshots showing the UAS Management Tool for adding users and configuring user group permissions.)*
+
+设定非管理员用户权限:
+(1) 创建新组。
+(2) 设定新组的权限。
+(3) 创建新的用户。
+(4) 将组归类到对应新的用户。
+(5) 重启系统, 测试权限。
+
+---
+
+同学们下节课见!
