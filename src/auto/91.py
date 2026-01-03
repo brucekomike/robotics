@@ -1,12 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import control # 导入 control 库
+from credit import get_credit
 
 # 定义系统参数
 omega_n = 6
 xi_values = [0.2, 0.4, 0.6, 0.8, 1.0, 2.0]
 time_end_step = 5 # 阶跃响应仿真结束时间
 time_end_impulse = 3 # 脉冲响应仿真结束时间
+try:
+    plt.rcParams['font.family'] = 'Hiragino Sans GB'
+    plt.rcParams['axes.unicode_minus'] = False
+except Exception as e:
+    print(f"Could not set PingFang SC directly: {e}")
+    print("You may need to use matplotlib.font_manager to register the font.")
 
 # --- 单位阶跃响应曲线 ---
 plt.figure(figsize=(12, 8))
@@ -22,7 +29,7 @@ for xi in xi_values:
     t_step, y_step = control.step_response(system, T=np.linspace(0, time_end_step, 500))
     plt.plot(t_step, y_step, label=f'$\\xi = {xi}$')
 
-plt.title('Unit Step Response for Different Damping Ratios ($\omega_n = 6$)')
+plt.title('Unit Step Response for Different Damping Ratios ($\omega_n = 6$)' + get_credit())
 plt.xlabel('Time (s)')
 plt.ylabel('Amplitude')
 plt.grid(True)
@@ -45,7 +52,7 @@ for xi in xi_values:
     t_impulse, y_impulse = control.impulse_response(system, T=np.linspace(0, time_end_impulse, 500))
     plt.plot(t_impulse, y_impulse, label=f'$\\xi = {xi}$')
 
-plt.title('Unit Impulse Response for Different Damping Ratios ($\omega_n = 6$)')
+plt.title('Unit Impulse Response for Different Damping Ratios ($\omega_n = 6$)'+get_credit())
 plt.xlabel('Time (s)')
 plt.ylabel('Amplitude')
 plt.grid(True)
