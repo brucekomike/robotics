@@ -44,18 +44,23 @@ $$
 
 **示例**:
 *   组合机床动力滑台铣平面时的情况:
+    
     $$
     f_i(t) - c\frac{dy_o(t)}{dt} - ky_o(t) = m\frac{d^2y_o(t)}{dt^2}
     $$
+
     整理为:
+    
     $$
     m\frac{d^2y_o(t)}{dt^2} + c\frac{dy_o(t)}{dt} + ky_o(t) = f_i(t)
     $$
+
 *   机械系统 (示例):
     1.  明确系统的输入与输出: 输入为 $f(t)$，输出为 $x(t)$。
     2.  列写原始微分方程: $f - kx - cx = m\ddot{x}$
     3.  整理: $m\ddot{x} + c\dot{x} + kx = f$
 *   汽车悬浮系统的原理图:
+    
     $$
     m\frac{d^2x_o(t)}{dt^2} + c\frac{dx_o(t)}{dt} + kx_o(t) = c\frac{dx_i(t)}{dt} + kx_i(t)
     $$
@@ -66,19 +71,23 @@ $$
 *   **阻性元件**: $i = \frac{1}{R}v_{21}$
 
 **RLC 无源网络**:
+
 $$
 \begin{cases}
 L\frac{di(t)}{dt} + Ri(t) + u_o(t) = u_i(t) \\
 i(t) = C\frac{du_o(t)}{dt}
 \end{cases}
 $$
+
 推导可得:
+
 $$
 LC\frac{d^2u_o(t)}{dt^2} + RC\frac{du_o(t)}{dt} + u_o(t) = u_i(t)
 $$
 
 **机电系统 (示例)**:
 输入电压 $u(t)$，输出位移 $x(t)$。
+
 $$
 \begin{cases}
 Ku(t) = Ri(t) + L\frac{di(t)}{dt} + e \\
@@ -86,7 +95,9 @@ e = k_2\frac{dx(t)}{dt} \\
 k_2i(t) - c\frac{dx(t)}{dt} - kx(t) = m\frac{d^2x(t)}{dt^2}
 \end{cases}
 $$
+
 推导可得:
+
 $$
 mL\frac{d^3x(t)}{dt^3} + (mR+cL)\frac{d^2x(t)}{dt^2} + (k^2+cR+kL)\frac{dx(t)}{dt} + kR = k_2Ku(t)
 $$
@@ -103,27 +114,36 @@ $$
 ## 3.2 系统的传递函数
 
 **微分方程**:
+
 $$
 a_n\frac{d^nx_o(t)}{dt^n} + a_{n-1}\frac{d^{n-1}x_o(t)}{dt^{n-1}} + \dots + a_0x_o(t) = b_m\frac{d^mx_i(t)}{dt^m} + b_{m-1}\frac{d^{m-1}x_i(t)}{dt^{m-1}} + \dots + b_0x_i(t)
 $$
+
 初始条件为零时，对上式进行拉氏变换:
+
 $$
 (a_n s^n + a_{n-1}s^{n-1} + \dots + a_0)X_o(s) = (b_m s^m + b_{m-1}s^{m-1} + \dots + b_0)X_i(s)
 $$
+
 **传递函数**:
+
 $$
 G(s) = \frac{X_o(s)}{X_i(s)} = \frac{b_m s^m + b_{m-1}s^{m-1} + \dots + b_0}{a_n s^n + a_{n-1}s^{n-1} + \dots + a_0} \quad (n \ge m)
 $$
 
 **传递函数的概念**:
 对于单输入、单输出线性定常系统，在外界输入作用前，输入、输出的初始条件为零时，输出象函数与输入象函数之比，称为系统的传递函数，用 $G(s)$ 表示。
+
 $$
 G(s) = \frac{X_o(s)}{X_i(s)} = \frac{b_m s^m + b_{m-1}s^{m-1} + \dots + b_0}{a_n s^n + a_{n-1}s^{n-1} + \dots + a_0} \quad (n \ge m)
 $$
+
 $$
 X_o(s) = G(s)X_i(s)
 $$
+
 方框图表示:
+
 $X_i(s) \longrightarrow G(s) \longrightarrow X_o(s)$
 
 **传递函数的性质**:
@@ -136,13 +156,17 @@ $X_i(s) \longrightarrow G(s) \longrightarrow X_o(s)$
 *   传递函数适用于对单输入、单输出的线性定常系统的动态特性进行描述。
 
 **传递函数零点、极点、放大系数**:
+
 $$
 G(s) = \frac{X_o(s)}{X_i(s)} = \frac{b_m s^m + b_{m-1}s^{m-1} + \dots + b_0}{a_n s^n + a_{n-1}s^{n-1} + \dots + a_0} \quad (n \ge m)
 $$
+
 $G(s)$ 以复变量 $s$ 为自变量，因式分解后， $G(s)$ 可以写成:
+
 $$
 G(s) = K \frac{(s - z_1)(s - z_2)\dots(s - z_m)}{(s - p_1)(s - p_2)\dots(s - p_n)} \quad (K \text{ 为常数})
 $$
+
 当 $s=z_j (j=1, 2, \dots, m)$ 时， $G(s)=0$，$z_1, z_2, \dots, z_m$ 为 $G(s)$ 的零点。
 当 $s=p_i (i=1, 2, \dots, n)$ 时，$G(s) \to \infty$，$p_1, p_2, \dots, p_n$ 为 $G(s)$ 的极点，即微分方程的特征根。
 
@@ -275,35 +299,45 @@ $G(0)$ — 系统的放大系数，决定系统的稳态输出，由微分方程
 
 **1. 给定输入信号作用下的系统传递函数**:
 令系统的干扰信号 $n(t) = 0$。
+
 $$
 G_B(s) = \frac{X_{o1}(s)}{X_i(s)} = \frac{G_1(s)G_2(s)}{1+G_1(s)G_2(s)H(s)}
 $$
+
 $G_K(s) = G_1(s)G_2(s)H(s)$
 系统在给定输入作用下的输出的拉氏变换为:
 $X_{o1}(s) = G_B(s)X_i(s) = \frac{G_1(s)G_2(s)}{1+G_1(s)G_2(s)H(s)}X_i(s)$
 
 **2. 干扰信号作用下的系统传递函数**:
 令系统的输入信号 $x_i(t) = 0$。
+
 $$
 \Phi_B(s) = \frac{X_{o2}(s)}{N(s)} = \frac{G_2(s)}{1+G_1(s)G_2(s)H(s)}
 $$
+
 $X_{o2}(s) = \Phi_B(s)N(s) = \frac{G_2(s)}{1+G_1(s)G_2(s)H(s)}N(s)$
 
 **3. 输入信号和干扰信号同时作用下的系统输出**:
+
 $X_o(s) = X_{o1}(s) + X_{o2}(s)$
+
 $$
 X_o(s) = \frac{G_1(s)G_2(s)}{1+G_1(s)G_2(s)H(s)}X_i(s) + \frac{G_2(s)}{1+G_1(s)G_2(s)H(s)}N(s)
 $$
+
 如果 $|G_1(s)G_2(s)H(s)| \gg 1$ 且 $|G_1(s)H(s)| \gg 1$，则：
+
 $X_{o2}(s) \approx \frac{G_2(s)}{G_1(s)G_2(s)H(s)}N(s) \approx \frac{1}{G_1(s)H(s)}N(s)$
 
 可见，闭环系统能使干扰引起的输出很小。
 
 **3.5 输入和干扰同时作用下的系统传函**
 这时，系统的总输出为:
+
 $$
 X_o(s) \approx \frac{1}{H(s)}X_i(s) + \frac{1}{G_1(s)H(s)}N(s) \approx \frac{1}{H(s)}X_i(s)
 $$
+
 显然，通过反馈回路组成的闭环系统能使总输出 $X_o(s)$ 只随 $X_i(s)$ 而变化，不管外来干扰如何变化，$X_o(s)$ 总是保持不变或变化很小。
 
 **结论**:
@@ -319,20 +353,24 @@ $E(s) = X_i(s) - B(s)$
 
 **(1) 给定输入信号作用下的系统误差传递函数**:
 令 $n(t) = 0$。
+
 $$
 G_e(s) = \frac{E(s)}{X_i(s)} = \frac{1}{1+G_1(s)G_2(s)H(s)}
 $$
 
 **(2) 干扰信号作用下的系统误差传递函数**:
 令 $x_i(t) = 0$。
+
 $$
 \Phi_e(s) = \frac{E(s)}{N(s)} = \frac{-G_2(s)H(s)}{1+G_1(s)G_2(s)H(s)}
 $$
 
 **(3) 输入和干扰信号同时作用下系统误差传函**:
 $E(s) = G_e(s)X_i(s) + \Phi_e(s)N(s)$
+
 $$
 E(s) = \frac{1}{1+G_1(s)G_2(s)H(s)}X_i(s) + \frac{-G_2(s)H(s)}{1+G_1(s)G_2(s)H(s)}N(s)
 $$
+
 如果 $|G_1(s)G_2(s)H(s)| \gg 1$ ，且 $|G_1(s)| \gg 1$，则 $E(s) \approx 0$。
 设计控制系统时，只要对组成系统的元器件选择合适的参数，控制系统就可以获得较高的工作精度。

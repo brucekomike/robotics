@@ -38,8 +38,11 @@
 ### 6.1.2 系统稳定性与特征根的关系
 
 在 4.3.2 中，二阶系统的特征方程为：
+
 $$ s^2 + 2\xi\omega_n s + \omega_n^2 = 0 $$
+
 特征方程的根为：
+
 $$ s_{1,2} = -\xi\omega_n \pm \omega_n\sqrt{\xi^2 - 1} $$
 
 *   阻尼比 $\xi$ 不同时，二阶系统特征根的形式不同，见表 4.2。
@@ -47,11 +50,15 @@ $$ s_{1,2} = -\xi\omega_n \pm \omega_n\sqrt{\xi^2 - 1} $$
 *   对于单位脉冲响应 (见 4.3.3 节)
 
 **1. 欠阻尼状态 ($0 < \xi < 1$)**
+
     $$ x_o(t) = \frac{\omega_n}{\sqrt{1-\xi^2}}e^{-\xi\omega_n t}\sin(\omega_d t) $$
+
     振荡衰减收敛于原平衡状态图 (a)
 
 **2. 临界阻尼状态 ($\xi = 1$)**
+
     $$ x_o(t) = \mathcal{L}^{-1}\bigg[\frac{\omega_n^2}{(s+\omega_n)^2}\bigg] = \omega_n^2 t e^{-\omega_n t} $$
+
     指数规律衰减收敛于原平衡状态图 (b)
 
 **3. 过阻尼状态 ($\xi > 1$)**
@@ -59,7 +66,9 @@ $$ s_{1,2} = -\xi\omega_n \pm \omega_n\sqrt{\xi^2 - 1} $$
     指数规律衰减收敛于原平衡状态图 (b)
 
 **4. 无阻尼状态 ($\xi = 0$)**
+
     $$ x_o(t) = \mathcal{L}^{-1}\bigg[\omega_n \frac{\omega_n}{s^2+\omega_n^2}\bigg] = \omega_n \sin(\omega_n t) $$
+
     等幅振荡远离原平衡状态图 (c)
 
 **二阶系统稳定性与特征根的关系总结：**
@@ -72,27 +81,42 @@ $$ s_{1,2} = -\xi\omega_n \pm \omega_n\sqrt{\xi^2 - 1} $$
 ### 6.1.3 系统稳定的充分必要条件
 
 设线性定常系统的微分方程为 (初始状态 $\neq 0$)：
+
 $$ a_n\frac{d^nx_o(t)}{dt^n} + a_{n-1}\frac{d^{n-1}x_o(t)}{dt^{n-1}} + \dots + a_1\frac{dx_o(t)}{dt} + a_0x_o(t) = b_m\frac{d^mx_i(t)}{dt^m} + b_{m-1}\frac{d^{m-1}x_i(t)}{dt^{m-1}} + \dots + b_1x_i(t) + b_0x_i(t) \quad (n \ge m) $$
+
 对上式进行拉氏变换，得：
+
 $$ X_o(s) = \frac{M(s)}{D(s)}X_i(s) + \frac{N(s)}{D(s)} $$
 其中：
+
 $$ M(s) = b_m s^m + b_{m-1}s^{m-1} + \dots + b_1s + b_0 $$
+
 $$ D(s) = a_n s^n + a_{n-1}s^{n-1} + \dots + a_1s + a_0 $$
+
 $$ \frac{M(s)}{D(s)} = G(s) \quad (\text{系统传递函数}) $$
+
 $$ N(s) \text{ 是与初始条件有关的多项式。} $$
 
 根据稳定性定义，研究系统在初始状态下的时间响应 (即零输入响应)，取 $X_i(s) = 0$，得到：
+
 $$ X_o(s) = \frac{N(s)}{D(s)} $$
+
 若 $s_i$ 为系统特征方程 $D(s) = 0$ 的根 (即系统传递函数的极点，$i=1, 2, \dots, n$)，且 $s_i$ 各不相同时，有：
+
 $$ x_o(t) = \mathcal{L}^{-1}[X_o(s)] = \mathcal{L}^{-1}\bigg[\frac{N(s)}{D(s)}\bigg] = \sum_{i=1}^n A_i e^{s_i t} $$
+
 $A_i$ 是与初始条件有关的系数。
 
 若系统所有特征根 $s_i$ 的实部 $\text{Re}[s_i] < 0$，则零输入响应随着时间的增长将衰减到零，即：
+
 $$ \lim_{t\to\infty} x_o(t) = 0 $$
+
 此时系统是稳定的。
 
 反之，若特征根中有一个或多个根具有正实部，则零输入响应随着时间的增长而发散，即：
+
 $$ \lim_{t\to\infty} x_o(t) = \infty $$
+
 此时系统是不稳定的。
 
 若系统特征根具有重根时，只要满足 $\text{Re}[s_i] < 0$，有 $\lim_{t\to\infty} x_o(t) = 0$，系统就是稳定的。
@@ -111,8 +135,11 @@ $$ \lim_{t\to\infty} x_o(t) = \infty $$
 ### 6.2.1 系统稳定的必要条件
 
 设系统的特征方程为：
+
 $$ D(s) = a_n s^n + a_{n-1}s^{n-1} + \dots + a_1s + a_0 = 0 $$
+
 $$ D(s) = a_n \bigg( s^n + \frac{a_{n-1}}{a_n}s^{n-1} + \dots + \frac{a_1}{a_n}s + \frac{a_0}{a_n} \bigg) = 0 $$
+
 $$ D(s) = a_n (s - s_1)(s - s_2)\dots(s - s_n) = 0 $$
 式中，$s_1, s_2, \dots, s_n$ 为系统的特征根。
 
@@ -125,7 +152,9 @@ $$ D(s) = a_n (s - s_1)(s - s_2)\dots(s - s_n) = 0 $$
 ### 6.2.2 系统稳定的充要条件
 
 设系统的特征方程为：
+
 $$ D(s) = a_n s^n + a_{n-1}s^{n-1} + \dots + a_1s + a_0 = 0 $$
+
 将上式中的各项系数，按下面的格式排成劳斯表：
 
 | $s^n$     | $a_n$   | $a_{n-2}$ | $a_{n-4}$ | $a_{n-6}$ | $\dots$ |
@@ -139,9 +168,13 @@ $$ D(s) = a_n s^n + a_{n-1}s^{n-1} + \dots + a_1s + a_0 = 0 $$
 | $s^0$     | $F_1$   |           |           |           |         |
 
 其中，$A_1, A_2, \dots, B_1, B_2, \dots$ 等元素的计算公式为：
+
 $$ A_1 = -\frac{\begin{vmatrix} a_n & a_{n-2} \\ a_{n-1} & a_{n-3} \end{vmatrix}}{a_{n-1}} = \frac{a_{n-1}a_{n-2} - a_n a_{n-3}}{a_{n-1}} $$
+
 $$ A_2 = -\frac{\begin{vmatrix} a_n & a_{n-4} \\ a_{n-1} & a_{n-5} \end{vmatrix}}{a_{n-1}} = \frac{a_{n-1}a_{n-4} - a_n a_{n-5}}{a_{n-1}} $$
+
 $$ B_1 = -\frac{\begin{vmatrix} A_1 & A_3 \\ A_2 & A_4 \end{vmatrix}}{A_1} = \frac{A_1 A_2 - A_2 A_3}{A_1} $$
+
 (此处公式有误，应为 $B_1 = \frac{A_1 A_3 - A_3 A_1}{A_1}$, 实际上是行列式计算)
 
 **劳斯稳定判据给出系统稳定的充分必要条件为：**
@@ -184,56 +217,83 @@ $$ B_1 = -\frac{\begin{vmatrix} A_1 & A_3 \\ A_2 & A_4 \end{vmatrix}}{A_1} = \fr
 ### 6.3.1 米哈伊洛夫定理
 
 设系统的特征方程为：
+
 $$ D(s) = a_n s^n + a_{n-1}s^{n-1} + \dots + a_1s + a_0 = 0 $$
+
 $$ D(s) = a_n (s - s_1)(s - s_2)\dots(s - s_n) = 0 $$
+
 $s_1, s_2, \dots, s_n$ 为系统的特征根。
 假设已知根 $s_i$ 在 $[s]$ 平面的位置，则可以从坐标原点引出 $s_i$ 和 $s$ 的向量，$s$ 和 $s_i$ 间的连线即向量 $(s - s_i)$。
 
 令 $s = j\omega$，得到特征方程的频率特性：
+
 $$ D(j\omega) = a_n (j\omega - s_1)(j\omega - s_2)\dots(j\omega - s_n) $$
+
 从各 $s_i$ 点引到 $j\omega$ 的向量即表示 $(j\omega - s_i)$。
 
 它的模和相角分别为：
+
 $$ |D(j\omega)| = a_n |j\omega - s_1| |j\omega - s_2| \dots |j\omega - s_n| $$
+
 $$ \angle D(j\omega) = \angle (j\omega - s_1) + \angle (j\omega - s_2) + \dots + \angle (j\omega - s_n) $$
 
 *   如果 $s_i$ 位于 $[s]$ 平面的左半边，那么 $\angle (j\omega - s_i)$ 逆时针旋转 $+\pi$ 角度。
 *   如果 $s_k$ 位于 $[s]$ 平面的右半边，那么 $\angle (j\omega - s_k)$ 顺时针旋转 $-\pi$ 角度。
 
 假定 $n$ 阶特征方程 $D(j\omega)$ 有 $p$ 个根在 $[s]$ 平面的右半平面，$(n-p)$ 个根在左平面 $(+\pi)$，则当 $\omega$ 从 $-\infty$ 变到 $+\infty$ 时，相角变化为：
+
 $$ \Delta \angle D(j\omega) = (n - 2p)\pi \quad (-\infty \le \omega \le +\infty) $$
 
 **米哈伊洛夫定理**
 
 令 $s=j\omega$，得到特征方程：
+
 $$ D(j\omega) = a_n (j\omega)^n + a_{n-1}(j\omega)^{n-1} + \dots + a_1(j\omega) + a_0 = 0 $$
+
 将实部和虚部分开，得 $D(j\omega) = U(\omega) + jV(\omega)$。
 式中：
+
 $$ U(\omega) = a_0 - a_2\omega^2 + a_4\omega^4 - \dots $$
+
 $$ V(\omega) = a_1\omega - a_3\omega^3 + a_5\omega^5 - \dots $$
+
 由于 $U(\omega) = U(-\omega)$ 且 $V(\omega) = -V(-\omega)$，故 $D(-j\omega) = U(\omega) - jV(\omega)$。
 
 由此可知，向量 $D(j\omega)$ 在 $[s]$ 平面上是关于实轴对称的，所以米哈伊洛夫定理的公式还可以写成：
+
 $$ \Delta \angle D(j\omega) = (n - 2p) \frac{\pi}{2} \quad (0 \le \omega \le +\infty) $$
+
 如果系统是稳定的，它的特征根应全部位于 $[s]$ 平面的左半平面，即 $p=0$，上式变为：
+
 $$ \Delta \angle D(j\omega) = n \frac{\pi}{2} \quad (0 \le \omega \le +\infty) $$
+
 
 ### 6.3.2 Nyquist 稳定判据
 
 开环传递函数为：
+
 $$ G_K(s) = G(s)H(s) = \frac{M_K(s)}{D_K(s)} $$
+
 闭环传递函数：
+
 $$ G_B(s) = \frac{G(s)}{1 + G_K(s)} = \frac{G(s)}{1 + \frac{M_K(s)}{D_K(s)}} = \frac{G(s)D_K(s)}{D_K(s) + M_K(s)} $$
+
 令 $F(s) = 1 + G_K(s) = \frac{D_K(s) + M_K(s)}{D_K(s)} = \frac{D_B(s)}{D_K(s)}$。
 $\omega$ 从 0 变到 $+\infty$：
+
 $$ \Delta \angle F(j\omega) = \Delta \angle [1 + G_K(j\omega)] = \Delta \angle D_B(j\omega) - \Delta \angle D_K(j\omega) $$
 
 **1. 开环稳定的系统**
 如果开环系统稳定，即开环系统的特征根均在 $[s]$ 的左半平面，根据米哈伊洛夫定理：
+
 $$ \Delta \angle D_K(j\omega) = n \cdot \frac{\pi}{2} \quad (0 \le \omega \le +\infty) $$
+
 这时如果闭环系统稳定，则：
+
 $$ \Delta \angle D_B(j\omega) = n \cdot \frac{\pi}{2} \quad (0 \le \omega \le +\infty) $$
+
 则：
+
 $$ \Delta \angle F(j\omega) = \Delta \angle D_B(j\omega) - \Delta \angle D_K(j\omega) = n \frac{\pi}{2} - n \frac{\pi}{2} = 0 \quad (0 \le \omega \le +\infty) $$
 
 当 $\omega$ 从 0 变到 $+\infty$ 时，$F(j\omega)$ 相角变化为 0，即 $F(j\omega)$ 的 Nyquist 图不包围原点，则闭环系统稳定。
@@ -242,9 +302,13 @@ $$ \Delta \angle F(j\omega) = \Delta \angle D_B(j\omega) - \Delta \angle D_K(j\o
 **2. 开环不稳定的系统**
 设开环系统有 $p$ 个特征根在 $[s]$ 的右半平面，$(n-p)$ 个根在左半平面。
 如果闭环系统稳定，则：
+
 $$ \Delta \angle D_K(j\omega) = (n-2p) \frac{\pi}{2} \quad (0 \le \omega \le +\infty) $$
+
 $$ \Delta \angle D_B(j\omega) = n \frac{\pi}{2} \quad (0 \le \omega \le +\infty) $$
+
 则：
+
 $$ \Delta \angle F(j\omega) = \Delta \angle [1 + G_K(j\omega)] = \Delta \angle D_B(j\omega) - \Delta \angle D_K(j\omega) = n \frac{\pi}{2} - (n-2p) \frac{\pi}{2} = p\pi \quad (0 \le \omega \le +\infty) $$
 
 *   当从 0 变到 $+\infty$ 时，$F(j\omega)$ 的 Nyquist 图逆时针方向包围原点 $p/2$ 次 (1 圈为 1 次)，则闭环系统稳定。
@@ -329,9 +393,13 @@ Bode 稳定判据实际上是 Nyquist 稳定判据的另一种形式，即利用
 ### 6.5.2 幅值裕度 $K_g$
 
 在 $\omega$ 为相位交界频率 $\omega_g (\omega_g > 0)$ 时，开环幅频特性 $|G(j\omega)H(j\omega)|$ 的倒数，称为幅值裕度，记做 $K_g$，即：
+
 $$ K_g = \frac{1}{|G(j\omega_g)H(j\omega_g)|} $$
+
 在 Bode 图上，幅值裕度改以分贝 (dB) 表示为 $K_g (\text{dB})$。
+
 $$ K_g (\text{dB}) = 20\lg K_g = -20\lg |G(j\omega)H(j\omega)| $$
+
 
 *   对于稳定的系统，$K_g (\text{dB})$ 必在 0dB 线以下，$K_g (\text{dB}) > 0$，此时称为 **正幅值裕度**。
 *   对于不稳定的系统，$K_g (\text{dB})$ 必在 0dB 线以上，$K_g (\text{dB}) < 0$，此时称为 **负幅值裕度**。

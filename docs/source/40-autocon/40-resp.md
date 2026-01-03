@@ -22,6 +22,7 @@
 2.  信号易于在实验室中获得。
 
 1.  **脉冲信号**:
+   
     $$
     x_i(t) =
     \begin{cases}
@@ -29,9 +30,11 @@
     A/\epsilon & 0 < t < \epsilon
     \end{cases}
     $$
+
     当 $A=1, \epsilon \to 0$ 时，单位脉冲信号 $\delta(t)$。 $L[\delta(t)] = 1$
 
 2.  **阶跃信号**:
+
     $$
     x_i(t) =
     \begin{cases}
@@ -39,9 +42,11 @@
     A & t \ge 0
     \end{cases}
     $$
+
     当 $A=1$，单位阶跃信号 $u(t)$。 $L[u(t)] = \frac{1}{s}$
 
 3.  **斜坡信号**:
+
     $$
     x_i(t) =
     \begin{cases}
@@ -49,6 +54,7 @@
     At & t \ge 0
     \end{cases}
     $$
+    
     当 $A=1$，单位斜坡信号 $r(t)$。 $L[r(t)] = \frac{1}{s^2}$
 
 4.  **正弦信号**: $x_i(t) = \sin \omega t$
