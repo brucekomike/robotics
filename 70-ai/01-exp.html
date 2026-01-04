@@ -1,0 +1,837 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="实验一 支持向量机" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/70-ai/01-exp.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="代码: python, 实验任务: 名称为汽车MPG.CSV的文件记录了不同车型的各种汽车的行驶测试数据和客观指 标值，包括汽车在城市道路上- 每加仑汽油可行使的英里数MPG、, 气缸数cylinders、, 排气量displacement、, 发动机马力horsepower、, 车的自重weight、, 百公里加速时间acceleration, 车名car name。., 请选取自重和马力..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="代码: python, 实验任务: 名称为汽车MPG.CSV的文件记录了不同车型的各种汽车的行驶测试数据和客观指 标值，包括汽车在城市道路上- 每加仑汽油可行使的英里数MPG、, 气缸数cylinders、, 排气量displacement、, 发动机马力horsepower、, 车的自重weight、, 百公里加速时间acceleration, 车名car name。., 请选取自重和马力..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="实验二 决策树" href="02-exp.html"><link rel="prev" title="人工智能" href="index.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>实验一 支持向量机 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-interg/index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../80-interg/reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/70-ai/01-exp.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/70-ai/01-exp.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>实验一 支持向量机<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2>代码<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-kebab-horizontal no-title" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14a2 2 0 1 1-.001-3.999A2 2 0 0 1 20 14ZM6 12a2 2 0 1 1-3.999.001A2 2 0 0 1 6 12Zm8 0a2 2 0 1 1-3.999.001A2 2 0 0 1 14 12Z"></path></svg></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">python</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">KFold</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.svm</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">r2_score</span> <span class="c1"># 用于比较模型</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="kn">import</span> <span class="n">filedialog</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="c1"># 忽略一些sklearn的FutureWarning，如果出现的话</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span> <span class="c1"># Matplotlib 可能的 UserWarning</span>
+
+<span class="c1"># --- 0. Matplotlib 中文显示配置 ---</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1">#plt.rcParams[&#39;font.sans-serif&#39;] = [&#39;SimHei&#39;]  # 指定默认字体：黑体</span>
+    <span class="c1">#plt.rcParams[&#39;font.sans-serif&#39;] = [&#39;NotoSansCJKsc-Regular&#39;]  # Specify default font: NotoSansCJKsc-Regular</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;STHeiti&#39;</span><span class="p">]</span>  <span class="c1"># Specify default font: PingFang SC</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.unicode_minus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># 解决保存图像是负号&#39;-&#39;显示为方块的问题</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;设置中文字体失败: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">. 图表中的中文可能无法正确显示。&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;请确保已安装 SimHei 字体，或修改为系统中存在的其他中文字体（如 Microsoft YaHei, WenQuanYi Micro Hei 等）。&quot;</span><span class="p">)</span>
+
+<span class="c1"># --- 1. 数据加载和初步处理函数 ---</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_and_preprocess_data</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    使用Tkinter让用户选择CSV文件，加载数据并进行预处理。</span>
+<span class="sd">    预处理包括：</span>
+<span class="sd">    - 处理&#39;horsepower&#39;列的&#39;?&#39;为NaN，转换为数值型，并用均值填充NaN。</span>
+<span class="sd">    - 删除&#39;MPG&#39;, &#39;weight&#39;, &#39;horsepower&#39;中任何包含NaN的行。</span>
+<span class="sd">    返回:</span>
+<span class="sd">        X (pd.DataFrame): 特征 (&#39;weight&#39;, &#39;horsepower&#39;)</span>
+<span class="sd">        y (pd.Series): 目标变量 (&#39;MPG&#39;)</span>
+<span class="sd">        df_cleaned (pd.DataFrame): 清理后的完整DataFrame，用于选择x0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+    <span class="n">root</span><span class="o">.</span><span class="n">withdraw</span><span class="p">()</span>  <span class="c1"># 隐藏Tkinter主窗口</span>
+    <span class="n">file_path</span> <span class="o">=</span> <span class="n">filedialog</span><span class="o">.</span><span class="n">askopenfilename</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;请选择 汽车MPG.CSV 文件&quot;</span><span class="p">,</span>
+        <span class="n">filetypes</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;CSV files&quot;</span><span class="p">,</span> <span class="s2">&quot;*.csv&quot;</span><span class="p">)]</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">file_path</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;未选择文件，程序退出。&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;成功从 &#39;</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&#39; 加载数据。&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;读取文件 &#39;</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&#39; 失败: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="c1"># 数据预处理</span>
+    <span class="c1"># 1. 处理 &#39;horsepower&#39;</span>
+    <span class="k">if</span> <span class="s1">&#39;horsepower&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="c1"># 将非数值（如 &#39;?&#39;）替换为 NaN</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;列 &#39;horsepower&#39; 中发现 </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> 个非数值/缺失值，将用该列均值填充。&quot;</span><span class="p">)</span>
+            <span class="n">horsepower_mean</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">horsepower_mean</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;使用 &#39;horsepower&#39; 均值 </span><span class="si">{</span><span class="n">horsepower_mean</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> 填充缺失值。&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;错误：数据集中未找到 &#39;horsepower&#39; 列。程序退出。&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="c1"># 2. 确保核心列存在且无缺失值</span>
+    <span class="n">required_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MPG&#39;</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="s1">&#39;horsepower&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">required_cols</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;错误：数据集中缺少必需列 &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39;。程序退出。&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="c1"># 删除这些核心列中任何包含NaN的行</span>
+    <span class="n">initial_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="n">required_cols</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># inplace=True 直接修改df</span>
+    <span class="n">rows_dropped</span> <span class="o">=</span> <span class="n">initial_rows</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rows_dropped</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;因 &#39;MPG&#39;, &#39;weight&#39;, &#39;horsepower&#39; 列存在缺失值，已删除 </span><span class="si">{</span><span class="n">rows_dropped</span><span class="si">}</span><span class="s2"> 行。&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;错误：预处理后数据为空。请检查CSV文件内容。程序退出。&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="s1">&#39;horsepower&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># 使用 .copy() 避免 SettingWithCopyWarning</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;MPG&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;数据加载和预处理完成。最终数据集包含 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2"> 条记录。&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">df</span> <span class="c1"># 返回清理后的df，其索引可能已改变</span>
+
+<span class="c1"># --- 2. 交叉验证、模型训练与绘图函数 ---</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_eval_and_plot_cv</span><span class="p">(</span><span class="n">X_full</span><span class="p">,</span> <span class="n">y_full</span><span class="p">,</span> <span class="n">model_template</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    执行n折交叉验证，训练模型，并绘制散点图。</span>
+<span class="sd">    参数:</span>
+<span class="sd">        X_full (pd.DataFrame): 全部特征数据</span>
+<span class="sd">        y_full (pd.Series): 全部目标数据</span>
+<span class="sd">        model_template: sklearn兼容的模型实例 (如LinearRegression(), Pipeline(SVR()))</span>
+<span class="sd">        model_name (str): 模型名称，用于图表标题和打印输出</span>
+<span class="sd">        n_splits (int): 交叉验证的折数</span>
+<span class="sd">    返回:</span>
+<span class="sd">        all_actuals (np.array): 所有折叠中测试集的实际MPG值</span>
+<span class="sd">        all_predictions (np.array): 所有折叠中测试集的预测MPG值</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_splits</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> <span class="c1"># random_state保证可复现性</span>
+    
+    <span class="n">fig_weight</span><span class="p">,</span> <span class="n">axs_weight</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">n_splits</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">n_splits</span><span class="p">),</span> <span class="n">squeeze</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">fig_hp</span><span class="p">,</span> <span class="n">axs_hp</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">n_splits</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">n_splits</span><span class="p">),</span> <span class="n">squeeze</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">fig_weight</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1"> - MPG vs 自重 (Weight) - </span><span class="si">{</span><span class="n">n_splits</span><span class="si">}</span><span class="s1">折交叉验证&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">fig_hp</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1"> - MPG vs 马力 (Horsepower) - </span><span class="si">{</span><span class="n">n_splits</span><span class="si">}</span><span class="s1">折交叉验证&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+    <span class="n">fold_num</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">all_actuals_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_predictions_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_full</span><span class="p">):</span>
+        <span class="n">X_train_fold</span><span class="p">,</span> <span class="n">X_test_fold</span> <span class="o">=</span> <span class="n">X_full</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">X_full</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+        <span class="n">y_train_fold</span><span class="p">,</span> <span class="n">y_test_fold</span> <span class="o">=</span> <span class="n">y_full</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">y_full</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+
+        <span class="c1"># 每次都用模板创建一个新的模型实例并训练</span>
+        <span class="c1"># 对于Pipeline和简单模型，直接fit即可，它们会被重置/新训练</span>
+        <span class="n">current_model</span> <span class="o">=</span> <span class="n">model_template</span> 
+        <span class="n">current_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_fold</span><span class="p">,</span> <span class="n">y_train_fold</span><span class="p">)</span>
+        <span class="n">y_pred_fold</span> <span class="o">=</span> <span class="n">current_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_fold</span><span class="p">)</span>
+
+        <span class="n">all_actuals_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">y_test_fold</span><span class="p">)</span>
+        <span class="n">all_predictions_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">y_pred_fold</span><span class="p">)</span>
+
+        <span class="c1"># --- 绘制 MPG vs Weight ---</span>
+        <span class="n">ax_w</span> <span class="o">=</span> <span class="n">axs_weight</span><span class="p">[</span><span class="n">fold_num</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># axs是2D数组，即使只有一列</span>
+        <span class="n">ax_w</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_train_fold</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">],</span> <span class="n">y_train_fold</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;训练集点&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">ax_w</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_test_fold</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">],</span> <span class="n">y_test_fold</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;测试集实际值&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+        <span class="n">ax_w</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_test_fold</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">],</span> <span class="n">y_pred_fold</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;测试集预测值&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+
+        <span class="n">weight_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">X_full</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">X_full</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">hp_mean_train</span> <span class="o">=</span> <span class="n">X_train_fold</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">X_plot_w</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="n">weight_range</span><span class="p">,</span> <span class="s1">&#39;horsepower&#39;</span><span class="p">:</span> <span class="n">hp_mean_train</span><span class="p">})</span>
+        <span class="n">y_plot_pred_w</span> <span class="o">=</span> <span class="n">current_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_plot_w</span><span class="p">)</span> <span class="c1"># 使用当前训练好的模型</span>
+        <span class="n">ax_w</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">weight_range</span><span class="p">,</span> <span class="n">y_plot_pred_w</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;回归线 (HP=</span><span class="si">{</span><span class="n">hp_mean_train</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+        
+        <span class="n">ax_w</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;第 </span><span class="si">{</span><span class="n">fold_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1"> 折&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+        <span class="n">ax_w</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;自重 (Weight)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">ax_w</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;MPG&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">ax_w</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+        <span class="n">ax_w</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+        <span class="c1"># --- 绘制 MPG vs Horsepower ---</span>
+        <span class="n">ax_h</span> <span class="o">=</span> <span class="n">axs_hp</span><span class="p">[</span><span class="n">fold_num</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">ax_h</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_train_fold</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">],</span> <span class="n">y_train_fold</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;训练集点&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">ax_h</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_test_fold</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">],</span> <span class="n">y_test_fold</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;测试集实际值&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+        <span class="n">ax_h</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_test_fold</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">],</span> <span class="n">y_pred_fold</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;测试集预测值&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+
+        <span class="n">hp_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">X_full</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">X_full</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">weight_mean_train</span> <span class="o">=</span> <span class="n">X_train_fold</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">X_plot_h</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="n">weight_mean_train</span><span class="p">,</span> <span class="s1">&#39;horsepower&#39;</span><span class="p">:</span> <span class="n">hp_range</span><span class="p">})</span>
+        <span class="n">y_plot_pred_h</span> <span class="o">=</span> <span class="n">current_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_plot_h</span><span class="p">)</span> <span class="c1"># 使用当前训练好的模型</span>
+        <span class="n">ax_h</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hp_range</span><span class="p">,</span> <span class="n">y_plot_pred_h</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;回归线 (W=</span><span class="si">{</span><span class="n">weight_mean_train</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+
+        <span class="n">ax_h</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;第 </span><span class="si">{</span><span class="n">fold_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1"> 折&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+        <span class="n">ax_h</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;马力 (Horsepower)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">ax_h</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;MPG&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">ax_h</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+        <span class="n">ax_h</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+        
+        <span class="n">pred_mean_fold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_pred_fold</span><span class="p">)</span>
+        <span class="n">pred_var_fold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">y_pred_fold</span><span class="p">)</span>
+        <span class="n">error_fold</span> <span class="o">=</span> <span class="n">y_test_fold</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">y_pred_fold</span> <span class="c1">#确保都是numpy array</span>
+        <span class="n">error_mean_fold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">error_fold</span><span class="p">)</span>
+        <span class="n">error_var_fold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">error_fold</span><span class="p">)</span>
+        <span class="n">r2_fold</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">y_test_fold</span><span class="p">,</span> <span class="n">y_pred_fold</span><span class="p">)</span>
+        <span class="n">mse_fold</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test_fold</span><span class="p">,</span> <span class="n">y_pred_fold</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2"> - 第 </span><span class="si">{</span><span class="n">fold_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> 折:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    测试集预测MPG: 均值=</span><span class="si">{</span><span class="n">pred_mean_fold</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, 方差=</span><span class="si">{</span><span class="n">pred_var_fold</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    测试集预测误差: 均值=</span><span class="si">{</span><span class="n">error_mean_fold</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, 方差=</span><span class="si">{</span><span class="n">error_var_fold</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    测试集R²得分: </span><span class="si">{</span><span class="n">r2_fold</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, MSE: </span><span class="si">{</span><span class="n">mse_fold</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">fold_num</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">fig_weight</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.96</span><span class="p">])</span> 
+    <span class="n">fig_hp</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.96</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_actuals_list</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_predictions_list</span><span class="p">)</span>
+
+
+<span class="c1"># --- 3. 特定数据点 x0 的预测均值和方差函数 ---</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">predict_for_x0</span><span class="p">(</span><span class="n">X_full</span><span class="p">,</span> <span class="n">y_full</span><span class="p">,</span> <span class="n">x0_features_df</span><span class="p">,</span> <span class="n">model_template</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    对指定数据点x0，使用交叉验证中每折训练的模型进行预测，并计算预测的均值和方差。</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">predictions_on_x0</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_splits</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> 
+
+    <span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_full</span><span class="p">):</span> 
+        <span class="n">X_train_fold</span><span class="p">,</span> <span class="n">y_train_fold</span> <span class="o">=</span> <span class="n">X_full</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">y_full</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_index</span><span class="p">]</span>
+        
+        <span class="n">current_model_instance</span> <span class="o">=</span> <span class="n">model_template</span> 
+        <span class="n">current_model_instance</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_fold</span><span class="p">,</span> <span class="n">y_train_fold</span><span class="p">)</span>
+        
+        <span class="n">pred_x0</span> <span class="o">=</span> <span class="n">current_model_instance</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x0_features_df</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">predictions_on_x0</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_x0</span><span class="p">)</span>
+
+    <span class="n">mean_pred_x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">predictions_on_x0</span><span class="p">)</span>
+    <span class="n">var_pred_x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">predictions_on_x0</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 对 x0 (</span><span class="si">{</span><span class="n">x0_features_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="si">}</span><span class="s2">) 使用 </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2"> 的预测 (</span><span class="si">{</span><span class="n">n_splits</span><span class="si">}</span><span class="s2">折模型) ---&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">predictions_on_x0</span><span class="p">:</span> <span class="c1"># 以防万一</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  未能生成任何预测值。&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  各折模型对 x0 的预测值: </span><span class="si">{</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">p</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">predictions_on_x0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  对 x0 的预测均值: </span><span class="si">{</span><span class="n">mean_pred_x0</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MPG&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  对 x0 的预测方差: </span><span class="si">{</span><span class="n">var_pred_x0</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mean_pred_x0</span><span class="p">,</span> <span class="n">var_pred_x0</span>
+
+<span class="c1"># --- 4. 主程序 ---</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">df_cleaned</span> <span class="o">=</span> <span class="n">load_and_preprocess_data</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">df_cleaned</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> 
+
+    <span class="n">lr_model_template</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+    <span class="n">svr_model_template</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>  
+        <span class="p">(</span><span class="s1">&#39;svr&#39;</span><span class="p">,</span> <span class="n">SVR</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">))</span>      
+    <span class="p">])</span>
+    <span class="n">n_cv_splits</span> <span class="o">=</span> <span class="mi">2</span> 
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== 开始执行 </span><span class="si">{</span><span class="n">n_cv_splits</span><span class="si">}</span><span class="s2">折交叉验证：线性回归 ===&quot;</span><span class="p">)</span>
+    <span class="n">lr_actuals</span><span class="p">,</span> <span class="n">lr_predictions</span> <span class="o">=</span> <span class="n">train_eval_and_plot_cv</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lr_model_template</span><span class="p">,</span> <span class="s2">&quot;线性回归 (LR)&quot;</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="n">n_cv_splits</span>
+    <span class="p">)</span>
+    <span class="n">overall_lr_mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">lr_actuals</span><span class="p">,</span> <span class="n">lr_predictions</span><span class="p">)</span>
+    <span class="n">overall_lr_r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">lr_actuals</span><span class="p">,</span> <span class="n">lr_predictions</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;线性回归 (</span><span class="si">{</span><span class="n">n_cv_splits</span><span class="si">}</span><span class="s2">-fold CV 总体性能):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  MSE: </span><span class="si">{</span><span class="n">overall_lr_mse</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  R² score: </span><span class="si">{</span><span class="n">overall_lr_r2</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== 开始执行 </span><span class="si">{</span><span class="n">n_cv_splits</span><span class="si">}</span><span class="s2">折交叉验证：支持向量回归 ===&quot;</span><span class="p">)</span>
+    <span class="n">svr_actuals</span><span class="p">,</span> <span class="n">svr_predictions</span> <span class="o">=</span> <span class="n">train_eval_and_plot_cv</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">svr_model_template</span><span class="p">,</span> <span class="s2">&quot;支持向量回归 (SVR)&quot;</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="n">n_cv_splits</span>
+    <span class="p">)</span>
+    <span class="n">overall_svr_mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">svr_actuals</span><span class="p">,</span> <span class="n">svr_predictions</span><span class="p">)</span>
+    <span class="n">overall_svr_r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">svr_actuals</span><span class="p">,</span> <span class="n">svr_predictions</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;支持向量回归 (</span><span class="si">{</span><span class="n">n_cv_splits</span><span class="si">}</span><span class="s2">-fold CV 总体性能):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  MSE: </span><span class="si">{</span><span class="n">overall_svr_mse</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  R² score: </span><span class="si">{</span><span class="n">overall_svr_r2</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== 模型比较总结 (基于整体交叉验证结果) ===&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;线性回归 (LR):     MSE = </span><span class="si">{</span><span class="n">overall_lr_mse</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, R² = </span><span class="si">{</span><span class="n">overall_lr_r2</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;支持向量回归 (SVR): MSE = </span><span class="si">{</span><span class="n">overall_svr_mse</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, R² = </span><span class="si">{</span><span class="n">overall_svr_r2</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">overall_lr_mse</span> <span class="o">&lt;</span> <span class="n">overall_svr_mse</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;在此数据集和评估下，线性回归的MSE较低，表现相对较好。&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">overall_svr_mse</span> <span class="o">&lt;</span> <span class="n">overall_lr_mse</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;在此数据集和评估下，支持向量回归的MSE较低，表现相对较好。&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;在此数据集和评估下，两种模型的MSE表现相似。&quot;</span><span class="p">)</span>
+
+    <span class="c1"># --- 对指定数据点 x0 进行预测 ---</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># 随机选择一个数据点作为 x0 (基于处理后的X/y数据集)</span>
+        <span class="n">idx_pos_x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">随机选择数据行（基于处理后的X/y数据集的位置索引 </span><span class="si">{</span><span class="n">idx_pos_x0</span><span class="si">}</span><span class="s2">）作为 x0。&quot;</span><span class="p">)</span>
+        
+        <span class="n">x0_features_df</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="n">idx_pos_x0</span><span class="p">]]</span> <span class="c1"># DataFrame格式 (1 row, 2 cols)</span>
+        <span class="n">x0_actual_mpg</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx_pos_x0</span><span class="p">]</span>    <span class="c1"># Series value</span>
+        
+        <span class="n">original_index_label</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">idx_pos_x0</span><span class="p">]</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;选定的 x0 (原始DataFrame索引标签: </span><span class="si">{</span><span class="n">original_index_label</span><span class="si">}</span><span class="s2">): 特征 </span><span class="si">{</span><span class="n">x0_features_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x0 的实际 MPG: </span><span class="si">{</span><span class="n">x0_actual_mpg</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">predict_for_x0</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x0_features_df</span><span class="p">,</span> <span class="n">lr_model_template</span><span class="p">,</span> <span class="s2">&quot;线性回归 (LR)&quot;</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="n">n_cv_splits</span><span class="p">)</span>
+        <span class="n">predict_for_x0</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x0_features_df</span><span class="p">,</span> <span class="n">svr_model_template</span><span class="p">,</span> <span class="s2">&quot;支持向量回归 (SVR)&quot;</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="n">n_cv_splits</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;数据为空，无法选择 x0 进行预测。&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">所有图表已生成。关闭图表窗口后程序结束。&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</details></section>
+<section id="id3">
+<h2>实验任务<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>名称为汽车MPG.CSV的文件记录了不同车型的各种汽车的行驶测试数据和客观指
+标值，包括汽车在城市道路上</p>
+<ul>
+<li><p>每加仑汽油可行使的英里数MPG、</p></li>
+<li><p>气缸数cylinders、</p></li>
+<li><p>排气量displacement、</p></li>
+<li><p>发动机马力horsepower、</p></li>
+<li><p>车的自重weight、</p></li>
+<li><p>百公里加速时间acceleration</p></li>
+<li><p>车名car name。</p></li>
+</ul>
+</li>
+<li><p>请选取自重和马力两个特征，并根据数据集建立油耗
+MPG（越大则油耗越低）预测的回归预测模型。</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>具体要求：<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>按照下发的实验报告模板独立完成实验报告，独立完成、加入代码注释。</p></li>
+<li><p>采用一般线性回归和支持向量回归建立回归预测模型，借助2折交叉验证法对两种
+方法进行比较，对得到的图表和数值给出必要说明和讨论。</p></li>
+<li><p>分别绘制不同测试集和训练集、两种方法下的MPG与自重、MPG与马力的回归预
+测结果，并用图例来说明不同点的含义。</p></li>
+<li><p>在支持向量回归中，对比4组惩罚参数C和epsilon取值的模型训练效果。</p></li>
+<li><p>分别针对自重数据和马力数据，输出两种方法的预测均值和方差。</p></li>
+</ul>
+</section>
+<section id="id5">
+<h2>报告材料<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>实验名称：
+基于支持向量机的回归预测
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>实验目的：
+理解支持向量机模型实现回归任务的基本原理，能够在有限时间
+内自主编写Python程序解决一个面向实际应用的基于支持向量机的
+回归预测问题。
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>实验设备：
+运行Sublime Text 3代码编辑器和Python 3.9.1编译环境的计算机。
+</pre></div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="02-exp.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">实验二 决策树</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">人工智能</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">实验一 支持向量机</a><ul>
+<li><a class="reference internal" href="#id2">代码</a></li>
+<li><a class="reference internal" href="#id3">实验任务</a></li>
+<li><a class="reference internal" href="#id4">具体要求：</a></li>
+<li><a class="reference internal" href="#id5">报告材料</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

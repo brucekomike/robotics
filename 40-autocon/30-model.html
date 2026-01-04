@@ -1,0 +1,950 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="第三章 控制系统的数学模型" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/40-autocon/30-model.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="数学模型: 描述系统的输入、输出变量以及系统内部各变量 (物理量) 之间关系的数学表达式。 时域数学模型:: 微分方程 (连续系统), 差分方程 (离散系统), 状态方程. 复域数学模型:: 传递函数 (连续系统) — 拉普拉斯变换, 脉冲传递函数 (离散系统). 频域数学模型:: 频率特性. 3.1 系统的微分方程: 系统的微分方程是时域中描述系统动态特性的数学模型。 线性系统: 系统的数..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="数学模型: 描述系统的输入、输出变量以及系统内部各变量 (物理量) 之间关系的数学表达式。 时域数学模型:: 微分方程 (连续系统), 差分方程 (离散系统), 状态方程. 复域数学模型:: 传递函数 (连续系统) — 拉普拉斯变换, 脉冲传递函数 (离散系统). 频域数学模型:: 频率特性. 3.1 系统的微分方程: 系统的微分方程是时域中描述系统动态特性的数学模型。 线性系统: 系统的数..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="第四章 线性系统的时域分析法" href="40-resp.html"><link rel="prev" title="第二章 拉普拉斯变换" href="20-lap.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>第三章 控制系统的数学模型 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-interg/index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../80-interg/reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/40-autocon/30-model.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/40-autocon/30-model.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>第三章 控制系统的数学模型<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p><strong>数学模型</strong>: 描述系统的输入、输出变量以及系统内部各变量 (物理量) 之间关系的数学表达式。</p>
+<section id="id2">
+<h2>时域数学模型:<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>微分方程 (连续系统)</p></li>
+<li><p>差分方程 (离散系统)</p></li>
+<li><p>状态方程</p></li>
+</ul>
+</section>
+<section id="id3">
+<h2>复域数学模型:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>传递函数 (连续系统) — 拉普拉斯变换</p></li>
+<li><p>脉冲传递函数 (离散系统)</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>频域数学模型:<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>频率特性</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>3.1 系统的微分方程<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>系统的微分方程是时域中描述系统动态特性的数学模型。</p>
+<p><strong>线性系统</strong>: 系统的数学模型能用线性微分方程来描述。反之，为非线性系统。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+a_n\frac{d^nx_o(t)}{dt^n} + a_{n-1}\frac{d^{n-1}x_o(t)}{dt^{n-1}} + \dots + a_1\frac{dx_o(t)}{dt} + a_0x_o(t) = b_m\frac{d^mx_i(t)}{dt^m} + b_{m-1}\frac{d^{m-1}x_i(t)}{dt^{m-1}} + \dots + b_1\frac{dx_i(t)}{dt} + b_0x_i(t)
+\]</div>
+</div>
+<p>若 <span class="math notranslate nohighlight">\(a_i, b_j\)</span> 都不是 <span class="math notranslate nohighlight">\(x_o(t)\)</span>, <span class="math notranslate nohighlight">\(x_i(t)\)</span> 及它们导数的函数，为线性系统，同时与时间无关，则为线性定常系统。</p>
+<p><strong>示例</strong>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\( \frac{d^2x_o(t)}{dt^2} + 2\frac{dx_o(t)}{dt} + 4x_o(t) = x_i(t) \)</span> (线性定常)</p></li>
+<li><p><span class="math notranslate nohighlight">\( \frac{d^2x_o(t)}{dt^2} + 2\frac{dx_o(t)}{dt} + 4tx_o(t) = x_i(t) \)</span> (线性时变)</p></li>
+<li><p><span class="math notranslate nohighlight">\( \frac{d^2x_o(t)}{dt^2} + x_o(t)\frac{dx_o(t)}{dt} + x_o^2(t) = tx_i(t) \)</span> (非线性时变)</p></li>
+</ul>
+<p><strong>线性系统满足叠加原理</strong>。</p>
+<section id="id6">
+<h3>典型元件所遵循的物理定律<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p><strong>机械系统</strong>:</p>
+<ul class="simple">
+<li><p><strong>质量元件</strong>: <span class="math notranslate nohighlight">\(F = M\frac{dv_{21}}{dt}\)</span></p></li>
+<li><p><strong>弹性元件</strong>: <span class="math notranslate nohighlight">\(v_{21} = \frac{1}{k}\frac{dF}{dt}\)</span></p></li>
+<li><p><strong>阻尼元件</strong>: <span class="math notranslate nohighlight">\(F = c v_{21}\)</span></p></li>
+</ul>
+<p><strong>示例</strong>:</p>
+<ul>
+<li><p>组合机床动力滑台铣平面时的情况:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+    f_i(t) - c\frac{dy_o(t)}{dt} - ky_o(t) = m\frac{d^2y_o(t)}{dt^2}
+    \]</div>
+</div>
+<p>整理为:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+    m\frac{d^2y_o(t)}{dt^2} + c\frac{dy_o(t)}{dt} + ky_o(t) = f_i(t)
+    \]</div>
+</div>
+</li>
+<li><p>机械系统 (示例):</p>
+<ol class="arabic simple">
+<li><p>明确系统的输入与输出: 输入为 <span class="math notranslate nohighlight">\(f(t)\)</span>，输出为 <span class="math notranslate nohighlight">\(x(t)\)</span>。</p></li>
+<li><p>列写原始微分方程: <span class="math notranslate nohighlight">\(f - kx - cx = m\ddot{x}\)</span></p></li>
+<li><p>整理: <span class="math notranslate nohighlight">\(m\ddot{x} + c\dot{x} + kx = f\)</span></p></li>
+</ol>
+</li>
+<li><p>汽车悬浮系统的原理图:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+    m\frac{d^2x_o(t)}{dt^2} + c\frac{dx_o(t)}{dt} + kx_o(t) = c\frac{dx_i(t)}{dt} + kx_i(t)
+    \]</div>
+</div>
+</li>
+</ul>
+<p><strong>电气系统</strong>:</p>
+<ul class="simple">
+<li><p><strong>容性元件</strong>: <span class="math notranslate nohighlight">\(i = C\frac{dv_{21}}{dt}\)</span></p></li>
+<li><p><strong>感性元件</strong>: <span class="math notranslate nohighlight">\(v_{21} = L\frac{di}{dt}\)</span></p></li>
+<li><p><strong>阻性元件</strong>: <span class="math notranslate nohighlight">\(i = \frac{1}{R}v_{21}\)</span></p></li>
+</ul>
+<p><strong>RLC 无源网络</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
+L\frac{di(t)}{dt} + Ri(t) + u_o(t) = u_i(t) \\
+i(t) = C\frac{du_o(t)}{dt}
+\end{cases}
+\end{split}\]</div>
+</div>
+<p>推导可得:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+LC\frac{d^2u_o(t)}{dt^2} + RC\frac{du_o(t)}{dt} + u_o(t) = u_i(t)
+\]</div>
+</div>
+<p><strong>机电系统 (示例)</strong>:
+输入电压 <span class="math notranslate nohighlight">\(u(t)\)</span>，输出位移 <span class="math notranslate nohighlight">\(x(t)\)</span>。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
+Ku(t) = Ri(t) + L\frac{di(t)}{dt} + e \\
+e = k_2\frac{dx(t)}{dt} \\
+k_2i(t) - c\frac{dx(t)}{dt} - kx(t) = m\frac{d^2x(t)}{dt^2}
+\end{cases}
+\end{split}\]</div>
+</div>
+<p>推导可得:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+mL\frac{d^3x(t)}{dt^3} + (mR+cL)\frac{d^2x(t)}{dt^2} + (k^2+cR+kL)\frac{dx(t)}{dt} + kR = k_2Ku(t)
+\]</div>
+</div>
+<p><strong>建立微分方程的基本步骤</strong>:</p>
+<ol class="arabic simple">
+<li><p>确定系统或各组成元件的输入、输出量。</p></li>
+<li><p>按照信号传递顺序，列写各环节的微分方程。</p></li>
+<li><p>简化微分方程，考虑相邻元件间是否存在负载效应。</p></li>
+<li><p>消去中间变量，得到只含输入、输出量的微分方程。</p></li>
+<li><p>整理所得方程。输出量在左，输入量在右，各阶导数项按降幂排列，即标准化。</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id7">
+<h2>3.2 系统的传递函数<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<p><strong>微分方程</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+a_n\frac{d^nx_o(t)}{dt^n} + a_{n-1}\frac{d^{n-1}x_o(t)}{dt^{n-1}} + \dots + a_0x_o(t) = b_m\frac{d^mx_i(t)}{dt^m} + b_{m-1}\frac{d^{m-1}x_i(t)}{dt^{m-1}} + \dots + b_0x_i(t)
+\]</div>
+</div>
+<p>初始条件为零时，对上式进行拉氏变换:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+(a_n s^n + a_{n-1}s^{n-1} + \dots + a_0)X_o(s) = (b_m s^m + b_{m-1}s^{m-1} + \dots + b_0)X_i(s)
+\]</div>
+</div>
+<p><strong>传递函数</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+G(s) = \frac{X_o(s)}{X_i(s)} = \frac{b_m s^m + b_{m-1}s^{m-1} + \dots + b_0}{a_n s^n + a_{n-1}s^{n-1} + \dots + a_0} \quad (n \ge m)
+\]</div>
+</div>
+<p><strong>传递函数的概念</strong>:
+对于单输入、单输出线性定常系统，在外界输入作用前，输入、输出的初始条件为零时，输出象函数与输入象函数之比，称为系统的传递函数，用 <span class="math notranslate nohighlight">\(G(s)\)</span> 表示。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+G(s) = \frac{X_o(s)}{X_i(s)} = \frac{b_m s^m + b_{m-1}s^{m-1} + \dots + b_0}{a_n s^n + a_{n-1}s^{n-1} + \dots + a_0} \quad (n \ge m)
+\]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+X_o(s) = G(s)X_i(s)
+\]</div>
+</div>
+<p>方框图表示:</p>
+<p><span class="math notranslate nohighlight">\(X_i(s) \longrightarrow G(s) \longrightarrow X_o(s)\)</span></p>
+<p><strong>传递函数的性质</strong>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(G(s)\)</span> 的分母只取决于系统本身的固有特性，而与外界输入无关；分子只取决于系统与外界之间的关系。</p></li>
+<li><p>对于给定的输入，系统的输出仅取决于传递函数。
+<span class="math notranslate nohighlight">\(x_o(t) = L^{-1}[X_o(s)] = L^{-1}[G(s)X_i(s)]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(G(s)\)</span> 为有理分式，要系统有意义，<span class="math notranslate nohighlight">\(n \ge m\)</span>。（实际系统总是具有惯性的）</p></li>
+<li><p><span class="math notranslate nohighlight">\(G(s)\)</span> 可以有量纲，也可以无量纲。</p></li>
+<li><p><span class="math notranslate nohighlight">\(G(s)\)</span> 与具体的物理系统无关。即相同的传递函数可描述不同的物理系统。</p></li>
+<li><p>传递函数适用于对单输入、单输出的线性定常系统的动态特性进行描述。</p></li>
+</ul>
+<p><strong>传递函数零点、极点、放大系数</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+G(s) = \frac{X_o(s)}{X_i(s)} = \frac{b_m s^m + b_{m-1}s^{m-1} + \dots + b_0}{a_n s^n + a_{n-1}s^{n-1} + \dots + a_0} \quad (n \ge m)
+\]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(G(s)\)</span> 以复变量 <span class="math notranslate nohighlight">\(s\)</span> 为自变量，因式分解后， <span class="math notranslate nohighlight">\(G(s)\)</span> 可以写成:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+G(s) = K \frac{(s - z_1)(s - z_2)\dots(s - z_m)}{(s - p_1)(s - p_2)\dots(s - p_n)} \quad (K \text{ 为常数})
+\]</div>
+</div>
+<p>当 <span class="math notranslate nohighlight">\(s=z_j (j=1, 2, \dots, m)\)</span> 时， <span class="math notranslate nohighlight">\(G(s)=0\)</span>，<span class="math notranslate nohighlight">\(z_1, z_2, \dots, z_m\)</span> 为 <span class="math notranslate nohighlight">\(G(s)\)</span> 的零点。
+当 <span class="math notranslate nohighlight">\(s=p_i (i=1, 2, \dots, n)\)</span> 时，<span class="math notranslate nohighlight">\(G(s) \to \infty\)</span>，<span class="math notranslate nohighlight">\(p_1, p_2, \dots, p_n\)</span> 为 <span class="math notranslate nohighlight">\(G(s)\)</span> 的极点，即微分方程的特征根。</p>
+<ul class="simple">
+<li><p><strong>零点</strong>: 影响瞬态响应曲线的形状，不影响系统的稳定性。</p></li>
+<li><p><strong>极点</strong>: 决定系统瞬态响应的收敛性，即影响系统的稳定性。</p></li>
+</ul>
+<p>当 <span class="math notranslate nohighlight">\(s=0\)</span> 时:
+<span class="math notranslate nohighlight">\(G(0) = K \frac{(-z_1)(-z_2)\dots(-z_m)}{(-p_1)(-p_2)\dots(-p_n)} = \frac{b_0}{a_0}\)</span>
+<span class="math notranslate nohighlight">\(G(0) = K\)</span> (传递系数，胡寿松书；放大系数)</p>
+<p>当系统输入为单位阶跃函数 <span class="math notranslate nohighlight">\(u(t)\)</span> 时:
+<span class="math notranslate nohighlight">\(x_o(\infty) = \lim_{s \to 0} sX_o(s) = \lim_{s \to 0} sG(s)X_i(s) = \lim_{s \to 0} G(s) = G(0)\)</span></p>
+<p><span class="math notranslate nohighlight">\(G(0)\)</span> — 系统的放大系数，决定系统的稳态输出，由微分方程的常数项决定。</p>
+<p>系统的传递函数的零点、极点和放大系数决定着系统的瞬态性能和稳态性能。所以，对系统的研究可变成对系统传递函数零点、极点和放大系数的研究。</p>
+<section id="id8">
+<h3>典型环节的传递函数<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>比例环节</strong>:</p>
+<ul class="simple">
+<li><p>动力学方程: <span class="math notranslate nohighlight">\(x_o(t) = Kx_i(t)\)</span></p></li>
+<li><p>传递函数: <span class="math notranslate nohighlight">\(G(s) = K\)</span></p></li>
+<li><p>方框图: <span class="math notranslate nohighlight">\(X_i(s) \longrightarrow K \longrightarrow X_o(s)\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>惯性环节</strong>:</p>
+<ul class="simple">
+<li><p>动力学方程为: <span class="math notranslate nohighlight">\(T\frac{dx_o(t)}{dt} + x_o(t) = x_i(t)\)</span></p></li>
+<li><p>传递函数为: <span class="math notranslate nohighlight">\(G(s) = \frac{1}{Ts+1}\)</span></p></li>
+<li><p>方框图: <span class="math notranslate nohighlight">\(X_i(s) \longrightarrow \frac{1}{Ts+1} \longrightarrow X_o(s)\)</span></p></li>
+<li><p><strong>示例</strong>:</p>
+<ul>
+<li><p>无源滤波电路: <span class="math notranslate nohighlight">\(G(s) = \frac{1}{RCs+1}\)</span></p></li>
+<li><p>弹簧—阻尼系统: <span class="math notranslate nohighlight">\(G(s) = \frac{1}{c/k \cdot s + 1}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>微分环节</strong>:</p>
+<ul class="simple">
+<li><p>动力学方程: <span class="math notranslate nohighlight">\(x_o(t) = T\frac{dx_i(t)}{dt}\)</span></p></li>
+<li><p>传递函数: <span class="math notranslate nohighlight">\(G(s) = \frac{X_o(s)}{X_i(s)} = Ts\)</span></p></li>
+<li><p>方框图: <span class="math notranslate nohighlight">\(X_i(s) \longrightarrow Ts \longrightarrow X_o(s)\)</span></p></li>
+<li><p><strong>特点</strong>:</p>
+<ul>
+<li><p>一般不能单独存在；</p></li>
+<li><p>反映输入的变化趋势；使输入提前，预测输入；</p></li>
+<li><p>增加系统的阻尼；</p></li>
+<li><p>强化噪声。</p></li>
+</ul>
+</li>
+<li><p><strong>示例</strong>: 微分运算电路 <span class="math notranslate nohighlight">\(u_o = -R_1C\dot{u}_i\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>积分环节</strong>:</p>
+<ul class="simple">
+<li><p>动力学方程: <span class="math notranslate nohighlight">\(x_o(t) = \int x_i(t) dt\)</span></p></li>
+<li><p>传递函数: <span class="math notranslate nohighlight">\(G(s) = \frac{X_o(s)}{X_i(s)} = \frac{1}{s}\)</span></p></li>
+<li><p><strong>特点</strong>:</p>
+<ul>
+<li><p>输出累加特性；</p></li>
+<li><p>输出的滞后作用；</p></li>
+<li><p>记忆功能。</p></li>
+</ul>
+</li>
+<li><p><strong>示例</strong>: 水箱液位控制。</p></li>
+</ul>
+</li>
+<li><p><strong>振荡环节</strong>:</p>
+<ul class="simple">
+<li><p>动力学方程: <span class="math notranslate nohighlight">\(T^2\frac{d^2x_o(t)}{dt^2} + 2\xi T\frac{dx_o(t)}{dt} + x_o(t) = x_i(t)\)</span></p></li>
+<li><p>传递函数: <span class="math notranslate nohighlight">\(G(s) = \frac{\omega_n^2}{s^2 + 2\xi\omega_n s + \omega_n^2} \quad (0 \le \xi &lt; 1)\)</span></p>
+<ul>
+<li><p>或 <span class="math notranslate nohighlight">\(G(s) = \frac{1}{T^2s^2 + 2Ts + 1}\)</span></p></li>
+</ul>
+</li>
+<li><p>其中 <span class="math notranslate nohighlight">\(\omega_n\)</span> 为无阻尼固有频率, <span class="math notranslate nohighlight">\(\xi\)</span> 为阻尼比, <span class="math notranslate nohighlight">\(T = \frac{1}{\omega_n}\)</span> 为时间常数。</p></li>
+<li><p><strong>特点</strong>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(0 \le \xi &lt; 1\)</span> 时, 输出存在振荡, 且 <span class="math notranslate nohighlight">\(\xi\)</span> 越小, 振荡越剧烈；</p></li>
+<li><p><span class="math notranslate nohighlight">\(\xi \ge 1\)</span> 时, 输出无振荡, 非振荡环节是两个一阶惯性环节的组合。</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>延时环节</strong>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x_o(t) = x_i(t-\tau)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(G(s) = e^{-\tau s}\)</span></p></li>
+<li><p><strong>示例</strong>: 轧钢时带钢厚度检测。</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id9">
+<h2>3.3 系统方框图及其简化<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<p>由若干环节按一定关系组成的复杂系统，这些环节用方框来表示，其间用相应的变量及信号流向联系起来，构成系统的方框图。</p>
+<ul class="simple">
+<li><p>系统内部各环节的数学模型</p></li>
+<li><p>各变量之间的关系</p></li>
+<li><p>信号流向</p></li>
+</ul>
+<p><strong>方框图的结构要素</strong>: 3个</p>
+<ul class="simple">
+<li><p>传递函数方框</p></li>
+<li><p>相加点示意图</p></li>
+<li><p>分支点示意图</p></li>
+</ul>
+<p><strong>系统方框图的建立</strong>:</p>
+<ol class="arabic simple">
+<li><p>根据系统工作原理和特性划分若干环节；</p></li>
+<li><p>建立各个环节的原始微分方程；</p></li>
+<li><p>对所建立的各个原始微分方程进行拉氏变换，分别建立其传递函数和绘制环节的方框图；</p></li>
+<li><p>按照信号在系统中传递、变换的关系，依次连接各传递函数方框图，系统输入量置于左端，输出量置于右端，便可得到系统的传递函数方框图。
+方框图中的方框与实际系统的物理元部件并非一一对应。</p></li>
+</ol>
+<p><strong>方框图的化简 (等效变换)</strong>
+等效变换原则是：变换前后前向通道中的传递函数的乘积应保持不变，回路中传递函数的乘积应保持不变。即变换前后整个系统的输入输出传递函数保持不变。</p>
+<ol class="arabic simple">
+<li><p><strong>串联环节</strong>: 前一环节的输出为后一环节输入的联接方式。</p>
+<ul class="simple">
+<li><p>环节串联：等效传递函数等于各串联环节的传递函数之积。
+<span class="math notranslate nohighlight">\(X_i(s) \xrightarrow{G_1(s)} X_1 \xrightarrow{G_2(s)} X_o(s) \quad \Longleftrightarrow \quad X_i(s) \xrightarrow{G_1(s)G_2(s)} X_o(s)\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>并联环节</strong>: 各环节输入相同，输出为各环节输出的代数和。</p>
+<ul class="simple">
+<li><p>环节并联：等效传递函数等于各并联环节的传递函数之和。
+<span class="math notranslate nohighlight">\(X_i \rightarrow \begin{cases} \xrightarrow{G_1} X_{o1} \\ \xrightarrow{G_2} X_{o2} \end{cases} \quad \Longleftrightarrow \quad X_i \xrightarrow{G_1 \pm G_2} X_o\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>反馈连接</strong>:</p>
+<ul class="simple">
+<li><p>前向通道传递函数: <span class="math notranslate nohighlight">\(G(s) = X_o(s) / E(s)\)</span></p></li>
+<li><p>反馈通道传递函数: <span class="math notranslate nohighlight">\(H(s) = B(s) / X_o(s)\)</span></p></li>
+<li><p>开环传递函数: <span class="math notranslate nohighlight">\(G_K(s) = G(s)H(s) = B(s) / E(s)\)</span></p></li>
+<li><p>闭环传递函数:
+$<span class="math notranslate nohighlight">\(
+G_B(s) = \frac{X_o(s)}{X_i(s)} = \frac{G(s)}{1 \pm G(s)H(s)}
+\)</span>$
+<strong>注意</strong>:</p></li>
+<li><p>若相加点的 <span class="math notranslate nohighlight">\(B(s)\)</span> 处为负号 <span class="math notranslate nohighlight">\(G_B(s) = \frac{G(s)}{1+G(s)H(s)}\)</span></p></li>
+<li><p>若相加点的 <span class="math notranslate nohighlight">\(B(s)\)</span> 处为正号 <span class="math notranslate nohighlight">\(G_B(s) = \frac{G(s)}{1-G(s)H(s)}\)</span></p></li>
+<li><p>闭环系统的反馈是正反馈还是负反馈，与反馈信号在相加点取正号还是负号是两回事。</p></li>
+<li><p>若反馈回路传递函数 <span class="math notranslate nohighlight">\(H(s) = 1\)</span>，称为单位反馈。此时的系统称为单位反馈系统。
+<span class="math notranslate nohighlight">\(G_B(s) = \frac{G(s)}{1 \pm G(s)}\)</span></p></li>
+<li><p>闭环传递函数的量纲决定于 <span class="math notranslate nohighlight">\(X_o(s)\)</span> 与 <span class="math notranslate nohighlight">\(X_i(s)\)</span> 的量纲，两者可以相同也可以不相同。</p></li>
+</ul>
+</li>
+<li><p><strong>分支点的移动规则</strong>:</p>
+<ul class="simple">
+<li><p>分支点前移</p></li>
+<li><p>分支点后移</p></li>
+</ul>
+</li>
+<li><p><strong>相加点的移动规则</strong>:</p>
+<ul class="simple">
+<li><p>相加点后移</p></li>
+<li><p>相加点前移</p></li>
+</ul>
+</li>
+<li><p><strong>相邻相加点的移动规则</strong></p></li>
+<li><p><strong>相邻分支点的移动规则</strong></p>
+<ul class="simple">
+<li><p><strong>分支点与相加点之间不能相互移动！</strong></p></li>
+</ul>
+</li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="id10">
+<h2>3.4 考虑扰动作用反馈系统的传递函数<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
+<p>控制系统在实际工作过程中有两类输入信号，给定输入信号 <span class="math notranslate nohighlight">\(x_i(t)\)</span>，干扰信号 <span class="math notranslate nohighlight">\(n(t)\)</span>。</p>
+<p><strong>1. 给定输入信号作用下的系统传递函数</strong>:
+令系统的干扰信号 <span class="math notranslate nohighlight">\(n(t) = 0\)</span>。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+G_B(s) = \frac{X_{o1}(s)}{X_i(s)} = \frac{G_1(s)G_2(s)}{1+G_1(s)G_2(s)H(s)}
+\]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(G_K(s) = G_1(s)G_2(s)H(s)\)</span>
+系统在给定输入作用下的输出的拉氏变换为:
+<span class="math notranslate nohighlight">\(X_{o1}(s) = G_B(s)X_i(s) = \frac{G_1(s)G_2(s)}{1+G_1(s)G_2(s)H(s)}X_i(s)\)</span></p>
+<p><strong>2. 干扰信号作用下的系统传递函数</strong>:
+令系统的输入信号 <span class="math notranslate nohighlight">\(x_i(t) = 0\)</span>。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\Phi_B(s) = \frac{X_{o2}(s)}{N(s)} = \frac{G_2(s)}{1+G_1(s)G_2(s)H(s)}
+\]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(X_{o2}(s) = \Phi_B(s)N(s) = \frac{G_2(s)}{1+G_1(s)G_2(s)H(s)}N(s)\)</span></p>
+<p><strong>3. 输入信号和干扰信号同时作用下的系统输出</strong>:</p>
+<p><span class="math notranslate nohighlight">\(X_o(s) = X_{o1}(s) + X_{o2}(s)\)</span></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+X_o(s) = \frac{G_1(s)G_2(s)}{1+G_1(s)G_2(s)H(s)}X_i(s) + \frac{G_2(s)}{1+G_1(s)G_2(s)H(s)}N(s)
+\]</div>
+</div>
+<p>如果 <span class="math notranslate nohighlight">\(|G_1(s)G_2(s)H(s)| \gg 1\)</span> 且 <span class="math notranslate nohighlight">\(|G_1(s)H(s)| \gg 1\)</span>，则：</p>
+<p><span class="math notranslate nohighlight">\(X_{o2}(s) \approx \frac{G_2(s)}{G_1(s)G_2(s)H(s)}N(s) \approx \frac{1}{G_1(s)H(s)}N(s)\)</span></p>
+<p>可见，闭环系统能使干扰引起的输出很小。</p>
+<p><strong>3.5 输入和干扰同时作用下的系统传函</strong>
+这时，系统的总输出为:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+X_o(s) \approx \frac{1}{H(s)}X_i(s) + \frac{1}{G_1(s)H(s)}N(s) \approx \frac{1}{H(s)}X_i(s)
+\]</div>
+</div>
+<p>显然，通过反馈回路组成的闭环系统能使总输出 <span class="math notranslate nohighlight">\(X_o(s)\)</span> 只随 <span class="math notranslate nohighlight">\(X_i(s)\)</span> 而变化，不管外来干扰如何变化，<span class="math notranslate nohighlight">\(X_o(s)\)</span> 总是保持不变或变化很小。</p>
+<p><strong>结论</strong>:
+通过负反馈回路所组成的闭环控制系统具有较强的抗干扰能力，即干扰信号对输出的影响很小。同时，系统的输出主要取决于反馈回路的传递函数和输入信号，与前向通路的传递函数几乎无关。特别是，当 <span class="math notranslate nohighlight">\(H(s) = 1\)</span> 时，即单位负反馈系统，这时系统的输出 <span class="math notranslate nohighlight">\(X_o(s) \approx X_i(s)\)</span>，从而系统几乎实现了对输入信号的完全复现。</p>
+</section>
+<hr class="docutils" />
+<section id="id11">
+<h2>4. 反馈控制系统中的误差传递函数<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<p><strong>反馈控制系统的典型框图</strong>
+<span class="math notranslate nohighlight">\(e(t) = x_i(t) - b(t)\)</span>
+<span class="math notranslate nohighlight">\(E(s) = X_i(s) - B(s)\)</span></p>
+<p><strong>(1) 给定输入信号作用下的系统误差传递函数</strong>:
+令 <span class="math notranslate nohighlight">\(n(t) = 0\)</span>。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+G_e(s) = \frac{E(s)}{X_i(s)} = \frac{1}{1+G_1(s)G_2(s)H(s)}
+\]</div>
+</div>
+<p><strong>(2) 干扰信号作用下的系统误差传递函数</strong>:
+令 <span class="math notranslate nohighlight">\(x_i(t) = 0\)</span>。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\Phi_e(s) = \frac{E(s)}{N(s)} = \frac{-G_2(s)H(s)}{1+G_1(s)G_2(s)H(s)}
+\]</div>
+</div>
+<p><strong>(3) 输入和干扰信号同时作用下系统误差传函</strong>:
+<span class="math notranslate nohighlight">\(E(s) = G_e(s)X_i(s) + \Phi_e(s)N(s)\)</span></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+E(s) = \frac{1}{1+G_1(s)G_2(s)H(s)}X_i(s) + \frac{-G_2(s)H(s)}{1+G_1(s)G_2(s)H(s)}N(s)
+\]</div>
+</div>
+<p>如果 <span class="math notranslate nohighlight">\(|G_1(s)G_2(s)H(s)| \gg 1\)</span> ，且 <span class="math notranslate nohighlight">\(|G_1(s)| \gg 1\)</span>，则 <span class="math notranslate nohighlight">\(E(s) \approx 0\)</span>。
+设计控制系统时，只要对组成系统的元器件选择合适的参数，控制系统就可以获得较高的工作精度。</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="40-resp.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">第四章 线性系统的时域分析法</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="20-lap.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">第二章 拉普拉斯变换</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">第三章 控制系统的数学模型</a><ul>
+<li><a class="reference internal" href="#id2">时域数学模型:</a></li>
+<li><a class="reference internal" href="#id3">复域数学模型:</a></li>
+<li><a class="reference internal" href="#id4">频域数学模型:</a></li>
+<li><a class="reference internal" href="#id5">3.1 系统的微分方程</a><ul>
+<li><a class="reference internal" href="#id6">典型元件所遵循的物理定律</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">3.2 系统的传递函数</a><ul>
+<li><a class="reference internal" href="#id8">典型环节的传递函数</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id9">3.3 系统方框图及其简化</a></li>
+<li><a class="reference internal" href="#id10">3.4 考虑扰动作用反馈系统的传递函数</a></li>
+<li><a class="reference internal" href="#id11">4. 反馈控制系统中的误差传递函数</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="../_static/tex-svg-full.js?v=fe9f5dce"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

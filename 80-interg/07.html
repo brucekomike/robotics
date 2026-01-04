@@ -1,0 +1,593 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="第七章 工业机器人高级编程" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/80-interg/07.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="7.1 中断与事件程序: 7.1.1 中断与事件程序: 上一章已讲解了Rapid语言数据结构与基本指令。但是工业机器人的实际作业场景往往比较复杂,单纯依靠运动控制语句和简单逻辑语句难以完成作业任务。此时,可通过机器人的中断、事件程序、错误处理、轨迹限速、区域监控等高级编程功能的配合使用,来满足复杂工况和工艺要求。 7.2 错误处理与轨迹限速: 7.3 区域监控与关节轴限制: 7.4 奇异点处..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="7.1 中断与事件程序: 7.1.1 中断与事件程序: 上一章已讲解了Rapid语言数据结构与基本指令。但是工业机器人的实际作业场景往往比较复杂,单纯依靠运动控制语句和简单逻辑语句难以完成作业任务。此时,可通过机器人的中断、事件程序、错误处理、轨迹限速、区域监控等高级编程功能的配合使用,来满足复杂工况和工艺要求。 7.2 错误处理与轨迹限速: 7.3 区域监控与关节轴限制: 7.4 奇异点处..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="第八章 工业机器人仿真软件高级应用" href="08.html"><link rel="prev" title="第六章 工业机器人数据与编程基础" href="06.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>第七章 工业机器人高级编程 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/80-interg/07.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/80-interg/07.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>第七章 工业机器人高级编程<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2>7.1 中断与事件程序<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>7.1.1 中断与事件程序<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>上一章已讲解了Rapid语言数据结构与基本指令。但是工业机器人的实际作业场景往往比较复杂,单纯依靠运动控制语句和简单逻辑语句难以完成作业任务。此时,可通过机器人的中断、事件程序、错误处理、轨迹限速、区域监控等高级编程功能的配合使用,来满足复杂工况和工艺要求。</p>
+</section>
+</section>
+<section id="id4">
+<h2>7.2 错误处理与轨迹限速<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+</section>
+<section id="id5">
+<h2>7.3 区域监控与关节轴限制<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+</section>
+<section id="id6">
+<h2>7.4 奇异点处理与多任务<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<section id="id7">
+<h3>7.4.1 奇异点处理<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>我们都知道六轴机器人包含六组不同位置的驱动电机,每个驱动电机都能提供绕一轴的旋转运动,从自由度的概念来看,六轴机器人已经满足三维空间中的六个自由度,理论上其末端可以到达空间中任何位置及角度,但为什么有时候六轴机器人运动会卡死呢?这是因为六轴机器人存在一些奇异点。</p>
+<p>运动学中,六轴机器人可视为由「刚体」以及可提供平移或旋转的「关节」所组成,运动学主要探讨刚体尺寸及关节参数对应于运动链末端的位置及运动路径之关系,可再划分为两个部分:即正运动学与逆运动学。</p>
+<p><strong>1. 正运动学:</strong>
+在给定已知的尺寸及关节参数的条件下,去求得运动链末端的位置及角度;在六轴机器人上,就是给定各轴角度,去求得末端的笛卡尔坐标。通常而言:一组给定的关节参数只对应唯一的末端坐标。</p>
+<p><strong>2. 逆运动学:</strong>
+欲求得任何可能的关节参数,使运动链末端达到特定位置及角度;在六轴机器人上,就是从已知的末端坐标,去求得各轴角度参数的组合。与正运动学不同,一个末端位置可以由不同的机器人姿态来达成,对应不只一组关节参数。理论上,六轴机器人的一个末端位置可对应多达十六组不同的关节参数。</p>
+<p>在逆运动学中,当末端位于奇异点时,一个末端位置会对应无限多组关节参数解。原因在于:运动学中使用Jacobian矩阵来映射关节转角与六轴机器人末端位置关系时,当六轴机器人中的两轴共线时,雅克比矩阵内各列并非完全线性独立,造成Jacobian矩阵的秩会减少,其行列式值为零,使得Jacabian矩阵无法求逆,即逆运动学无法运算,发生奇异。</p>
+<p>在六轴机器人末端接近奇异点时,微小的位移变化量就会导致某些轴的角度产生剧烈变化,产生近似无限大的角速度,或者机器人自由度减少,而无法实现某些运算。若六轴机器人经过奇异点,运动即会停止,并出现错误讯息等提示。</p>
+<p><strong>奇异点错误消息界面</strong>
+例如:当工业机器人机器人关节的第5轴角度为0°,同时第4轴和第6轴角度相同时,则称机器人的这个种姿态叫做奇异点。</p>
+<p><strong>六轴机器人的奇异点分为三种类型:</strong></p>
+<p><strong>1. 腕部奇点:</strong>
+腕奇异点是指轴4和轴6处于同一条线上(即,轴5角度为0度)的配置。此时,无论如何改变轴4和轴6的关节转速,都无法改变末端执行器的位置。也即会造成系统试图将4轴与6轴瞬间旋转180度。</p>
+<p><strong>2. 肩关节奇异:</strong>
+当第1轴与腕关节中心C点(第5轴与第6轴之交点)共线时,会发生肩关节奇异。此时无论如何改变1轴与4轴的转角,机器人末端位置不会发生改变。也即会造成系统尝试将1轴与4轴瞬间旋转180度。</p>
+<p><strong>2. 肘关节奇异:</strong>
+当腕关节中心点C与2轴、3轴共面时,即C点与A2、A3共线时,会发生肘关节奇异。此时会造成肘关节卡死,机器人无法再移动。也可以从力与运动角度理解该奇异点。</p>
+<p><strong>避免奇异点</strong>
+通常可以用简单方式来避免奇异点。当机器人4、5、6关节轴连接成直线或者4、6轴角度相同时,就会出现奇点。因此,技术人员通过工具增加一个很小的角度,以减少机器人进入奇点的机会。</p>
+<p>这种技术仍然是避免奇点的一种好方法。以一个非常小的角度(5-15度)安装机器人工具,通常可以确保机器人完全避免奇点。这种设计成本相对造价低,并且很容易实现。而最直接有效的方式就是把机器人运动姿态设计到没有奇点的区域。</p>
+<p><strong>SingArea 指令</strong>
+另外机器人控制系统在软件层面也对奇异点有相关的应对设计,ABB机器人编写程序时候,可以通过“SingArea”指令帮助让机器人自动规划当前轨迹,在优化经过的奇异点时的插补方式,避免出现系统遇到奇异点而报错。</p>
+<p>“SingArea”指令说明表</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>项目/指令</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SingArea</p></td>
+<td><p>设定机器人运动时,在奇异点的插补方式</p></td>
+</tr>
+<tr class="row-odd"><td><p>SingArea\Wrist</p></td>
+<td><p>允许轻微改变工具的姿态,以便通过奇异点</p></td>
+</tr>
+<tr class="row-even"><td><p>SingArea\Off</p></td>
+<td><p>关闭自动插补</p></td>
+</tr>
+<tr class="row-odd"><td><p>变元</p></td>
+<td><p>SingArea [\Wrist]</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>SingArea只对MoveL MoveC有效。</p>
+<p><strong>SingArea 变元说明:</strong></p>
+<ul class="simple">
+<li><p><strong>Wrist:</strong> 允许工具方位稍微偏离,以避免腕奇异点。其适用于轴4和轴6平行的情况(轴5为0度)。同时适用于拥有不到六个轴的机械臂的线性和圆周插补,其允许工具方位出现偏离。</p></li>
+<li><p><strong>LockAxis4:</strong> 将轴4锁定在0或±180度,使得机器人依然可以继续运行,从而避免在轴5接近于零时的奇异点问题。如果当轴4位于0或±180度时,依然达不到编程位置,这通过四轴微动改变工具姿态来运行机械臂来达到位置,如果轴4的需要偏离锁定位置2度以上时候,则系统通过自行改变参数执行一次变元Wrist的功能来继续运动,在所有后续移动中,轴4将保持锁定,直至执行新的SingArea指令。</p></li>
+<li><p><strong>Off:</strong> 不允许工具方位出现偏离。当未通过奇异点,或不允许方位发生改变时,上述要求适用。如果未指定任何参数,系统默认设置为\Off。如果通过奇异点,则一个或多个轴可实施彻底的移动,从而导致速率降低。拥有不到六个轴的机械臂可能无法达到编程的工具方位。因此,机械臂将停止。</p></li>
+</ul>
+</section>
+<section id="id8">
+<h3>7.4.2 多任务之间数据通信<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<p>多任务程序最多可以支持20个不带机器人运动指令的后台并行的RAPID程序。</p>
+<p>多任务程序最常见的应用就是任务间数据交换:任务间是可以通过程序数据进行数据的交换,在需要数据交换的任务中建立存储类型为可变量而且名字相同的程序数据,在一个任务中修改了这个数据的数值,在另一个任务中名字相同的数据也会随之更新。</p>
+<p><strong>操作步骤</strong></p>
+<p><strong>1. 建立多任务</strong>
+(1) 首先进入示教器控制面板的配置画面中,选择“Controller”主题,然后选择“Task”,添加一个新的任务;然后进入新的任务添加界面,对新任务起一个Tmp01的名字,接着对类型选项“Type”选择“NONMAL”,以及“Main entry”进行重命名为“mainTK”如图所示。</p>
+<p>(2) 然后进行重启操作,使设置生效。重新启动后,点击示教器主页右下角快捷菜单,再点击多任务按钮,将T_ROB1前台任务取消掉如图所示。这样就可以进入到后台任务中新建主程序和例行程序。</p>
+<p>(3) 最后在新建的后台任务中编辑程序完成后,将T_ROB1前台任务勾选,在此进入到控制面板配置的在Task的编辑画面,将前面新建的多任务的Type设定为“SEMISTATIC”,以及将TrustLevel改为NoSafety,这样设置后,重启后台程序将会自动执行。</p>
+<p><strong>2. 多任务之间数据通信</strong>
+<strong>例:</strong>
+首先建立一个并行任务,type设置为NONMAL,如图所示,在两个任务下建立好相同名称不同任务的可变量数字数据,如图所示。</p>
+<p>将tmp01的type改为SEMISTATIC以及确保TrustLevel为NoSafety,在前台任务程序中编写赋值语句处理数据,观察后台任务数据的变化,见下面代码和如图所示。</p>
+<div class="highlight-rapid notranslate"><div class="highlight"><pre><span></span>MODULE MainModule
+  PERS num TX01:=881;
+
+  PROC main()
+    TX01 := 881;
+  ENDPROC
+ENDMODULE
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="08.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">第八章 工业机器人仿真软件高级应用</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="06.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">第六章 工业机器人数据与编程基础</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">第七章 工业机器人高级编程</a><ul>
+<li><a class="reference internal" href="#id2">7.1 中断与事件程序</a><ul>
+<li><a class="reference internal" href="#id3">7.1.1 中断与事件程序</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">7.2 错误处理与轨迹限速</a></li>
+<li><a class="reference internal" href="#id5">7.3 区域监控与关节轴限制</a></li>
+<li><a class="reference internal" href="#id6">7.4 奇异点处理与多任务</a><ul>
+<li><a class="reference internal" href="#id7">7.4.1 奇异点处理</a></li>
+<li><a class="reference internal" href="#id8">7.4.2 多任务之间数据通信</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

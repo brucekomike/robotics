@@ -1,0 +1,283 @@
+# 第二次作业
+- $l_1=375mm$
+- $l_2=950mm$
+- $e=125mm$
+- $r^p=(10,20, -900)^T$
+
+1. 推导运动学逆解
+2. 思考正解如何求解
+3. 撰写word报告
+## 求解流程
+
+Delta机器人是一种并联机器人，主要用于快速拾取和放置任务。为了计算其逆运动学，我们需要确定每个关节的角度，以便将末端执行器移动到指定的位置。
+
+### 参数定义
+
+- $ e $: 从原点到第一个关节的距离。
+- $ l_1 $: 上臂的长度。
+- $ l_2 $: 下臂的长度。
+- $ \mathbf{r}_p = (x, y, z) $: 末端执行器的位置。
+
+给定参数：
+
+- $ e = 125 \, \text{mm} $
+- $ l_1 = 375 \, \text{mm} $
+- $ l_2 = 950 \, \text{mm} $
+- $ \mathbf{r}_p = (10, 20, -900) $
+
+### 计算步骤
+
+1. **计算臂基坐标**：
+
+   对于每个臂基（假设角度为 $\theta_1, \theta_2, \theta_3$），计算其坐标：
+
+   $$
+   x_1 = x - e \cdot \cos(\theta_1)
+   $$
+   $$
+   y_1 = y - e \cdot \sin(\theta_1)
+   $$
+   $$
+   z_1 = z
+   $$
+
+   对 $\theta_2$ 和 $\theta_3$ 重复上述步骤。
+
+2. **计算基座到末端执行器的距离**：
+
+   $$
+   d_1 = \sqrt{x_1^2 + y_1^2 + z_1^2}
+   $$
+
+   对 $d_2$ 和 $d_3$ 重复上述步骤。
+
+3. **求解逆运动学**：
+
+   使用余弦定理计算每个关节的角度：
+
+   $$
+   \theta_1 = \cos^{-1}\left(\frac{l_1^2 + d_1^2 - l_2^2}{2 \cdot l_1 \cdot d_1}\right)
+   $$
+
+   对 $\theta_2$ 和 $\theta_3$ 重复上述步骤。
+
+### 结果展示
+
+将计算结果以可读格式和 LaTeX 格式输出：
+
+- Theta1: $ \theta_1 $
+- Theta2: $ \theta_2 $
+- Theta3: $ \theta_3 $
+
+通过这些步骤，我们可以计算出Delta机器人每个关节的角度，从而实现精确的运动控制。
+### matlab/octave
+```matlab
+% Define symbolic variables
+syms x y z e l1 l2 theta1 theta2 theta3
+
+% Assign values to the parameters
+values = struct('x', 10, 'y', 20, 'z', -900, 'e', 125, 'l1', 375, 'l2', 950);
+
+% Calculate the coordinates of the arm bases, considering e
+x1 = x - e * cos(theta1);
+y1 = y - e * sin(theta1);
+z1 = z;
+
+x2 = x - e * cos(theta2);
+y2 = y - e * sin(theta2);
+z2 = z;
+
+x3 = x - e * cos(theta3);
+y3 = y - e * sin(theta3);
+z3 = z;
+
+% Calculate distances from base to end effector
+d1 = sqrt(x1^2 + y1^2 + z1^2);
+d2 = sqrt(x2^2 + y2^2 + z2^2);
+d3 = sqrt(x3^2 + y3^2 + z3^2);
+
+% Calculate joint angles using inverse kinematics
+theta1_sol = acos((l1^2 + d1^2 - l2^2) / (2 * l1 * d1));
+theta2_sol = acos((l1^2 + d2^2 - l2^2) / (2 * l1 * d2));
+theta3_sol = acos((l1^2 + d3^2 - l2^2) / (2 * l1 * d3));
+
+% Substitute values into the solutions
+theta1_val = subs(theta1_sol, values);
+theta2_val = subs(theta2_sol, values);
+theta3_val = subs(theta3_sol, values);
+
+% Display the solutions
+fprintf('Theta1: %s\n', char(theta1_val));
+fprintf('Theta2: %s\n', char(theta2_val));
+fprintf('Theta3: %s\n', char(theta3_val));
+
+% LaTeX output
+latex_output = sprintf('\\theta_1 = %s \\\\\n\\theta_2 = %s \\\\\n\\theta_3 = %s', latex(theta1_val), latex(theta2_val), latex(theta3_val));
+fprintf('LaTeX Output:\n%s\n', latex_output);
+```
+### python
+```python
+from sympy import symbols, sqrt, acos, cos, sin, latex
+
+# Define symbols
+x, y, z = symbols('x y z')
+e, l1, l2 = symbols('e l1 l2')
+theta1, theta2, theta3 = symbols('theta1 theta2 theta3')
+
+# Assign values to the parameters
+values = {
+    x: 10,   # End effector x position
+    y: 20,   # End effector y position
+    z: -900, # End effector z position
+    e: 125,  # Distance from origin to first joint
+    l1: 375, # Length of the upper arms
+    l2: 950  # Length of the lower arms
+}
+
+# Adjust the end effector position
+adjusted_x = x
+adjusted_y = y
+adjusted_z = z
+
+# Calculate the coordinates of the arm bases, considering e
+x1 = adjusted_x - e * cos(theta1)
+y1 = adjusted_y - e * sin(theta1)
+z1 = adjusted_z
+
+x2 = adjusted_x - e * cos(theta2)
+y2 = adjusted_y - e * sin(theta2)
+z2 = adjusted_z
+
+x3 = adjusted_x - e * cos(theta3)
+y3 = adjusted_y - e * sin(theta3)
+z3 = adjusted_z
+
+# Calculate distances from base to end effector
+d1 = sqrt(x1**2 + y1**2 + z1**2)
+d2 = sqrt(x2**2 + y2**2 + z2**2)
+d3 = sqrt(x3**2 + y3**2 + z3**2)
+
+# Calculate joint angles using inverse kinematics
+theta1_sol = acos((l1**2 + d1**2 - l2**2) / (2 * l1 * d1))
+theta2_sol = acos((l1**2 + d2**2 - l2**2) / (2 * l1 * d2))
+theta3_sol = acos((l1**2 + d3**2 - l2**2) / (2 * l1 * d3))
+
+# Substitute values into the solutions
+theta1_val = theta1_sol.subs(values)
+theta2_val = theta2_sol.subs(values)
+theta3_val = theta3_sol.subs(values)
+
+# Display the solutions
+print("Theta1:", theta1_val)
+print("Theta2:", theta2_val)
+print("Theta3:", theta3_val)
+
+# LaTeX output
+latex_output = f"""
+\\theta_1 = {latex(theta1_val)} \\
+\\theta_2 = {latex(theta2_val)} \\
+\\theta_3 = {latex(theta3_val)}
+"""
+
+print("LaTeX Output:")
+print(latex_output)
+```
+
+## 正解
+
+### 参数定义
+
+- \( e \): 从原点到第一个关节的距离。
+- \( l_1 \): 上臂的长度。
+- \( l_2 \): 下臂的长度。
+- \( \mathbf{r}_p = (x, y, z) \): 末端执行器的位置。
+
+### 计算步骤
+
+1. **计算臂基坐标**：
+
+   Delta机器人的三个臂基相对于末端执行器的位置是固定的。可以通过几何关系计算每个臂基的坐标：
+
+   \[
+   \begin{align*}
+   x_1 &= x - e \cdot \cos(\theta) \\
+   y_1 &= y - e \cdot \sin(\theta) \\
+   z_1 &= z
+   \end{align*}
+   \]
+
+   其中\(\theta\)为每个臂的角度（例如，0度、120度、240度）。
+
+2. **计算基座到末端执行器的距离**：
+
+   使用欧几里得距离公式计算每个臂基到末端执行器的距离：
+
+   \[
+   d_i = \sqrt{x_i^2 + y_i^2 + z_i^2}
+   \]
+
+   对于每个臂基重复此步骤。
+
+3. **求解逆运动学**：
+
+   使用余弦定理计算每个关节的角度。余弦定理用于连接三个点之间的关系：
+
+   \[
+   \theta_i = \cos^{-1}\left(\frac{l_1^2 + d_i^2 - l_2^2}{2 \cdot l_1 \cdot d_i}\right)
+   \]
+
+   通过这个公式，我们可以获得每个关节的角度。
+
+### python
+```python
+import sympy as sp
+
+# 定义符号变量
+x, y, z, e, l1, l2 = sp.symbols('x y z e l1 l2')
+theta1, theta2, theta3 = sp.symbols('theta1 theta2 theta3')
+
+# 赋值给定参数
+values = {x: 10, y: 20, z: -900, e: 125, l1: 375, l2: 950}
+
+# 计算臂基坐标
+x1 = x - e * sp.cos(theta1)
+y1 = y - e * sp.sin(theta1)
+z1 = z
+
+x2 = x - e * sp.cos(theta2)
+y2 = y - e * sp.sin(theta2)
+z2 = z
+
+x3 = x - e * sp.cos(theta3)
+y3 = y - e * sp.sin(theta3)
+z3 = z
+
+# 计算距离
+d1 = sp.sqrt(x1**2 + y1**2 + z1**2)
+d2 = sp.sqrt(x2**2 + y2**2 + z2**2)
+d3 = sp.sqrt(x3**2 + y3**2 + z3**2)
+
+# 计算关节角度
+theta1_sol = sp.acos((l1**2 + d1**2 - l2**2) / (2 * l1 * d1))
+theta2_sol = sp.acos((l1**2 + d2**2 - l2**2) / (2 * l1 * d2))
+theta3_sol = sp.acos((l1**2 + d3**2 - l2**2) / (2 * l1 * d3))
+
+# 替换数值
+theta1_val = theta1_sol.subs(values)
+theta2_val = theta2_sol.subs(values)
+theta3_val = theta3_sol.subs(values)
+
+# 输出结果
+print(f'Theta1: {theta1_val.evalf()}')
+print(f'Theta2: {theta2_val.evalf()}')
+print(f'Theta3: {theta3_val.evalf()}')
+
+# LaTeX 输出
+latex_output = f"""
+\\theta_1 = {sp.latex(theta1_val)} \\\\
+\\theta_2 = {sp.latex(theta2_val)} \\\\
+\\theta_3 = {sp.latex(theta3_val)}
+"""
+print('LaTeX Output:')
+print(latex_output)
+```

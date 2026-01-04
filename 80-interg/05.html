@@ -1,0 +1,1314 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="第五章 机器人操作基础" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/80-interg/05.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="2022年10月20日 本章学习要点: 本章学习提要:: 机器人操作与编程是实现机器人集成系统工作的基础。本章将以ABB机器人为例，从机器人操作与机器人编程两部分展开讲解，目的在于： 了解工业机器人调试准备工作。, 掌握工业机器人的示教器手动操作相关步骤。, 熟悉ABB仿真软件RobotStudio软件的使用方法。, 掌握虚拟机器人工作站的搭建方法。. 内容简介: 工业机器人调试前准备工作,..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="2022年10月20日 本章学习要点: 本章学习提要:: 机器人操作与编程是实现机器人集成系统工作的基础。本章将以ABB机器人为例，从机器人操作与机器人编程两部分展开讲解，目的在于： 了解工业机器人调试准备工作。, 掌握工业机器人的示教器手动操作相关步骤。, 熟悉ABB仿真软件RobotStudio软件的使用方法。, 掌握虚拟机器人工作站的搭建方法。. 内容简介: 工业机器人调试前准备工作,..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="第六章 工业机器人数据与编程基础" href="06.html"><link rel="prev" title="第四章 基于PLC的机器人系统集成" href="04.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>第五章 机器人操作基础 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/80-interg/05.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/80-interg/05.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>第五章 机器人操作基础<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>2022年10月20日</p>
+<hr class="docutils" />
+<section id="id2">
+<h2>本章学习要点<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>本章学习提要:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>机器人操作与编程是实现机器人集成系统工作的基础。本章将以ABB机器人为例，从机器人操作与机器人编程两部分展开讲解，目的在于：</p>
+<ul class="simple">
+<li><p>了解工业机器人调试准备工作。</p></li>
+<li><p>掌握工业机器人的示教器手动操作相关步骤。</p></li>
+<li><p>熟悉ABB仿真软件RobotStudio软件的使用方法。</p></li>
+<li><p>掌握虚拟机器人工作站的搭建方法。</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h2>内容简介<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>工业机器人调试前准备工作</strong></p></li>
+<li><p><strong>工业机器人示教器手动操作</strong></p></li>
+<li><p><strong>ABB仿真软件RobotStudio软件</strong></p></li>
+<li><p><strong>虚拟机器人工作站的搭建方法</strong></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>1. 工业机器人调试前的准备工作<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<section id="id6">
+<h3>检查安装<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>检查新机完整度。</strong> 打开外包装，检查物件是否齐全。</p></li>
+<li><p><strong>根据机器人本体上的吊装方法的图示及说明，将机器人固定安装到底座上。</strong></p></li>
+<li><p><strong>机器人安装好之后，需要用配备的电缆，进行各组件的连接，以保证机器人正常上电和运行。</strong></p></li>
+</ol>
+</section>
+<section id="id7">
+<h3>检查<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<section id="id8">
+<h4>紧凑型控制柜重要按钮<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>A</strong>为主电源开关，用来为系统开机。</p></li>
+<li><p><strong>B</strong>为制动闸释放按钮，位于盖子下，用来释放关节伺服电机刹车。</p></li>
+<li><p><strong>C</strong>为模式选择旋钮开关，用来选择机器人运行模式，至少有手动和自动运行两种模式，是钥匙旋钮选择式开关，通过插入钥匙转动来选择。</p></li>
+<li><p><strong>D</strong>为机器人电机供电按钮，点亮用于机械臂各个关节电机上电激活。</p></li>
+<li><p><strong>E</strong>为紧急停止按钮，用于在紧急情况下停止机器人动作。</p></li>
+</ul>
+</section>
+<section id="id9">
+<h4>吊装与搬运<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p><strong>轴运动到指定位置：</strong> 根据机器人本体上的吊装方法的图示及说明，将机器人固定安装到底座上。以ABB机器人IRB2600型号机器人为例，首先需要将机器人的轴2、轴3和轴5运动至指定的位置。</p></li>
+<li><p><strong>机器人叉车搬运姿态图：</strong> 然后将机器人搬运到目标位置。此时，如果需要使用叉车移动机器人，则需要借助专用的机构，详细根据工业机器人随机说明，来进行搬运。不同品牌机构安装位置和方式不同。</p></li>
+<li><p><strong>使用吊车吊装示意图：</strong> 此时，在A、B和C处应添加覆盖物，预防线索对机器人本体的损坏。</p></li>
+<li><p><strong>控制柜周围预留空间：</strong> 机器人搬运到目标位置后，再用吊装方式，将控制柜移动到指定的位置。需要注意的是，控制柜周围应有空间预留，如上图所示。</p></li>
+</ol>
+</section>
+<section id="id10">
+<h4>紧凑型控制柜接口<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>A. XS.4 FlexPendant (示教器)连接插口：</strong> 用于与示教器线缆末端航插连接（线缆与插头标配）。</p></li>
+<li><p><strong>B. XS.1机器人供电连接插口：</strong> 用于和对应机器人机械臂动力线缆连接（线缆与插头标配）。</p></li>
+<li><p><strong>C. XS.4 1附加轴SMB连接插口：</strong> 用于连接带有附加关节控制器插口。</p></li>
+<li><p><strong>D. XS.2机器人SMB连接插口：</strong> 用于连接机器人本体机械臂SMB线缆航插接头（线缆与插头标配）。</p></li>
+<li><p><strong>E. XP.0主电路连接插口：</strong> 用于和对应搭配的附件插头连接，插头需要连接外部工业用电线缆，电力参数需参考机器人出厂说明，需要电力工程师按照规程操作（插头标配）。</p></li>
+</ul>
+</section>
+<section id="id11">
+<h4>机器人连接示意图<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<p>机器人本体与控制柜之间的连接主要是电动机动力电缆与转数计数器电缆、用户电缆的连接。</p>
+<p>左图是电机动力线缆和转数计数器电缆的连接情况：上面的是标准型控制柜、下面的是紧凑型控制柜。</p>
+<p>另外还需要将用户电缆连接到控制柜接口，在标准型控制柜门内贴有电源连接指引。ABB机器人使用380V三相四线制。IRB 120及1200等机型用紧凑型控制柜的输入电压为单相制200v，我国标准民用电压，具体请查看对应的电气图。</p>
+<p>连接好各组件之后，需要检查主电源是否输入正常。确认无问题的情况下，合上控制柜上的主电源开关，开始进行上电、开关机及校准等工作。</p>
+</section>
+</section>
+<section id="id12">
+<h3>示教器简介<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>示教器是工业机器人必备的组件之一，用示教器来手动控制机器人，也是机器人的操作基础。因此，操作工业机器人不可避免要与机器人的示教器打交道。示教编程是机器人两大主流编程方式之一，所以配置示教器的操作环境，对使用示教器手动操作机器人至关重要。使用示教器编程，必须掌握以下基础操作内容：</p>
+<ol class="arabic simple">
+<li><p>认识示教器的功能和各部分构造，同时正确使用示教器。</p></li>
+<li><p>配置必要的操作环境，包括设定示教器的显示语言及正确使用使能键。</p></li>
+<li><p>通过示教器画面上的状态栏进行机器人常用信息的查看。</p></li>
+<li><p>能够对机器人的数据进行备份。</p></li>
+</ol>
+<p>示教器最主要的作用是示教编程，即操作人员通过示教器，手动控制机器人运动，以使机器人运动到预定的位置，同时将该位置进行记录，并传递到机器人控制器中，之后的机器人可根据指令自动重复该任务。操作人员可以选择不同的坐标系对机器人进行示教。</p>
+<section id="id13">
+<h4>优点<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>编程门槛低。</p></li>
+<li><p>简单方便。</p></li>
+<li><p>不需要环境模型。</p></li>
+<li><p>对实际的机器人进行示教时，修正机械结构带来的误差。</p></li>
+</ol>
+</section>
+<section id="id14">
+<h4>缺点<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>示教在线编程过程繁琐、效率低。</p></li>
+<li><p>精度完全是靠示教者的目测决定，而且对于复杂的路径示教在线编程难以取得令人满意的效果。</p></li>
+<li><p>示教器种类太多，学习量太大。</p></li>
+<li><p>示教过程容易发生事故，轻则撞坏设备，重则撞伤人。</p></li>
+<li><p>对实际的机器人进行示教时要占用机器人。</p></li>
+</ol>
+</section>
+<section id="abb">
+<h4>ABB工业机器人示教器<a class="headerlink" href="#abb" title="Link to this heading">¶</a></h4>
+<p>示教器还是机器人的必备组件，是进行机器人的手动操纵、程序编写、参数配置以及监控用的手持装置，也是最常打交道的机器人控制装置。</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>标号</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>A</p></td>
+<td class="text-left"><p>连接电缆</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>B</p></td>
+<td class="text-left"><p>触摸屏</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>C</p></td>
+<td class="text-left"><p>紧急停止开关</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>D</p></td>
+<td class="text-left"><p>控制杆</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>E</p></td>
+<td class="text-left"><p>USB端口</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>F</p></td>
+<td class="text-left"><p>使动装置</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>G</p></td>
+<td class="text-left"><p>触摸笔</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>H</p></td>
+<td class="text-left"><p>重置孔</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id15">
+<h4>硬件按钮<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h4>
+<p>示教器上有专用的硬件按钮。对应的每个按钮的功能为参见上图和表中的内容，其中预设键可以将想要定义的功能指定给其中四个按钮A-D。</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>标号</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>A-D</p></td>
+<td class="text-left"><p>预设快捷键，1-4。</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>E</p></td>
+<td class="text-left"><p>选择机械单元</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>F</p></td>
+<td class="text-left"><p>切换运动模式，重定向或线性</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>G</p></td>
+<td class="text-left"><p>切换运动模式，轴1-3或轴4-6</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>H</p></td>
+<td class="text-left"><p>切换增量</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>J</p></td>
+<td class="text-left"><p>步退按钮。按下此按钮，可使程序后退至上一指令。</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>K</p></td>
+<td class="text-left"><p>启动按钮。开始执行程序。</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>L</p></td>
+<td class="text-left"><p>步进按钮。按下此按钮，可使程序前进至下一指令。</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>M</p></td>
+<td class="text-left"><p>停止按钮。停止程序执行</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>将示教器放在左手上，然后用右手进行屏幕和按钮的操作。示教器是按照人体工程学设计的，示教器的握持方式如下图所示。</p>
+</section>
+<section id="id16">
+<h4>ABB工业机器人示教器主页面<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
+<p>ABB品牌示教器为触摸和按键结合控制，其中界面中功能选择和编程设置通过触摸屏选择。下图为示教器触摸屏显示界面，下表详细介绍了主页面的功能。</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>标号</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>A</p></td>
+<td class="text-left"><p>ABB菜单键</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>B</p></td>
+<td class="text-left"><p>操作员窗口</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>C</p></td>
+<td class="text-left"><p>状态栏</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>D</p></td>
+<td class="text-left"><p>关闭按钮（图中未显示，因为后台没打开任何视图）。点击关闭按钮将关闭当前打开的视图或应用程序。</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>E</p></td>
+<td class="text-left"><p>任务栏</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>F</p></td>
+<td class="text-left"><p>快速设置菜单</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id17">
+<h4>使能键<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h4>
+<p>使能器按钮位于示教器手动操作摇杆的右侧。使能键是工业机器人为保证操作人员人身安全而设置的，只有在按下使能键，并保持在“电机开启”状态，才可以对机器人进行手动的操作与程序的调试。当发生危险时，人会本能的将使能键松开或按紧，则机器人会马上停下来，保证安全。</p>
+<p>使能键分为两档，在手动状态下，第一挡按下去，机器人将处于电机开启状态，第二挡按下去以后，机器人又处于防护装置停止状态。</p>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id18">
+<h2>2. 工业机器人示教器操作与手动操作<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h2>
+<section id="id19">
+<h3>手动操作<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<p>手动操作，指的是利用示教器控制机器人进行运动。机器人的运动本质上是通过各个关节配合运动实现机器人本体姿态和空间位置改变的过程。</p>
+<p>机器人从一个位置移动到下一个位置，有多种运动方式，也可以有多种运动路线。通常来说，机器人运动有三种方式：</p>
+<ol class="arabic simple">
+<li><p><strong>单轴运动（也叫关节运动）</strong></p></li>
+<li><p><strong>线性运动（也叫笛卡尔线性运动）</strong></p></li>
+<li><p><strong>重定位运动</strong></p></li>
+</ol>
+<p>结合这三种运动方式，机器人计算出最优的路线并执行。</p>
+<section id="id20">
+<h4>单轴运动<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h4>
+<p>一般地，六轴工业机器人是由六个伺服电动机分别驱动机器人的六个关节轴，那么每次手动操纵一个关节轴的运动，就称之为单轴运动。</p>
+<p>常见的六轴关节机器人，第六轴是它的最末端轴，所以通常第六轴的法兰盘用来安装机器人工具，如焊接枪、抓手等，因为是工具常常安装在最末端轴上，所以有时称机器人工具为末端执行器。</p>
+</section>
+<section id="id21">
+<h4>线性运动<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h4>
+<p>机器人的线性运动是指安装在机器人第六轴法兰盘上的工具的中心点（TCP）在空间中作线性运动。</p>
+<p>出厂默认工业机器人的TCP点在机器人末端的法兰盘中心点，通过安装末端执行器抓手，然后将相应的TCP点做软件偏移匹配，建立工具坐标系。</p>
+</section>
+<section id="id22">
+<h4>重定位运动<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h4>
+<p>机器人的重定位运动是指：机器人通过系统控制各个关节运动，实现第六轴法兰盘上的工具中心点保持空间坐标位置不变，而实现绕着坐标轴旋转来改变工业机器人工具姿态的运动，也可以理解为机器人绕着工具TCP点作姿态调整的运动。</p>
+</section>
+</section>
+<section id="id23">
+<h3>手动控制<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>开机</strong>，将控制柜上机器人模式选择开关钥匙切换到中间的手动模式。</p></li>
+<li><p>若是紧凑型控制柜直接打到手动，因为紧凑型控制柜有两种选择模式：手动和自动。</p></li>
+<li><p>很多机器人有三种选择模式：自动模式，手动模式和手动全速模式。</p></li>
+</ul>
+<section id="id24">
+<h4>设置手动关节运动<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h4>
+<p>在示教器里点击ABB菜单，然后选择“手动操纵”，单击“动作模式”，选中“轴1-3”，然后单击“确定”（选中“轴4-6”），就可以操纵轴4-6。</p>
+</section>
+<section id="id25">
+<h4>关节运动操纵方向<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h4>
+<p>按下使能按按键一档位，示教器处于“电动机开启”状态，此处显示“轴1-3”的操纵杆方向。紫箭头代表正方向，如下图所示。</p>
+</section>
+<section id="id26">
+<h4>关节运动操纵方向<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>线性运动：</strong> 保持工具的姿态不变，而只沿着工具坐标的方向进行笛卡尔运动。</p></li>
+<li><p><strong>重定位运动：</strong> 线性运动和重定位运动都是基于工具坐标系的基础上来说的，选中了工具坐标后就可以执行重定位或者线性运动，每个工具坐标都有一个工具的中心点，就是常说的TCP点。保持工具TCP点的空间位置不变，围绕着工具的坐标方向旋转来改变工具的姿态的运动。</p></li>
+</ul>
+</section>
+<section id="id27">
+<h4>手动控制线性运动<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h4>
+<p>“动作模式”界面中选择“线性”，然后单击“确定”，回到手动操纵页面后单击“工具坐标”。选中对应的工具，如下图所示。</p>
+</section>
+<section id="id28">
+<h4>手动控制线性运动<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h4>
+<p>选中对应的工具（工具数据的建立，参见程序数据内容），用按下使能按键，进入“电动机开启”状态，在状态栏中，确认“电动机开启”状态。此处显示轴X、Y、Z的操纵杆方向。箭头代表正方向，操作示教器上的操纵杆，工具的TCP点在空间中作线性运动，如下图所示。</p>
+</section>
+<section id="id29">
+<h4>手动控制重定位运动<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h4>
+<p>“动作模式”界面中，选中“重定位”，然后单击“确定”，与线性运动相同选中工具坐标系，用按下使能按键，进入“电动机开启”状态。此处显示X、Y、Z的操纵杆方向，箭头代表正方向，操纵示教器上的操纵杆，机器人绕着工具TCP点作姿态调整的运动，如下图所示。</p>
+</section>
+<section id="id30">
+<h4>增量模式控制机器人运动<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h4>
+<p>用“增量”模式来控制机器人的运动。是为了让初学机器人的操作者能够确保更加安全的手动调试机器人，在增量模式下，操纵杆每位移一次，机器人就移动一步。如果操纵杆持续一秒或数秒钟，机器人就会持续移动（速率为10步/s）。</p>
+<p><strong>操作方法：</strong></p>
+<ol class="arabic simple">
+<li><p>“手动操纵”界面中，选中“增量”。</p></li>
+<li><p>根据需要选择增量的移动距离，然后单击“确定”，上图，上表是增量参数的相关说明。</p></li>
+</ol>
+</section>
+<section id="id31">
+<h4>手动快捷控制<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h4>
+<p>手动操纵的快捷按钮：增量设置。</p>
+<ul class="simple">
+<li><p><strong>A</strong> 机器人/外轴的切换</p></li>
+<li><p><strong>B</strong> 线性运动/重定位运动的切换</p></li>
+<li><p><strong>C</strong> 关节运动轴1-3/轴4-6的切换</p></li>
+<li><p><strong>D</strong> 增量开/关</p></li>
+</ul>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="abbrobot-studio">
+<h2>3. ABB仿真软件Robot Studio软件<a class="headerlink" href="#abbrobot-studio" title="Link to this heading">¶</a></h2>
+<section id="id32">
+<h3>仿真软件<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h3>
+<p>在进行正式的编程学习之前，需要构建必要的开发环境，也就是要安装好Robot Studio仿真软件，并创建机器人编程的工作站。</p>
+<p>仿真指的是通过交互式计算机图形技术和机器人学理论等，在计算机软件中生成机器人的几何模型，并对其进行三维显示，用来确定机器人的本体及工作环境的动态变化过程，从而对实际的机器人系统进行模拟。</p>
+<p>仿真软件为机器人和自动化设备的选型和设计提供最有利的直观技术测试和支持，可以极大的缩短生产工期，避免不必要的返工。</p>
+<section id="id33">
+<h4>仿真软件基本都涵盖以下几个功能：<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>功能一：三维虚拟仿真。</strong> 可用于为一种或多种品牌的机器人创建3D布局图的程序。它可以快速和方便地生成不同的布局图、方案和机器人任务并进行相互比较。由于有大量的零件数据库，它是用于方案研究和可达性分析的理想模拟软件，乃至有的具有可以将节拍时间说明提供给作为设计评定和参考。具有以下属性：具有的CAD性能、内置 CAD STEP等三维格式的导入。</p></li>
+<li><p><strong>功能二：离线编程。</strong> 可以建立虚拟工作站后设计编辑机器人运动程序，可以用于分析节拍时间并生成机器人程序。同时可以将编辑好的应用程序，真正导入到机器人工作站真机，后续仅需要将工作站的部分示教点位进行优化更改完全自程，大大缩减的工程项目的工作周期，此外还可以用来实时连接虚拟的机器人控制系统。在中的运动系统布置参数化的组件以及定义用。还可以实现以下功能：大量内置待选的CAD组件库的组件导入、仿真运动视频生成和方案模拟视频导出功能。</p></li>
+<li><p><strong>功能三：在线编程。</strong> 通过PC机借助相应的通讯协议连接机器人控制器，通过软件操作的取得机器人控制器控制权限，就可以在软件界面对机器人的程序进行编写、修改等一系列操作，以此实现在线编程。</p></li>
+</ul>
+</section>
+</section>
+<section id="robot-studio">
+<h3>安装 Robot Studio<a class="headerlink" href="#robot-studio" title="Link to this heading">¶</a></h3>
+<p>本课程重点围绕对ABB品牌机器人应用和编程知识进行讲解，首先需要下载Robot Studio软件，安装包如图1所示。</p>
+<p>解压缩后，找到文件夹中的setup.exe文件，双击打开。弹出界面如图2所示，选择中文（简体）。</p>
+<section id="abb-robotstudio-6-03-installshield-wizard">
+<h4>1. 欢迎使用 ABB RobotStudio 6.03 InstallShield Wizard<a class="headerlink" href="#abb-robotstudio-6-03-installshield-wizard" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id34">
+<h4>2. 许可证协议<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h4>
+<p>点选“我接受该许可证协议中的条款（A）”，并单击【下一步】按钮。</p>
+</section>
+<section id="id35">
+<h4>3. 隐私声明<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h4>
+<p>单击【接受】按钮，进入界面如图2所示。</p>
+</section>
+<section id="id36">
+<h4>4. 安装目录<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h4>
+<p>如果需要修改安装路径，可单击【更改】按钮。选择完毕后单击【下一步】按钮。</p>
+</section>
+<section id="id37">
+<h4>5. 安装类型<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h4>
+<p>选择最适合自己需要的安装类型。</p>
+<ul class="simple">
+<li><p><strong>最小安装</strong></p></li>
+<li><p><strong>完整安装（□）</strong></p></li>
+<li><p><strong>自定义（S）</strong></p></li>
+</ul>
+</section>
+<section id="id38">
+<h4>6. 开始安装<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h4>
+<p>已做好安装程序的准备。单击“安装”开始安装。</p>
+</section>
+<section id="id39">
+<h4>7. 正在安装<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h4>
+<p>单击【完成】按钮完成安装。此时，安装的Robot Studio软件为30天试用版本。</p>
+</section>
+<section id="id40">
+<h4>8. 安装完成<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h4>
+<p>Robot Studio安装成功后，在桌面上会生成两个图标，双击任意图标，即可打开Robot Studio软件。</p>
+</section>
+</section>
+<section id="id41">
+<h3>软件界面<a class="headerlink" href="#id41" title="Link to this heading">¶</a></h3>
+<p>双击Robot Studio软件快捷方式，如图1所示，就会出现图“文件”功能选项卡，其中包含创建新工作站、创造新机器人系统、连接到控制器、将工作站另存为查看器的选项和Robot Studio选项，如图2所示。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id42">
+<h2>4. 虚拟机器人工作站的搭建方法<a class="headerlink" href="#id42" title="Link to this heading">¶</a></h2>
+<section id="id43">
+<h3>新建工作站<a class="headerlink" href="#id43" title="Link to this heading">¶</a></h3>
+<p>基本的工业机器人工作站包含工业机器人及工作对象。我们就通过下图的例子来学习如何建立工业机器人工作站，以及导入机器人，并手动操作机器人。</p>
+</section>
+<section id="id44">
+<h3>机器人工作站<a class="headerlink" href="#id44" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>在“文件”功能选项卡中，选择“新建”，单击“创建”，创建一个新的空工作站，如图1所示。</p></li>
+<li><p>在“基本”功能选项卡中，打开“ABB模型库”，选择“IRB1200”，如图2所示。</p></li>
+</ol>
+<section id="id45">
+<h4>机器人工作站<a class="headerlink" href="#id45" title="Link to this heading">¶</a></h4>
+<p>设定机器人参数，单击“确定”（在实际中，要根据项目的要求选定具体的机器人型号、承重能力及到达距离），如图3所示。</p>
+<p>使用键盘与鼠标的按键组合，调整工作站视图，如图4所示。平移：按住键盘Ctrl和鼠标左键，移动鼠标；视角：按住Ctrl + Shift和鼠标左键，移动鼠标；缩放：通过调节滚动鼠标中间滚轮可以实现缩小和放大视图视角。</p>
+</section>
+</section>
+<section id="id46">
+<h3>工业机器人的工具<a class="headerlink" href="#id46" title="Link to this heading">¶</a></h3>
+<p>工业机器人的工具又叫末端执行器，指的是任何一个连接在机器人最末端关节上并具有一定功能的工具。</p>
+<p>工具可以是机器人抓手、机器人工具快换装置、机器人碰撞传感器、机器人旋转连接器、机器人压力工具、机器人喷涂枪、机器人毛刺清理工具、机器人焊枪、机器人焊钳等等。工业机器人末端执行器通常被认为是机器人的外围设备属于机器人的附件，也被称作机器人工具、手臂末端工具。</p>
+<p>通常在机器人本体生产商购买的成套工业机器人设备是不包含工业机器人工具的，需要工程师自己设计安排制造，或者在产业下游服务商处购买或者定制。</p>
+</section>
+<section id="id47">
+<h3>机器人添加工具的操作<a class="headerlink" href="#id47" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>在“基本”功能选项卡中，打开“导入模型库”中的“用户库”，选择&quot;myNewTool”，如图1所示。</p></li>
+<li><p>找到软件最左侧导航栏找到“MyTool1”，用鼠标左键按住“MyTool1”，向上拖动到“IRB1200_7_70_STD_01”的机器人图标上，松开鼠标左键，然后单击“Yes”，如图2所示。</p></li>
+</ol>
+<section id="id48">
+<h4>已安装工具的机器人<a class="headerlink" href="#id48" title="Link to this heading">¶</a></h4>
+<p>图3中显示工具已安装到机器人法兰盘上，如果想将工具从机器人法兰盘上拆下，则可以在左侧导航栏上找到“MyToo1l”（工具名称）上单击右键，选择“拆除”，如图4所示。</p>
+</section>
+</section>
+<section id="id49">
+<h3>摆放周边的设备<a class="headerlink" href="#id49" title="Link to this heading">¶</a></h3>
+<p>工业机器人不是单单匹配好工具，并将工业机器人安装到位就可以使用的，通常需要工业机器人与周边自动化配合成为一套完整的工作站系统，以此来解决工业现场的实际生产问题。</p>
+<p>在进行机器人仿真时，软件里面需要搭建周边设备或者编辑自动化虚拟设备来形成一个工作站或者一条产线来模拟现实生产，以进行离线编程，或者方案制定之前的前期筹划匹配验证等等。</p>
+<section id="id50">
+<h4>摆放周边的设备<a class="headerlink" href="#id50" title="Link to this heading">¶</a></h4>
+<p>下面就是为工作站添加摆放周边设备的步骤：</p>
+<ol class="arabic simple">
+<li><p>在“基本”功能选项卡中，在“导入模型库”下拉“设备”列表中选择“轨迹平台”模型进行导入，如图1。</p></li>
+<li><p>选中“IRB1200_7_70_STD_01”，单击右键，选择“显示机器人工作区域”，如图2所示，弹出的对话框选择当前工具，这样可以显示安装工具后机器人的实际工作空间。</p></li>
+</ol>
+</section>
+<section id="id51">
+<h4>摆放周边的设备<a class="headerlink" href="#id51" title="Link to this heading">¶</a></h4>
+<p><strong>工业机器人区域（颜色已加深）</strong></p>
+<p>如图3所示，描黑的不规则环形区域为机器人可到达范围。工作对象应调整到机器人的最佳工作范围，这样才可以提高节拍和方便轨迹规划。下面将小桌子移到机器人的工作区域。</p>
+<p><strong>Freehand工具栏功能</strong></p>
+<p>要移动对象，则要用到基本选项卡中的Freehand工具栏功能，如图4所示。选定“大地坐标”和单击“移动”按钮。</p>
+</section>
+<section id="id52">
+<h4>摆放周边的设备<a class="headerlink" href="#id52" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id53">
+<h4>捕捉工具<a class="headerlink" href="#id53" title="Link to this heading">¶</a></h4>
+<p>选择捕捉部件和捕捉末端工具。</p>
+<p>单击设备“轨迹平台”，拖动箭头到达图中所示的位置，如图5所示。为了能够准确捕捉对象特征，需要正确地选择捕捉工具，将鼠标移动到对应的捕捉工具，则会显示详细的说明，捕捉工具在视图上部如图6所示，选中捕捉工具的“选择部件”和“捕捉末端”，如图6所示。</p>
+</section>
+</section>
+<section id="id54">
+<h3>建立机器人系统<a class="headerlink" href="#id54" title="Link to this heading">¶</a></h3>
+<p>在完成了布局以后，要为机器人加载系统，建立虚拟的控制器。若不建立虚拟控制器，就相当于在实际中只有机器人本体，没有机器人系统控制柜，完全无法使用。软件中的虚拟控制器可以让工业机器人具有受电气控制的特性，来完成相关的仿真操作。</p>
+<ol class="arabic simple">
+<li><p>在“基本”功能选项卡下，单击“机器人系统”的“从布局…”，如图1所示。</p></li>
+</ol>
+<section id="id55">
+<h4>建立机器人系统<a class="headerlink" href="#id55" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id56">
+<h4>编辑机器人系统 (2)<a class="headerlink" href="#id56" title="Link to this heading">¶</a></h4>
+<p>设定好系统名字与保存的位置后，选择系统版本（如果你系统库中有多种系统，就选版本号最新系统），单击“下一个”，如图2所示。</p>
+</section>
+<section id="id57">
+<h4>编辑机器人系统 (3)<a class="headerlink" href="#id57" title="Link to this heading">¶</a></h4>
+<p>若没有更多的选配，单击“完成”，若有更多的选配单击“选项”，如图3所示。</p>
+</section>
+<section id="id58">
+<h4>控制器状态显示栏<a class="headerlink" href="#id58" title="Link to this heading">¶</a></h4>
+<p>系统建立完成后，如图4所示，软件右下角“控制器状态”（建立系统后会显示控制器状态栏）绿色表示系统启动完成。</p>
+</section>
+<section id="id59">
+<h4>移动机器人位置<a class="headerlink" href="#id59" title="Link to this heading">¶</a></h4>
+<p>如果在建立工业机器人系统后，发现机器人的摆放位置并不合适，若还需要进行调整，需要移动机器人的位置。在“Freehand”工具栏中根据需要选中“移动”或“旋转”，拖动机器人到新的位置，单击“是”，如图5所示。</p>
+</section>
+</section>
+<section id="id60">
+<h3>手动操纵虚拟机器人<a class="headerlink" href="#id60" title="Link to this heading">¶</a></h3>
+<p>在Robot Studio中，让机器人手动运动到达所需要的位置，手动共有三种方式：手动关节、手动线性和手动重定位。我们可以通过直接拖动和精确手动两种控制方式来实现。这里需要明确工具中心点和重定位的定义：</p>
+<p><strong>1. 拖动调整</strong></p>
+<p>直接拖动指的是用户通过鼠标，在机器人工作站直接拖动机器人到达指定位置的方式。这种方式的定位并不准确，通常用在对定位精度要求不高的场合。</p>
+<section id="id61">
+<h4>手动调节机器人关节按钮<a class="headerlink" href="#id61" title="Link to this heading">¶</a></h4>
+<p>在【基本】选项卡中的【FreeHand)（手动）栏中，选中手动关节图标，如图1所示。</p>
+</section>
+<section id="id62">
+<h4>手动调节机器人关节按钮<a class="headerlink" href="#id62" title="Link to this heading">¶</a></h4>
+<p>选中对应的关节轴进行调节，以第三轴为例，点击机器人各关节，长按鼠标左键即可拖动做单轴运动，如图2所示。</p>
+</section>
+<section id="id63">
+<h4>手动线性调节机器人按钮<a class="headerlink" href="#id63" title="Link to this heading">¶</a></h4>
+<p>将【设置】栏的【工具】项设定为&quot;MyNewTool”。选中【FreeHand】栏的手动线性图标如图1所示。</p>
+</section>
+<section id="id64">
+<h4>基于大地坐标系手动线性调节机器人<a class="headerlink" href="#id64" title="Link to this heading">¶</a></h4>
+<p>鼠标左键单击机器人工具，会在工具的设定中心点位置出现一个三种颜色的坐标系，拖动箭头即可使机器人的工具沿着不同方向进行线性运动。鼠标左键点住某一方向的箭头，就可以拖动鼠标对机器人进行在这一方向的手动运动，如图2所示。</p>
+</section>
+<section id="id65">
+<h4>手动重定位图标<a class="headerlink" href="#id65" title="Link to this heading">¶</a></h4>
+<p>在【FreeHand】栏中选中手动重定位图标，如图1所示。</p>
+</section>
+<section id="id66">
+<h4>手动重定位调节机器人<a class="headerlink" href="#id66" title="Link to this heading">¶</a></h4>
+<p>单击工具，会在工具中线点周围出现三种颜色的箭头曲线，使用鼠标左键单击按住箭头曲线移动鼠标，会实现保证工具中心点空间坐标不变，并绕相应的坐标轴做改变工具姿态的运动，也就是重定位运动。如图2所示。</p>
+</section>
+</section>
+<section id="id67">
+<h3>精确调整<a class="headerlink" href="#id67" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>将【设置】栏的【工具】项设定为&quot;MyNewTool1&quot;, 如图1所示。</p></li>
+<li><p>在【IRB1200_7_70_STD_01】上单击右键, 在菜单列表中选择【机械装置手动关节】,如图2所示, 弹出窗口如图3所示。</p></li>
+</ol>
+<section id="id68">
+<h4>手动关节运动调节界面<a class="headerlink" href="#id68" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id69">
+<h4>精确调整<a class="headerlink" href="#id69" title="Link to this heading">¶</a></h4>
+<p>（3）此时，拖动滑块进行关节轴运动，或单击右侧按钮，可以点动关节轴运动。其中, Step框内可以设定每次点动的距离,六个部分对应六个关节轴,如图3所示。</p>
+<p>（4） 在机器人图标上上单击右键, 在菜单列表中选择“机械装置手动线性”,即可弹出窗口,如图所示。在前三项“x、y、z”直接输入坐标值使机器人的工具中心点沿着工具坐标的笛卡尔方向,达到对应的方向的某一位置,这就是在软件中对应精确线性运动姿态调节。单击按钮,可以点动运动, Step框内可以设定每次点动的距离;在后面三项“Rx、Ry、Rz”直接输入,则是对应的在软件中对应精确重定位运动姿态调节。</p>
+</section>
+</section>
+<section id="id70">
+<h3>回到机械原点<a class="headerlink" href="#id70" title="Link to this heading">¶</a></h3>
+<p>在手动动作后,如果对移动的位置不满意,可以通过【回到机械原点】命令,将机器人恢复到初始位置。</p>
+<p>在【IRB1200_7_70_STD_01】上单击右键, 在菜单列表中选择【回到机械原点】, 机器人就会回到机械原点,如左图所示。机器人会回到机械原点,但不是6个关节轴都为0°,轴5会在30°的位置（机器人默认原点角度,但根据机型不同此原点角度也会有区别）。</p>
+</section>
+<section id="id71">
+<h3>工件坐标系<a class="headerlink" href="#id71" title="Link to this heading">¶</a></h3>
+<p>设定工件坐标系一般使用三点法。</p>
+<p>所谓的三点法,其实就是用工具坐标系中的三个点,来确定工具坐标系的坐标原点及X、Y、Z三个轴的方向。因此,这三个点的选择是至关重要的。通常情况下,第一个点选择所要设定的工件坐标系的原点位置,第二个点选择设定坐标系X轴上的一点,第三点选择Y轴上的一点。在Robot Studio软件中,可以通过记录这个点的数据,从而系统自动计算并完成工具坐标系的设定。</p>
+<section id="id72">
+<h4>创建工件坐标系<a class="headerlink" href="#id72" title="Link to this heading">¶</a></h4>
+<p>（1）打开Robot Studio软件,同时打开创建好的机器人工作站。在【基本】功能选项卡的【其它】中选择“创建工件坐标”如图1所示。</p>
+</section>
+<section id="id73">
+<h4>设置工件坐标系 (1)<a class="headerlink" href="#id73" title="Link to this heading">¶</a></h4>
+<p>（2）单击【选择表面】,然后单击捕捉工具栏的【捕捉末端】,设定工件坐标名称为“Wobj1”,单击用户坐标框架的【取点创建框架】的下拉箭头,如图2所示。</p>
+</section>
+<section id="id74">
+<h4>创建工件坐标系 (2)<a class="headerlink" href="#id74" title="Link to this heading">¶</a></h4>
+<p>（3）在【取点创建框架】下拉界面中选中【三点】,手表左键单击“X轴上的第一个点”的第一个输入框,如图3所示。</p>
+</section>
+<section id="id75">
+<h4>在设备上创建工件坐标系<a class="headerlink" href="#id75" title="Link to this heading">¶</a></h4>
+<p>鼠标捕捉单击第一个角点,图4所示,然后单击图3所示的“X轴上的第二个点”,依次…操作,如图4所示1、2、3号的直角顶点位置,这样就会形成以“点1”为原点,原点向“点2”方向为x轴,原点向“点3”方向为y轴,垂直于设备长方形平面的方向为z轴的工件坐标系。</p>
+</section>
+<section id="id76">
+<h4>创建工件坐标系 (3)<a class="headerlink" href="#id76" title="Link to this heading">¶</a></h4>
+<p>确认单击的三个角点的数据已生成后,单击【Accept】如图5所示,然后单击【创建】。</p>
+</section>
+<section id="id77">
+<h4>创建完成的工件坐标系<a class="headerlink" href="#id77" title="Link to this heading">¶</a></h4>
+<p>工件坐标“Wobj1”已创建,如图6所示。</p>
+</section>
+</section>
+<section id="id78">
+<h3>运动轨迹程序<a class="headerlink" href="#id78" title="Link to this heading">¶</a></h3>
+<p>与真实的机器人一样,在Robot Studio中工业机器人运动轨迹也是通过RAPID程序指令进行控制的。下面以一个正方形轨迹的作业为例,讲解如何在Robot Studio中进行轨迹的仿真。生成的轨迹可以下载到真实的机器人中运行。</p>
+<p>作业需求:安装在法兰盘上的工具MyNewTool1在工件坐标Wobj1中沿着对象的边沿行走一圈如下图。</p>
+<section id="id79">
+<h4>运动轨迹程序<a class="headerlink" href="#id79" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p><strong>新建空路径</strong></p></li>
+<li><p><strong>创建完成路径Path_10</strong></p></li>
+</ol>
+<p>（1）如图1所示,在【基本】功能选项卡中,单击【路径】后选择【空路径】。如图2所示,软件左侧“路径和目标点”显示生成的空路径“Path_10”:</p>
+</section>
+<section id="id80">
+<h4>运动轨迹程序<a class="headerlink" href="#id80" title="Link to this heading">¶</a></h4>
+<p>（2）在【基本】选项卡下选定相应的工具坐标和工件坐标系,在开始编程之前,对运动指令及参数进行设定,设定位置在软件的最下方,单击对应的选项并设定为
+MoveJ * v150 fine MyTool \Wobj:=Wobj1</p>
+</section>
+<section id="id81">
+<h4>设定机器人运动起始点<a class="headerlink" href="#id81" title="Link to this heading">¶</a></h4>
+<p>（3）选择【基本】选项卡下的【手动关节】,将机器人拖动到合适的位置,作为轨迹的起始点（也称为运动原点）。一般运动原点取设备与机器人所处环境中相对“安全”的点,运动周围无过多干涉物,方便机器人改变姿态,并使用比较舒展的姿势运动到下一目标点。如图3所示。</p>
+</section>
+<section id="id82">
+<h4>4. 示教<a class="headerlink" href="#id82" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id83">
+<h4>5. 示教完成的一条运动语句<a class="headerlink" href="#id83" title="Link to this heading">¶</a></h4>
+<p>（4）单击基本选项卡中的【示教指令】, 如图4所示。
+（5）如图5所示,Path 10下方的“MoveJ Target_10”此处显示新创建的运动语句。</p>
+</section>
+<section id="id84">
+<h4>运动轨迹程序<a class="headerlink" href="#id84" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id85">
+<h4>6. 示教第一个目标点<a class="headerlink" href="#id85" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id86">
+<h4>7. 拖动机器人,使工具对准第二个角点,单击【示教指令】,如图7所示。<a class="headerlink" href="#id86" title="Link to this heading">¶</a></h4>
+<p>（7）接下来的指令要沿桌子直线运动,在软件下方单击对应的选项并设定为
+MoveL * v150 fine MyTool \Wobj:=Wobj1.</p>
+<p>（6）单击【手动线性】或合适的手动模式, 拖动机器人,使机器人对准矩形平台第一个角点,单击【示教指令】,如图6所示。</p>
+</section>
+<section id="id87">
+<h4>运动轨迹程序<a class="headerlink" href="#id87" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id88">
+<h4>8. 验证机器人目标点和运动指令的到达性。<a class="headerlink" href="#id88" title="Link to this heading">¶</a></h4>
+<p>（9）按照前面的操作依次示教第三个目标点,第四个目标点,然后再示教第一个目标点(回到最初位置,使得轨迹形成完整的矩形)。最后在机器人处于第一个角点位置时候,拖动机器人垂直向上,离开桌子到一个合适的位置,示教(此次示教前需要调节参数为MoveJ),表示机器人运动完成离开到一个安全位置。</p>
+<p>（10） 在最左侧导航栏上的路径“Path 10”图标上单击右键,选择【到达能力】。绿色打钩说明目标点都可到达,单后单击“关闭”如图8所示。</p>
+</section>
+<section id="id89">
+<h4>运动轨迹程序<a class="headerlink" href="#id89" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id90">
+<h4>9. 配置参数及沿着路径运动<a class="headerlink" href="#id90" title="Link to this heading">¶</a></h4>
+<p>（11） 在路径“Path 10“上单击右键,选择【配置参数】-【自动配置】进行关节轴自动配置;选择【沿着路径运动】,检查是否能正常运行如图9所示。</p>
+</section>
+<section id="id91">
+<h4>运动轨迹程序<a class="headerlink" href="#id91" title="Link to this heading">¶</a></h4>
+<p>经过以上步骤, 机器人沿着之前设定好的目标点沿着正方形轨迹运行。在创建机器人轨迹指令程序时,要注意以下的事情:</p>
+<ol class="arabic simple">
+<li><p>手动线性时,要注意观察各关节轴是否会接近极限而无法拖动,这时要适当做出姿态的调整。</p></li>
+<li><p>在示教轨迹的过程中,如果出现机器人无法到达工件的话,适当调整工件的位置再进行示教。</p></li>
+<li><p>在示教的过程中,要适当调整视角,这样可以更好地观察。</p></li>
+<li><p>在示教调节工业机器人位置时候,建议开启相应的捕捉按钮,有助于提要提高示教编程。</p></li>
+</ol>
+</section>
+</section>
+<section id="id92">
+<h3>仿真步骤<a class="headerlink" href="#id92" title="Link to this heading">¶</a></h3>
+<section id="rapid-1">
+<h4>1. 同步到RAPID (1)<a class="headerlink" href="#rapid-1" title="Link to this heading">¶</a></h4>
+<p>（1）在【基本】功能选项卡下单击【同步】,选择【同步到 RAPID】,如图1所示。</p>
+</section>
+<section id="rapid-2">
+<h4>2. 同步到 RAPID (2)<a class="headerlink" href="#rapid-2" title="Link to this heading">¶</a></h4>
+<p>（2）将需要同步的项目都打钩后,单击【确定】。一般全部勾选,如图2所示。</p>
+<p>在仿真软件中,为保证虚拟控制器中的数据与工作站数据一致,需将虚拟控制器与工作站数据进行同步。当在工作站中修改数据后,则需要执行【同步到RAPID】;反之则需要执行【同步到工作站】。</p>
+</section>
+<section id="path-10">
+<h4>3. 进入点选择Path_10<a class="headerlink" href="#path-10" title="Link to this heading">¶</a></h4>
+<p>在【仿真】功能选项卡下单击【仿真设定】,在【T_ROB1的设置】列表里,选择Path_10,如图3所示。</p>
+</section>
+<section id="id93">
+<h4>4. 播放仿真<a class="headerlink" href="#id93" title="Link to this heading">¶</a></h4>
+<p>在【仿真】功能选项卡中,单击【播放】,如图4所示,这时机器人就按之前所示教的轨迹进行运动,点击【停止】停止仿真。</p>
+</section>
+</section>
+<section id="id94">
+<h3>视频录制步骤<a class="headerlink" href="#id94" title="Link to this heading">¶</a></h3>
+<p>除了仿真运动外,还可以将工作站中工业机器人的运行录制成视频,以便在没有安装Robot Studio的计算机中查看工业机器人的运行。另外,还可以将工作站制作成exe可执行文件,以便进行更灵活的工作站查看。</p>
+<section id="id95">
+<h4>(1) 在【文件】功能选项卡中,单击【选项】,然后单击【屏幕录像机】,对录像的参数进行设定,然后单击【确定】,如图1所示。<a class="headerlink" href="#id95" title="Link to this heading">¶</a></h4>
+</section>
+</section>
+<section id="id96">
+<h3>视频录制步骤<a class="headerlink" href="#id96" title="Link to this heading">¶</a></h3>
+<section id="id97">
+<h4>仿真和查看录像<a class="headerlink" href="#id97" title="Link to this heading">¶</a></h4>
+<p>（2） 在【仿真】功能选项卡中单击【仿真录像】,如图 2所示,然后在“仿真”功能选项卡中单击【播放】, 在【仿真】功能选项卡中单击“查看录像”,就可以看到视频。</p>
+</section>
+</section>
+<section id="id98">
+<h3>测量工具<a class="headerlink" href="#id98" title="Link to this heading">¶</a></h3>
+<p>仿真软件处理仿真示教操作外还具备测量功能,在编程示教和方案测试等过程中测量工具也起到了关键的作用,提高软件使用效率。</p>
+<section id="id99">
+<h4>选择点到点测量<a class="headerlink" href="#id99" title="Link to this heading">¶</a></h4>
+<p>（1） 首先在捕捉工具栏下单击【选择部件】和单击【捕捉末端】,在【建模】选项卡中,单击【点到点】工具,另外在捕捉工具右侧也有测量工具的快捷键,如图1所示。</p>
+</section>
+<section id="id100">
+<h4>选择点到点测量<a class="headerlink" href="#id100" title="Link to this heading">¶</a></h4>
+<p>（2）鼠标左键单击A角点,然后单击B角点,如图所示,长度的测量结果就显示在图上,如图所示。</p>
+</section>
+</section>
+<section id="id101">
+<h3>三维建模<a class="headerlink" href="#id101" title="Link to this heading">¶</a></h3>
+<p>当使用Robot Studio进行机器人工作站或者应用的仿真验证时,往往需要与周边设备配合,周边设备与机器人统一称为一个工作站。有时候设备库中的系统设备不能满足用户的实际需求,那么就需要用简单的等同实际大小的基本模型来代替设备,从而节约仿真验证的时间。</p>
+<p>如果需要精细的3D模型,可以通过第三方的建模软件(如SolidWorks)进行建模,并通过*.step格式导入到Robot Studio中来完成建模布局的工作。</p>
+<section id="id102">
+<h4>1. 建立矩形体<a class="headerlink" href="#id102" title="Link to this heading">¶</a></h4>
+<p>（1） 单击【新建】菜单命令组,创建一个新的空工作站,在【建模】功能选项卡中,单击【固体】菜单,选择【矩形体】,如图1中所示。</p>
+</section>
+<section id="id103">
+<h4>2. 矩形体参数设置<a class="headerlink" href="#id103" title="Link to this heading">¶</a></h4>
+<p>（2） 输入任意尺寸,这里我们输入,长度1190mm,宽度800mm,高度140mm,然后单击【创建】,如图2所示。</p>
+<hr class="docutils" />
+<p>同学们下节课见!</p>
+</section>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="06.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">第六章 工业机器人数据与编程基础</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="04.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">第四章 基于PLC的机器人系统集成</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">第五章 机器人操作基础</a><ul>
+<li><a class="reference internal" href="#id2">本章学习要点</a><ul>
+<li><a class="reference internal" href="#id3">本章学习提要:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">内容简介</a></li>
+<li><a class="reference internal" href="#id5">1. 工业机器人调试前的准备工作</a><ul>
+<li><a class="reference internal" href="#id6">检查安装</a></li>
+<li><a class="reference internal" href="#id7">检查</a><ul>
+<li><a class="reference internal" href="#id8">紧凑型控制柜重要按钮</a></li>
+<li><a class="reference internal" href="#id9">吊装与搬运</a></li>
+<li><a class="reference internal" href="#id10">紧凑型控制柜接口</a></li>
+<li><a class="reference internal" href="#id11">机器人连接示意图</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id12">示教器简介</a><ul>
+<li><a class="reference internal" href="#id13">优点</a></li>
+<li><a class="reference internal" href="#id14">缺点</a></li>
+<li><a class="reference internal" href="#abb">ABB工业机器人示教器</a></li>
+<li><a class="reference internal" href="#id15">硬件按钮</a></li>
+<li><a class="reference internal" href="#id16">ABB工业机器人示教器主页面</a></li>
+<li><a class="reference internal" href="#id17">使能键</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id18">2. 工业机器人示教器操作与手动操作</a><ul>
+<li><a class="reference internal" href="#id19">手动操作</a><ul>
+<li><a class="reference internal" href="#id20">单轴运动</a></li>
+<li><a class="reference internal" href="#id21">线性运动</a></li>
+<li><a class="reference internal" href="#id22">重定位运动</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id23">手动控制</a><ul>
+<li><a class="reference internal" href="#id24">设置手动关节运动</a></li>
+<li><a class="reference internal" href="#id25">关节运动操纵方向</a></li>
+<li><a class="reference internal" href="#id26">关节运动操纵方向</a></li>
+<li><a class="reference internal" href="#id27">手动控制线性运动</a></li>
+<li><a class="reference internal" href="#id28">手动控制线性运动</a></li>
+<li><a class="reference internal" href="#id29">手动控制重定位运动</a></li>
+<li><a class="reference internal" href="#id30">增量模式控制机器人运动</a></li>
+<li><a class="reference internal" href="#id31">手动快捷控制</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#abbrobot-studio">3. ABB仿真软件Robot Studio软件</a><ul>
+<li><a class="reference internal" href="#id32">仿真软件</a><ul>
+<li><a class="reference internal" href="#id33">仿真软件基本都涵盖以下几个功能：</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#robot-studio">安装 Robot Studio</a><ul>
+<li><a class="reference internal" href="#abb-robotstudio-6-03-installshield-wizard">1. 欢迎使用 ABB RobotStudio 6.03 InstallShield Wizard</a></li>
+<li><a class="reference internal" href="#id34">2. 许可证协议</a></li>
+<li><a class="reference internal" href="#id35">3. 隐私声明</a></li>
+<li><a class="reference internal" href="#id36">4. 安装目录</a></li>
+<li><a class="reference internal" href="#id37">5. 安装类型</a></li>
+<li><a class="reference internal" href="#id38">6. 开始安装</a></li>
+<li><a class="reference internal" href="#id39">7. 正在安装</a></li>
+<li><a class="reference internal" href="#id40">8. 安装完成</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id41">软件界面</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id42">4. 虚拟机器人工作站的搭建方法</a><ul>
+<li><a class="reference internal" href="#id43">新建工作站</a></li>
+<li><a class="reference internal" href="#id44">机器人工作站</a><ul>
+<li><a class="reference internal" href="#id45">机器人工作站</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id46">工业机器人的工具</a></li>
+<li><a class="reference internal" href="#id47">机器人添加工具的操作</a><ul>
+<li><a class="reference internal" href="#id48">已安装工具的机器人</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id49">摆放周边的设备</a><ul>
+<li><a class="reference internal" href="#id50">摆放周边的设备</a></li>
+<li><a class="reference internal" href="#id51">摆放周边的设备</a></li>
+<li><a class="reference internal" href="#id52">摆放周边的设备</a></li>
+<li><a class="reference internal" href="#id53">捕捉工具</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id54">建立机器人系统</a><ul>
+<li><a class="reference internal" href="#id55">建立机器人系统</a></li>
+<li><a class="reference internal" href="#id56">编辑机器人系统 (2)</a></li>
+<li><a class="reference internal" href="#id57">编辑机器人系统 (3)</a></li>
+<li><a class="reference internal" href="#id58">控制器状态显示栏</a></li>
+<li><a class="reference internal" href="#id59">移动机器人位置</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id60">手动操纵虚拟机器人</a><ul>
+<li><a class="reference internal" href="#id61">手动调节机器人关节按钮</a></li>
+<li><a class="reference internal" href="#id62">手动调节机器人关节按钮</a></li>
+<li><a class="reference internal" href="#id63">手动线性调节机器人按钮</a></li>
+<li><a class="reference internal" href="#id64">基于大地坐标系手动线性调节机器人</a></li>
+<li><a class="reference internal" href="#id65">手动重定位图标</a></li>
+<li><a class="reference internal" href="#id66">手动重定位调节机器人</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id67">精确调整</a><ul>
+<li><a class="reference internal" href="#id68">手动关节运动调节界面</a></li>
+<li><a class="reference internal" href="#id69">精确调整</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id70">回到机械原点</a></li>
+<li><a class="reference internal" href="#id71">工件坐标系</a><ul>
+<li><a class="reference internal" href="#id72">创建工件坐标系</a></li>
+<li><a class="reference internal" href="#id73">设置工件坐标系 (1)</a></li>
+<li><a class="reference internal" href="#id74">创建工件坐标系 (2)</a></li>
+<li><a class="reference internal" href="#id75">在设备上创建工件坐标系</a></li>
+<li><a class="reference internal" href="#id76">创建工件坐标系 (3)</a></li>
+<li><a class="reference internal" href="#id77">创建完成的工件坐标系</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id78">运动轨迹程序</a><ul>
+<li><a class="reference internal" href="#id79">运动轨迹程序</a></li>
+<li><a class="reference internal" href="#id80">运动轨迹程序</a></li>
+<li><a class="reference internal" href="#id81">设定机器人运动起始点</a></li>
+<li><a class="reference internal" href="#id82">4. 示教</a></li>
+<li><a class="reference internal" href="#id83">5. 示教完成的一条运动语句</a></li>
+<li><a class="reference internal" href="#id84">运动轨迹程序</a></li>
+<li><a class="reference internal" href="#id85">6. 示教第一个目标点</a></li>
+<li><a class="reference internal" href="#id86">7. 拖动机器人,使工具对准第二个角点,单击【示教指令】,如图7所示。</a></li>
+<li><a class="reference internal" href="#id87">运动轨迹程序</a></li>
+<li><a class="reference internal" href="#id88">8. 验证机器人目标点和运动指令的到达性。</a></li>
+<li><a class="reference internal" href="#id89">运动轨迹程序</a></li>
+<li><a class="reference internal" href="#id90">9. 配置参数及沿着路径运动</a></li>
+<li><a class="reference internal" href="#id91">运动轨迹程序</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id92">仿真步骤</a><ul>
+<li><a class="reference internal" href="#rapid-1">1. 同步到RAPID (1)</a></li>
+<li><a class="reference internal" href="#rapid-2">2. 同步到 RAPID (2)</a></li>
+<li><a class="reference internal" href="#path-10">3. 进入点选择Path_10</a></li>
+<li><a class="reference internal" href="#id93">4. 播放仿真</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id94">视频录制步骤</a><ul>
+<li><a class="reference internal" href="#id95">(1) 在【文件】功能选项卡中,单击【选项】,然后单击【屏幕录像机】,对录像的参数进行设定,然后单击【确定】,如图1所示。</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id96">视频录制步骤</a><ul>
+<li><a class="reference internal" href="#id97">仿真和查看录像</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id98">测量工具</a><ul>
+<li><a class="reference internal" href="#id99">选择点到点测量</a></li>
+<li><a class="reference internal" href="#id100">选择点到点测量</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id101">三维建模</a><ul>
+<li><a class="reference internal" href="#id102">1. 建立矩形体</a></li>
+<li><a class="reference internal" href="#id103">2. 矩形体参数设置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

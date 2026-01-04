@@ -1,0 +1,709 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="实验二 决策树" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/70-ai/02-exp.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="实验任务: 基于空气质量监测数据，通过 Python 编程实现：, 利用分类树建立空气质量等级的分类预测模型，对空气质量等级进行多分类预测；, 利用回归树建立 PM2.5 浓度的回归预测模型，基于测试误差和训练误差确定合理的 树深度。. 具体要求: 按照下发的实验报告模板独立完成实验报告。, 分类任务：- 基于 PM2.5、PM10、SO2、CO 和 NO2 五个特征，决策树生成算法可选 I..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="实验任务: 基于空气质量监测数据，通过 Python 编程实现：, 利用分类树建立空气质量等级的分类预测模型，对空气质量等级进行多分类预测；, 利用回归树建立 PM2.5 浓度的回归预测模型，基于测试误差和训练误差确定合理的 树深度。. 具体要求: 按照下发的实验报告模板独立完成实验报告。, 分类任务：- 基于 PM2.5、PM10、SO2、CO 和 NO2 五个特征，决策树生成算法可选 I..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="第三次试验 BP神经网络" href="03-exp1.html"><link rel="prev" title="实验一 支持向量机" href="01-exp.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>实验二 决策树 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-interg/index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../80-interg/reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/70-ai/02-exp.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/70-ai/02-exp.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>实验二 决策树<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2>实验任务<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>基于空气质量监测数据，通过 Python 编程实现：</p></li>
+<li><p>利用分类树建立空气质量等级的分类预测模型，对空气质量等级进行多分类预测；</p></li>
+<li><p>利用回归树建立 PM2.5 浓度的回归预测模型，基于测试误差和训练误差确定合理的
+树深度。</p></li>
+</ul>
+</section>
+<section id="id3">
+<h2>具体要求<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>按照下发的实验报告模板独立完成实验报告。</p></li>
+<li><p>分类任务：</p>
+<ul>
+<li><p>基于 PM2.5、PM10、SO2、CO 和 NO2 五个特征，决策树生成算法可选
+ID3 或 CART，</p></li>
+<li><p>需要输出训练精度和测试精度（训练精度不得低于 80%），输出分类
+树的文本化表达结果和图形化结果。</p></li>
+</ul>
+</li>
+<li><p>回归任务：</p>
+<ul>
+<li><p>基于 CO 和 SO2 两个特征，分别建立树深度为 2~15 的回归树模型，基于
+测试误差和测试误差确定合理的树深度，并绘制树深度与测试误差、测试误差的折
+线图（要有图例）；</p></li>
+<li><p>绘制最优树深度下的回归树模型的回归平面，将预测值小于实
+际值的点设为蓝色，其余为灰色。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id4">
+<h2>报告材料<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>实验名称：
+基于决策树的多分类预测与回归预测
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>实验目的：
+理解决策树模型实现分类和回归任务的基本原理，能够在有限时
+间内自主编写 Python 程序解决一个面向实际应用的基于决策树模型
+的多分类预测与回归预测问题。
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>实验设备：
+运行 Sublime Text 3 代码编辑器和 Python 3.9.1 编译环境的计算机。
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2><strong>实验原理（或实验方案）：</strong><a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>决策树是一种基本的分类与回归方法。它呈树形结构，可以看作是 if-then 规则的集合，具有可读性好、分类速度快的优点。决策树的学习通常包括三个步骤：特征选择、决策树的生成和决策树的修剪。</p>
+<section id="id6">
+<h3><strong>1. 分类决策树</strong><a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>分类决策树是一种描述对实例进行分类的树形结构。决策树由结点和有向边组成。结点有两种类型：内部结点和叶结点。内部结点表示一个特征或属性，叶结点表示一个类。</p>
+<ul class="simple">
+<li><p><strong>特征选择</strong>：其目的是选取对训练数据具有分类能力的特征，这样可以提高决策树学习的效率。常用的特征选择标准有信息增益（ID3 算法）、信息增益率（C4.5 算法）和基尼指数（CART 算法）。</p>
+<ul>
+<li><p><strong>ID3 算法</strong>：核心是在决策树各个结点上应用信息增益准则选择特征，递归地构建决策树。</p></li>
+<li><p><strong>CART (Classification and Regression Tree) 算法</strong>：既可用于分类也可用于回归。在分类任务中，CART 使用基尼指数最小化准则来进行特征选择，生成二叉树。基尼指数表示集合的不确定性，基尼指数越小，样本集合的纯度越高。</p></li>
+</ul>
+</li>
+<li><p><strong>决策树生成</strong>：从根结点开始，对结点计算所有可能的特征的信息增益（或基尼指数等），选择最优特征，根据该特征的不同取值建立子结点，再对子结点递归地调用以上方法，构建决策树，直到所有训练数据子集基本被正确分类，或没有合适的特征为止。</p></li>
+<li><p><strong>决策树剪枝</strong>：生成的决策树可能对训练数据有很好的分类能力，但对未知的测试数据却未必有好的分类能力，即可能发生过拟合现象。剪枝是解决过拟合的有效手段，分为预剪枝和后剪枝。</p></li>
+</ul>
+</section>
+<section id="id7">
+<h3><strong>2. 回归决策树</strong><a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>回归决策树用于预测连续值。与分类树类似，回归树也是将特征空间划分为若干单元（即叶子节点），但在每个单元上的输出是一个连续值，通常是该单元内所有训练样本目标值的均值。</p>
+<ul>
+<li><p><strong>CART 回归树生成</strong>：CART 回归树采用平方误差最小化准则来选择最优划分特征和最优切分点。
+假设已将输入空间划分为 <span class="math notranslate nohighlight">\(M\)</span> 个单元 <span class="math notranslate nohighlight">\(R_1, R_2, \dots, R_M\)</span>，并且在每个单元 <span class="math notranslate nohighlight">\(R_m\)</span> 上有一个固定的输出值 <span class="math notranslate nohighlight">\(c_m\)</span>。回归树模型可表示为 <span class="math notranslate nohighlight">\(f(x) = \sum_{m=1}^{M} c_m I(x \in R_m)\)</span>。
+当输入空间的划分确定时，可以用平方误差 <span class="math notranslate nohighlight">\(\sum_{x_i \in R_m} (y_i - c_m)^2\)</span> 来表示训练误差，用平方误差最小的准则求解每个单元上的最优输出值，易知单元 <span class="math notranslate nohighlight">\(R_m\)</span> 上的 <span class="math notranslate nohighlight">\(c_m\)</span> 的最优值 <span class="math notranslate nohighlight">\(\hat{c}_m\)</span> 是 <span class="math notranslate nohighlight">\(R_m\)</span> 上所有输入实例 <span class="math notranslate nohighlight">\(x_i\)</span> 对应的输出 <span class="math notranslate nohighlight">\(y_i\)</span> 的均值。
+选择最优切分变量 <span class="math notranslate nohighlight">\(j\)</span> 和切分点 <span class="math notranslate nohighlight">\(s\)</span> 的过程如下：
+遍历所有输入变量 <span class="math notranslate nohighlight">\(j\)</span>，对固定的切分变量 <span class="math notranslate nohighlight">\(j\)</span> 扫描所有切分点 <span class="math notranslate nohighlight">\(s\)</span>，求解</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+    \min_{j,s} \left[ \min_{c_1} \sum_{x_i \in R_1(j,s)} (y_i - c_1)^2 + \min_{c_2} \sum_{x_i \in R_2(j,s)} (y_i - c_2)^2 \right]
+    \]</div>
+</div>
+<p>其中 <span class="math notranslate nohighlight">\(R_1(j,s) = \{x | x^{(j)} \le s\}\)</span> 和 <span class="math notranslate nohighlight">\(R_2(j,s) = \{x | x^{(j)} &gt; s\}\)</span> 是划分后的两个区域。对每个区域找到最优的 <span class="math notranslate nohighlight">\(c_1\)</span> 和 <span class="math notranslate nohighlight">\(c_2\)</span>（即区域内样本均值）。然后选择使上述表达式最小的 <span class="math notranslate nohighlight">\((j,s)\)</span> 对。
+递归地重复这个过程，直到满足停止条件（如节点中样本个数小于预定阈值，或平方误差减小量小于预定阈值，或达到预设的最大深度）。</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h2><strong>实验步骤：</strong><a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<section id="id9">
+<h3><strong>一、数据准备与预处理</strong><a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>加载数据</strong>：使用 Pandas 库加载空气质量监测数据集。数据集中应包含 PM2.5、PM10、SO2、CO、NO2 等特征，以及用于分类任务的空气质量等级标签和用于回归任务的 PM2.5 浓度值。</p></li>
+<li><p><strong>数据清洗</strong>：检查并处理缺失值（例如，删除包含缺失值的样本或使用均值/中位数填充）。检查并处理异常值（可选）。</p></li>
+<li><p><strong>数据转换</strong>：确保所有特征列为数值类型。对于分类任务的目标变量（空气质量等级），如果其为文本类型，需要进行数值编码（如标签编码）。</p></li>
+</ol>
+</section>
+<section id="id10">
+<h3><strong>二、分类任务：空气质量等级预测</strong><a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>特征与目标选择</strong>：选择 PM2.5、PM10、SO2、CO 和 NO2 作为特征变量 (X_cls)，空气质量等级作为目标变量 (y_cls)。</p></li>
+<li><p><strong>数据划分</strong>：将数据集划分为训练集和测试集（例如，采用 80% 作为训练集，20% 作为测试集），确保划分的随机性。</p></li>
+<li><p><strong>模型训练</strong>：</p>
+<ul class="simple">
+<li><p>选择决策树生成算法（ID3 或 CART）。在 Scikit-learn 中，<code class="docutils literal notranslate"><span class="pre">DecisionTreeClassifier</span></code> 可以通过设置 <code class="docutils literal notranslate"><span class="pre">criterion</span></code> 参数（如 <code class="docutils literal notranslate"><span class="pre">'gini'</span></code> 对应 CART，<code class="docutils literal notranslate"><span class="pre">'entropy'</span></code> 对应 ID3 思想）来实现。</p></li>
+<li><p>初始化分类决策树模型。可以设置一些参数以防止过拟合，如 <code class="docutils literal notranslate"><span class="pre">max_depth</span></code>（最大深度）、<code class="docutils literal notranslate"><span class="pre">min_samples_split</span></code>（节点最小分裂样本数）、<code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code>（叶节点最小样本数）。</p></li>
+<li><p>使用训练集数据训练分类决策树模型。</p></li>
+</ul>
+</li>
+<li><p><strong>模型评估</strong>：</p>
+<ul class="simple">
+<li><p>使用训练好的模型对训练集进行预测，计算训练精度（Accuracy）。</p></li>
+<li><p>使用训练好的模型对测试集进行预测，计算测试精度。</p></li>
+<li><p>确保训练精度不低于 80%。</p></li>
+</ul>
+</li>
+<li><p><strong>结果输出</strong>：</p>
+<ul class="simple">
+<li><p>打印训练精度和测试精度。</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">sklearn.tree.export_text</span></code> 函数输出分类树的文本化表达结果。</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">sklearn.tree.export_graphviz</span></code> 函数结合 <code class="docutils literal notranslate"><span class="pre">graphviz</span></code> 库（或 <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>）输出分类树的图形化结果。</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="pm2-5">
+<h3><strong>三、回归任务：PM2.5 浓度预测</strong><a class="headerlink" href="#pm2-5" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>特征与目标选择</strong>：选择 CO 和 SO2 作为特征变量 (X_reg)，PM2.5 浓度作为目标变量 (y_reg)。</p></li>
+<li><p><strong>数据划分</strong>：将数据集划分为训练集和测试集（例如，采用 80% 作为训练集，20% 作为测试集）。</p></li>
+<li><p><strong>不同树深度的模型训练与评估</strong>：</p>
+<ul class="simple">
+<li><p>初始化一个列表用于存储不同树深度下的训练误差和测试误差（例如，使用均方误差 MSE 作为评价指标）。</p></li>
+<li><p>循环设置树的深度从 2 到 15：</p>
+<ul>
+<li><p>初始化回归决策树模型 (<code class="docutils literal notranslate"><span class="pre">DecisionTreeRegressor</span></code>)，设置 <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> 为当前循环的深度。</p></li>
+<li><p>使用训练集数据训练回归决策树模型。</p></li>
+<li><p>使用训练好的模型对训练集进行预测，计算训练误差 (MSE)。</p></li>
+<li><p>使用训练好的模型对测试集进行预测，计算测试误差 (MSE)。</p></li>
+<li><p>将当前深度的训练误差和测试误差存入列表。</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>确定合理的树深度</strong>：</p>
+<ul class="simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> 绘制树深度与训练误差、测试误差的折线图。横轴为树深度，纵轴为误差。图中应包含图例，清晰标示训练误差曲线和测试误差曲线。</p></li>
+<li><p>观察折线图，选择一个测试误差较低且开始趋于平稳（或轻微上升，避免过拟合），同时训练误差和测试误差之间差距不过大的深度作为合理的树深度。</p></li>
+</ul>
+</li>
+<li><p><strong>最优树深度下的回归平面绘制</strong>：</p>
+<ul class="simple">
+<li><p>使用上一步确定的最优树深度，重新训练一个回归决策树模型。</p></li>
+<li><p>创建 CO 和 SO2 特征值范围内的网格数据 (meshgrid)。</p></li>
+<li><p>使用训练好的最优回归树模型对网格数据进行预测，得到预测的 PM2.5 浓度值，这将构成回归曲面。</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> 绘制 3D 回归平面图。</p></li>
+<li><p>在 3D 图上，同时绘制测试集的实际数据点。根据要求，将模型预测值小于实际值的点设为蓝色，其余点设为灰色。</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="id11">
+<h2><strong>实验数据：</strong><a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<!-- zh-hans: 此处应简要描述所使用的空气质量监测数据集的来源、样本量、特征概况等。由于您未提供具体数据，请在此处补充。 -->
+<p>例如：本实验使用的数据集为 XX 市空气质量监测数据，包含 XXXX 条记录。主要特征包括 PM2.5 (µg/m³), PM10 (µg/m³), SO2 (µg/m³), CO (mg/m³), NO2 (µg/m³)。目标变量为空气质量等级（优、良、轻度污染、中度污染、重度污染、严重污染）和 PM2.5 浓度 (µg/m³)。</p>
+</section>
+<section id="id12">
+<h2><strong>实验结果与讨论：</strong><a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
+<section id="id13">
+<h3><strong>一、分类任务结果与讨论</strong><a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>模型精度</strong>：</p>
+<ul class="simple">
+<li><p>训练精度：[<!-- zh-hans: 此处填写实际训练精度，例如：0.85 (85%) -->]</p></li>
+<li><p>测试精度：[<!-- zh-hans: 此处填写实际测试精度，例如：0.82 (82%) -->]</p></li>
+</ul>
+</li>
+<li><p><strong>分类树文本化表达</strong>：</p></li>
+<li><p><strong>分类树图形化结果</strong>：
+`</p></li>
+</ol>
+</section>
+<section id="id14">
+<h3><strong>二、回归任务结果与讨论</strong><a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>树深度与误差关系</strong>：</p></li>
+<li><p><strong>最优树深度下的回归平面</strong>：</p></li>
+</ol>
+</section>
+<section id="id15">
+<h3><strong>三、总结与展望</strong><a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<p>通过本次实验，我理解了决策树模型在分类和回归任务中的基本原理和实现过程。
+在分类任务中，学习了如何构建和评估分类决策树，并将其规则进行可视化。训练精度达到了预期目标。
+在回归任务中，通过比较不同树深度下的训练误差和测试误差，确定了合理的树深度，并可视化了回归树的预测平面。
+实验中遇到的问题可能包括：数据预处理的细节（如缺失值填充策略）、模型参数的选择（如最大深度、最小叶节点样本数）对结果的影响等。
+决策树模型具有解释性强、易于理解的优点，但也容易过拟合。未来可以尝试决策树的剪枝算法（预剪枝和后剪枝）来进一步优化模型性能，或者学习集成学习方法如随机森林、梯度提升决策树（GBDT）等，它们通常能获得比单一决策树更好的预测效果。</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="03-exp1.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">第三次试验 BP神经网络</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="01-exp.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">实验一 支持向量机</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">实验二 决策树</a><ul>
+<li><a class="reference internal" href="#id2">实验任务</a></li>
+<li><a class="reference internal" href="#id3">具体要求</a></li>
+<li><a class="reference internal" href="#id4">报告材料</a></li>
+<li><a class="reference internal" href="#id5"><strong>实验原理（或实验方案）：</strong></a><ul>
+<li><a class="reference internal" href="#id6"><strong>1. 分类决策树</strong></a></li>
+<li><a class="reference internal" href="#id7"><strong>2. 回归决策树</strong></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8"><strong>实验步骤：</strong></a><ul>
+<li><a class="reference internal" href="#id9"><strong>一、数据准备与预处理</strong></a></li>
+<li><a class="reference internal" href="#id10"><strong>二、分类任务：空气质量等级预测</strong></a></li>
+<li><a class="reference internal" href="#pm2-5"><strong>三、回归任务：PM2.5 浓度预测</strong></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id11"><strong>实验数据：</strong></a></li>
+<li><a class="reference internal" href="#id12"><strong>实验结果与讨论：</strong></a><ul>
+<li><a class="reference internal" href="#id13"><strong>一、分类任务结果与讨论</strong></a></li>
+<li><a class="reference internal" href="#id14"><strong>二、回归任务结果与讨论</strong></a></li>
+<li><a class="reference internal" href="#id15"><strong>三、总结与展望</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="../_static/tex-svg-full.js?v=fe9f5dce"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

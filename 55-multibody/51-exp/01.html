@@ -1,0 +1,862 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="实验一 2dof（五连杆）建模" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/55-multibody/51-exp/01.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="一、实验名称: 2-DOF并联机械手运动学建模 二、实验目的: 通过实际操作Matlab软件及应用多体动力学，通过构建系统运动副约束方程，掌握构建2-DOF并联机械手系统运动学模型的基本方法与步骤。, 加深对机器人独立变量与非独立变量的物理意义，以及相应的剥离方法。. 三、实验设备: 装有Python (SymPy, NumPy, Matplotlib) 运行环境的计算机。(注：实验要求中提..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="一、实验名称: 2-DOF并联机械手运动学建模 二、实验目的: 通过实际操作Matlab软件及应用多体动力学，通过构建系统运动副约束方程，掌握构建2-DOF并联机械手系统运动学模型的基本方法与步骤。, 加深对机器人独立变量与非独立变量的物理意义，以及相应的剥离方法。. 三、实验设备: 装有Python (SymPy, NumPy, Matplotlib) 运行环境的计算机。(注：实验要求中提..." />
+<link rel="index" title="索引" href="../../genindex.html"><link rel="search" title="搜索" href="../../search.html"><link rel="next" title="实验二 2dof（五连杆）仿真" href="02.html"><link rel="prev" title="实验" href="index.html">
+        <link rel="prefetch" href="../../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>实验一 2dof（五连杆）建模 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">实验</a><input aria-label="Toggle navigation of 实验" checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../80-interg/index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../80-interg/reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../80-interg/reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../80-interg/reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/55-multibody/51-exp/01.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/55-multibody/51-exp/01.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="dof">
+<h1>实验一 2dof（五连杆）建模<a class="headerlink" href="#dof" title="Link to this heading">¶</a></h1>
+<!-- ---
+title: 2-DOF并联机械手运动学建模实验报告
+--- -->
+<section id="id1">
+<h2>一、实验名称<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>2-DOF并联机械手运动学建模</p>
+</section>
+<section id="id2">
+<h2>二、实验目的<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>通过实际操作Matlab软件及应用多体动力学，通过构建系统运动副约束方程，掌握构建2-DOF并联机械手系统运动学模型的基本方法与步骤。</p></li>
+<li><p>加深对机器人独立变量与非独立变量的物理意义，以及相应的剥离方法。</p></li>
+</ol>
+</section>
+<section id="id3">
+<h2>三、实验设备<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>装有Python (SymPy, NumPy, Matplotlib) 运行环境的计算机。
+(注：实验要求中提及RobotStudio，本报告基于提供的Python代码进行建模原理阐述，该建模方法和原理同样适用于其他多体动力学仿真平台。)</p>
+</section>
+<section id="id4">
+<h2>四、实验原理（或实验方案）<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>本实验研究的2-DOF并联机械手是一个五杆闭环机构。我们将采用多体系统动力学中的方法，通过定义广义坐标和建立约束方程来描述系统的运动学特性。</p>
+<section id="id5">
+<h3>1. 机构简图与坐标系<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>所研究的2-DOF并联机械手简化为一个平面五杆机构，如下图所示。</p>
+<div class="mermaid" align="center">
+flowchart LR
+    P0 ---|fixed| Ground
+    P0 ---|L1| P1
+    P1 ---|L2| P2
+    P2 ---|L3| P3
+    P4 ---|L4| P3
+    Ground ---|fixed| P4
+</div><p><strong>符号定义:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(L_1, L_2, L_3, L_4\)</span>: 分别为连杆1、2、3、4的长度。</p></li>
+<li><p><span class="math notranslate nohighlight">\(L_5\)</span>: 地面连杆 (机架) 的长度，即固定点 <span class="math notranslate nohighlight">\(P_0\)</span> 和 <span class="math notranslate nohighlight">\(P_5\)</span> 之间的距离。</p></li>
+<li><p><span class="math notranslate nohighlight">\(P_0\)</span>: 固定转动副，坐标为 <span class="math notranslate nohighlight">\((0, 0)\)</span>。</p></li>
+<li><p><span class="math notranslate nohighlight">\(P_5\)</span>: 固定转动副，坐标为 <span class="math notranslate nohighlight">\((L_5, 0)\)</span>。 (在代码中为 <code class="docutils literal notranslate"><span class="pre">P3_p</span></code>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(P_1, P_2, P_3j\)</span>: 活动转动副。</p></li>
+<li><p><span class="math notranslate nohighlight">\(a_1, a_2, a_3, a_4\)</span>: 分别为连杆1、2、3、4相对于全局X轴正方向的绝对转角（逆时针为正）。</p></li>
+<li><p><span class="math notranslate nohighlight">\(R_i = \begin{pmatrix} r_{i1} \\ r_{i2} \end{pmatrix}\)</span>: 连杆 <span class="math notranslate nohighlight">\(i\)</span> (i=1,2,3,4) 的质心在全局坐标系下的坐标。</p></li>
+<li><p><span class="math notranslate nohighlight">\(A_i = \begin{pmatrix} \cos(a_i) &amp; -\sin(a_i) \\ \sin(a_i) &amp; \cos(a_i) \end{pmatrix}\)</span>: 连杆 <span class="math notranslate nohighlight">\(i\)</span> 从局部坐标系到全局坐标系的旋转矩阵。</p></li>
+<li><p><span class="math notranslate nohighlight">\(u_{ia}, u_{ib}, \dots\)</span>: 在连杆 <span class="math notranslate nohighlight">\(i\)</span> 局部坐标系中定义的从质心指向其端点的矢量。根据代码，连杆质心位于其几何中心：</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(u_{1a} = \begin{pmatrix} -L_1/2 \\ 0 \end{pmatrix}\)</span> (从<span class="math notranslate nohighlight">\(R_1\)</span>指向<span class="math notranslate nohighlight">\(P_0\)</span>的局部矢量)</p></li>
+<li><p><span class="math notranslate nohighlight">\(u_{1b} = \begin{pmatrix} L_1/2 \\ 0 \end{pmatrix}\)</span> (从<span class="math notranslate nohighlight">\(R_1\)</span>指向<span class="math notranslate nohighlight">\(P_1\)</span>的局部矢量)</p></li>
+<li><p><span class="math notranslate nohighlight">\(u_{2b} = \begin{pmatrix} -L_2/2 \\ 0 \end{pmatrix}\)</span> (从<span class="math notranslate nohighlight">\(R_2\)</span>指向<span class="math notranslate nohighlight">\(P_1\)</span>的局部矢量)</p></li>
+<li><p><span class="math notranslate nohighlight">\(u_{2c} = \begin{pmatrix} L_2/2 \\ 0 \end{pmatrix}\)</span> (从<span class="math notranslate nohighlight">\(R_2\)</span>指向<span class="math notranslate nohighlight">\(P_2\)</span>的局部矢量)</p></li>
+<li><p><span class="math notranslate nohighlight">\(u_{3c} = \begin{pmatrix} -L_3/2 \\ 0 \end{pmatrix}\)</span> (从<span class="math notranslate nohighlight">\(R_3\)</span>指向<span class="math notranslate nohighlight">\(P_2\)</span>的局部矢量)</p></li>
+<li><p><span class="math notranslate nohighlight">\(u_{3d} = \begin{pmatrix} L_3/2 \\ 0 \end{pmatrix}\)</span> (从<span class="math notranslate nohighlight">\(R_3\)</span>指向<span class="math notranslate nohighlight">\(P_{3j}\)</span>的局部矢量)</p></li>
+<li><p><span class="math notranslate nohighlight">\(u_{4c} = \begin{pmatrix} -L_4/2 \\ 0 \end{pmatrix}\)</span> (从<span class="math notranslate nohighlight">\(R_4\)</span>指向<span class="math notranslate nohighlight">\(P_{3j}\)</span>的局部矢量)</p></li>
+<li><p><span class="math notranslate nohighlight">\(u_{4d} = \begin{pmatrix} L_4/2 \\ 0 \end{pmatrix}\)</span> (从<span class="math notranslate nohighlight">\(R_4\)</span>指向<span class="math notranslate nohighlight">\(P_5\)</span>的局部矢量)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id6">
+<h3>2. 广义坐标的选取<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>为了完全描述系统的位形，我们选取以下12个变量作为广义坐标 <span class="math notranslate nohighlight">\(q\)</span>:
+<span class="math notranslate nohighlight">\(q = [a_1, a_2, a_3, a_4, r_{11}, r_{12}, r_{21}, r_{22}, r_{31}, r_{32}, r_{41}, r_{42}]^T\)</span>
+这是一个包含4个角度和4个质心（每个质心2个坐标）的向量。</p>
+</section>
+<section id="id7">
+<h3>3. 自由度分析<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>对于平面机构，其自由度 <span class="math notranslate nohighlight">\(F\)</span> 可由 Grübler 公式计算：
+<span class="math notranslate nohighlight">\(F = 3(n-1) - 2j_1 - j_2\)</span>
+其中：</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(n\)</span>: 构件数量 (包括地面)。对于五杆机构， <span class="math notranslate nohighlight">\(n=5\)</span> (L1, L2, L3, L4, L5/地面)。</p></li>
+<li><p><span class="math notranslate nohighlight">\(j_1\)</span>: 低副 (转动副或移动副) 的数量。机构中有5个转动副 (<span class="math notranslate nohighlight">\(P_0, P_1, P_2, P_{3j}, P_5\)</span>)，所以 <span class="math notranslate nohighlight">\(j_1=5\)</span>。</p></li>
+<li><p><span class="math notranslate nohighlight">\(j_2\)</span>: 高副数量。机构中无高副，所以 <span class="math notranslate nohighlight">\(j_2=0\)</span>。</p></li>
+</ul>
+<p>因此，自由度为：
+<span class="math notranslate nohighlight">\(F = 3(5-1) - 2(5) - 0 = 3 \times 4 - 10 = 12 - 10 = 2\)</span>
+该机构具有2个自由度，这与实验名称“2-DOF并联机械手”相符。</p>
+</section>
+<section id="c-q-0">
+<h3>4. 约束方程的建立 <span class="math notranslate nohighlight">\(C(q)=0\)</span><a class="headerlink" href="#c-q-0" title="Link to this heading">¶</a></h3>
+<p>由于选取的广义坐标数量 (12个) 大于系统的自由度 (2个)，这些广义坐标之间并非完全独立，而是通过几何约束方程联系起来。对于该五杆机构，共有 <span class="math notranslate nohighlight">\(12 - 2 = 10\)</span> 个独立的标量约束方程。这些约束方程由各连杆的连接关系确定：</p>
+<ol class="arabic">
+<li><p><strong>连杆1的A端 (与<span class="math notranslate nohighlight">\(P_0\)</span>连接的一端) 固定在原点 <span class="math notranslate nohighlight">\(P_0 = (0,0)^T\)</span>:</strong>
+定义 <span class="math notranslate nohighlight">\(P_{1A}\)</span> 为连杆1与 <span class="math notranslate nohighlight">\(P_0\)</span> 的连接点在全局坐标系中的位置。
+<span class="math notranslate nohighlight">\(P_{1A} = R_1 + A_1 u_{1a}\)</span>
+约束方程 <span class="math notranslate nohighlight">\(C_1(q)\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} C_1(q) = R_1 + A_1 u_{1a} - P_0 = \begin{pmatrix} r_{11} \\ r_{12} \end{pmatrix} + \begin{pmatrix} \cos(a_1) &amp; -\sin(a_1) \\ \sin(a_1) &amp; \cos(a_1) \end{pmatrix} \begin{pmatrix} -L_1/2 \\ 0 \end{pmatrix} - \begin{pmatrix} 0 \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix} \end{split}\]</div>
+</div>
+<p>展开得到两个标量方程：
+<span class="math notranslate nohighlight">\(c_{1x}: r_{11} - \frac{L_1}{2} \cos(a_1) = 0\)</span>
+<span class="math notranslate nohighlight">\(c_{1y}: r_{12} - \frac{L_1}{2} \sin(a_1) = 0\)</span></p>
+</li>
+<li><p><strong>连杆1的B端与连杆2的B端在点 <span class="math notranslate nohighlight">\(P_1\)</span> 重合:</strong>
+定义 <span class="math notranslate nohighlight">\(P_{1B}\)</span> 为连杆1的B端位置，<span class="math notranslate nohighlight">\(P_{2B}\)</span> 为连杆2的B端位置。
+<span class="math notranslate nohighlight">\(P_{1B} = R_1 + A_1 u_{1b}\)</span>
+<span class="math notranslate nohighlight">\(P_{2B} = R_2 + A_2 u_{2b}\)</span>
+约束方程 <span class="math notranslate nohighlight">\(C_2(q)\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} C_2(q) = P_{2B} - P_{1B} = (R_2 + A_2 u_{2b}) - (R_1 + A_1 u_{1b}) = \begin{pmatrix} 0 \\ 0 \end{pmatrix} \end{split}\]</div>
+</div>
+<p>展开得到两个标量方程：
+<span class="math notranslate nohighlight">\(c_{2x}: (r_{21} - \frac{L_2}{2} \cos(a_2)) - (r_{11} + \frac{L_1}{2} \cos(a_1)) = 0\)</span>
+<span class="math notranslate nohighlight">\(c_{2y}: (r_{22} - \frac{L_2}{2} \sin(a_2)) - (r_{12} + \frac{L_1}{2} \sin(a_1)) = 0\)</span></p>
+</li>
+<li><p><strong>连杆2的C端与连杆3的C端在点 <span class="math notranslate nohighlight">\(P_2\)</span> 重合:</strong>
+定义 <span class="math notranslate nohighlight">\(P_{2C}\)</span> 为连杆2的C端位置，<span class="math notranslate nohighlight">\(P_{3C}\)</span> 为连杆3的C端位置。
+<span class="math notranslate nohighlight">\(P_{2C} = R_2 + A_2 u_{2c}\)</span>
+<span class="math notranslate nohighlight">\(P_{3C} = R_3 + A_3 u_{3c}\)</span>
+约束方程 <span class="math notranslate nohighlight">\(C_3(q)\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} C_3(q) = P_{3C} - P_{2C} = (R_3 + A_3 u_{3c}) - (R_2 + A_2 u_{2c}) = \begin{pmatrix} 0 \\ 0 \end{pmatrix} \end{split}\]</div>
+</div>
+<p>展开得到两个标量方程：
+<span class="math notranslate nohighlight">\(c_{3x}: (r_{31} - \frac{L_3}{2} \cos(a_3)) - (r_{21} + \frac{L_2}{2} \cos(a_2)) = 0\)</span>
+<span class="math notranslate nohighlight">\(c_{3y}: (r_{32} - \frac{L_3}{2} \sin(a_3)) - (r_{22} + \frac{L_2}{2} \sin(a_2)) = 0\)</span></p>
+</li>
+<li><p><strong>连杆3的D端与连杆4的C’端 (代码中为C端) 在点 <span class="math notranslate nohighlight">\(P_{3j}\)</span> 重合:</strong>
+定义 <span class="math notranslate nohighlight">\(P_{3D}\)</span> 为连杆3的D端位置，<span class="math notranslate nohighlight">\(P_{4C'}\)</span> 为连杆4的C’端位置。
+<span class="math notranslate nohighlight">\(P_{3D} = R_3 + A_3 u_{3d}\)</span>
+<span class="math notranslate nohighlight">\(P_{4C'} = R_4 + A_4 u_{4c}\)</span>
+约束方程 <span class="math notranslate nohighlight">\(C_4(q)\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} C_4(q) = P_{4C'} - P_{3D} = (R_4 + A_4 u_{4c}) - (R_3 + A_3 u_{3d}) = \begin{pmatrix} 0 \\ 0 \end{pmatrix} \end{split}\]</div>
+</div>
+<p>展开得到两个标量方程：
+<span class="math notranslate nohighlight">\(c_{4x}: (r_{41} - \frac{L_4}{2} \cos(a_4)) - (r_{31} + \frac{L_3}{2} \cos(a_3)) = 0\)</span>
+<span class="math notranslate nohighlight">\(c_{4y}: (r_{42} - \frac{L_4}{2} \sin(a_4)) - (r_{32} + \frac{L_3}{2} \sin(a_3)) = 0\)</span></p>
+</li>
+<li><p><strong>连杆4的D端固定在点 <span class="math notranslate nohighlight">\(P_5 = (L_5, 0)^T\)</span>:</strong>
+定义 <span class="math notranslate nohighlight">\(P_{4D}\)</span> 为连杆4的D端位置。
+<span class="math notranslate nohighlight">\(P_{4D} = R_4 + A_4 u_{4d}\)</span>
+约束方程 <span class="math notranslate nohighlight">\(C_5(q)\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} C_5(q) = P_{4D} - P_5 = (R_4 + A_4 u_{4d}) - \begin{pmatrix} L_5 \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix} \end{split}\]</div>
+</div>
+<p>展开得到两个标量方程：
+<span class="math notranslate nohighlight">\(c_{5x}: (r_{41} + \frac{L_4}{2} \cos(a_4)) - L_5 = 0\)</span>
+<span class="math notranslate nohighlight">\(c_{5y}: (r_{42} + \frac{L_4}{2} \sin(a_4)) - 0 = 0\)</span></p>
+</li>
+</ol>
+<p>这5组矢量约束方程共同构成了10个标量约束方程 <span class="math notranslate nohighlight">\(C(q) = [C_1(q)^T, C_2(q)^T, C_3(q)^T, C_4(q)^T, C_5(q)^T]^T = 0_{10 \times 1}\)</span>。</p>
+</section>
+<section id="id8">
+<h3>5. 独立变量与非独立变量的剥离<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<p>由于系统有2个自由度，我们可以从12个广义坐标中选取2个作为<strong>独立变量</strong> (或驱动变量)，记为 <span class="math notranslate nohighlight">\(q_i\)</span>。其余的 <span class="math notranslate nohighlight">\(12-2=10\)</span> 个广义坐标则为<strong>非独立变量</strong> (或从动变量)，记为 <span class="math notranslate nohighlight">\(q_d\)</span>。独立变量的值可以自由指定（例如，通过电机驱动），而非独立变量的值则由约束方程 <span class="math notranslate nohighlight">\(C(q_i, q_d)=0\)</span> 唯一确定。</p>
+<p>在提供的Python代码中，<code class="docutils literal notranslate"><span class="pre">DRIVEN_JOINTS</span></code> 参数允许用户从 <span class="math notranslate nohighlight">\(\{a_1, a_2, a_3, a_4\}\)</span> 中选择任意两个角度作为独立变量。例如，若选择 <span class="math notranslate nohighlight">\(a_1\)</span> 和 <span class="math notranslate nohighlight">\(a_2\)</span> 作为独立变量，则：
+<span class="math notranslate nohighlight">\(q_i = [a_1, a_2]^T\)</span>
+<span class="math notranslate nohighlight">\(q_d = [a_3, a_4, r_{11}, r_{12}, r_{21}, r_{22}, r_{31}, r_{32}, r_{41}, r_{42}]^T\)</span></p>
+<p>给定独立变量 <span class="math notranslate nohighlight">\(q_i(t)\)</span> 的瞬时值，可以通过求解非线性方程组 <span class="math notranslate nohighlight">\(C(q_i(t), q_d) = 0\)</span> 来得到对应的非独立变量 <span class="math notranslate nohighlight">\(q_d(t)\)</span>。这通常需要数值方法，如代码中使用的 <code class="docutils literal notranslate"><span class="pre">scipy.optimize.fsolve</span></code> (基于牛顿-拉夫逊法或其变种)。</p>
+</section>
+<section id="id9">
+<h3>6. 运动学方程（速度和加速度分析）<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<section id="id10">
+<h4>6.1 速度分析与雅可比矩阵<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
+<p>对约束方程 <span class="math notranslate nohighlight">\(C(q)=0\)</span> 关于时间 <span class="math notranslate nohighlight">\(t\)</span> 求一阶导数，得到速度级约束方程：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \frac{dC(q)}{dt} = \frac{\partial C}{\partial q} \frac{dq}{dt} = C_q \dot{q} = 0 \]</div>
+</div>
+<p>其中：</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\dot{q} = \frac{dq}{dt}\)</span> 是广义速度向量 (12x1)。</p></li>
+<li><p><span class="math notranslate nohighlight">\(C_q = \frac{\partial C}{\partial q}\)</span> 是约束雅可比矩阵 (10x12)。它的每一行是对应标量约束方程对所有广义坐标的偏导数。</p></li>
+</ul>
+<p>将广义坐标 <span class="math notranslate nohighlight">\(q\)</span> 和广义速度 <span class="math notranslate nohighlight">\(\dot{q}\)</span> 划分为独立部分和非独立部分：
+<span class="math notranslate nohighlight">\(q = \begin{pmatrix} q_i \\ q_d \end{pmatrix}\)</span>, <span class="math notranslate nohighlight">\(\dot{q} = \begin{pmatrix} \dot{q}_i \\ \dot{q}_d \end{pmatrix}\)</span>
+相应地，雅可比矩阵 <span class="math notranslate nohighlight">\(C_q\)</span> 也可分块：
+<span class="math notranslate nohighlight">\(C_q = \begin{bmatrix} \frac{\partial C}{\partial q_i} &amp; \frac{\partial C}{\partial q_d} \end{bmatrix} = \begin{bmatrix} C_{q_i} &amp; C_{q_d} \end{bmatrix}\)</span>
+其中 <span class="math notranslate nohighlight">\(C_{q_i}\)</span> 是 <span class="math notranslate nohighlight">\(10 \times 2\)</span> 矩阵，<span class="math notranslate nohighlight">\(C_{q_d}\)</span> 是 <span class="math notranslate nohighlight">\(10 \times 10\)</span> 矩阵。</p>
+<p>速度级约束方程可写为：
+<span class="math notranslate nohighlight">\(C_{q_i} \dot{q}_i + C_{q_d} \dot{q}_d = 0\)</span>
+假设 <span class="math notranslate nohighlight">\(C_{q_d}\)</span> 是非奇异的（即机构未处于奇异位形），则可以解出非独立速度 <span class="math notranslate nohighlight">\(\dot{q}_d\)</span> 与独立速度 <span class="math notranslate nohighlight">\(\dot{q}_i\)</span> 之间的关系：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \dot{q}_d = -(C_{q_d})^{-1} C_{q_i} \dot{q}_i \]</div>
+</div>
+<p>这里，矩阵 <span class="math notranslate nohighlight">\(J_v = -(C_{q_d})^{-1} C_{q_i}\)</span> 称为速度传递雅可比矩阵，它建立了从独立（驱动）速度到非独立（从动）速度的线性映射。在代码中，这一步通过求解线性方程组 <code class="docutils literal notranslate"><span class="pre">Cq_d_k</span> <span class="pre">*</span> <span class="pre">dq_d_k</span> <span class="pre">=</span> <span class="pre">-Cq_i_k</span> <span class="pre">*</span> <span class="pre">dq_i_k_vec</span></code> 实现。</p>
+</section>
+<section id="id11">
+<h4>6.2 加速度分析与伽马项<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<p>对速度级约束方程 <span class="math notranslate nohighlight">\(C_q \dot{q} = 0\)</span> 再次对时间 <span class="math notranslate nohighlight">\(t\)</span> 求导，得到加速度级约束方程：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \frac{d}{dt}(C_q \dot{q}) = \dot{C}_q \dot{q} + C_q \ddot{q} = 0 \]</div>
+</div>
+<p>其中 <span class="math notranslate nohighlight">\(\ddot{q} = \frac{d\dot{q}}{dt}\)</span> 是广义加速度向量 (12x1)。
+上式可整理为：
+<span class="math notranslate nohighlight">\(C_q \ddot{q} = - \dot{C}_q \dot{q}\)</span>
+右端项通常被称为伽马项 <span class="math notranslate nohighlight">\(\gamma\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \gamma = - \dot{C}_q \dot{q} = - \left( \frac{d}{dt} \left( \frac{\partial C}{\partial q} \right) \right) \dot{q} = - \left( \frac{\partial (\frac{\partial C}{\partial q} \dot{q})}{\partial q} \right) \dot{q} = - \frac{\partial (C_q \dot{q})}{\partial q} \dot{q} \]</div>
+</div>
+<p>代码中 <code class="docutils literal notranslate"><span class="pre">gamma_full</span> <span class="pre">=</span> <span class="pre">-gamma_term_jacobian_full</span> <span class="pre">*</span> <span class="pre">dq_all_sym</span></code>，其中 <code class="docutils literal notranslate"><span class="pre">gamma_term_jacobian_full</span> <span class="pre">=</span> <span class="pre">(Cq_full</span> <span class="pre">*</span> <span class="pre">dq_all_sym).jacobian(q_all_sym)</span></code>，这与 <span class="math notranslate nohighlight">\(\gamma\)</span> 的定义一致。</p>
+<p>将加速度向量 <span class="math notranslate nohighlight">\(\ddot{q}\)</span> 和雅可比矩阵 <span class="math notranslate nohighlight">\(C_q\)</span> 分块：
+<span class="math notranslate nohighlight">\(C_{q_i} \ddot{q}_i + C_{q_d} \ddot{q}_d = \gamma\)</span>
+假设 <span class="math notranslate nohighlight">\(C_{q_d}\)</span> 非奇异，则非独立加速度 <span class="math notranslate nohighlight">\(\ddot{q}_d\)</span> 可由独立加速度 <span class="math notranslate nohighlight">\(\ddot{q}_i\)</span> 和当前系统的状态 <span class="math notranslate nohighlight">\((q, \dot{q})\)</span> 确定：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \ddot{q}_d = (C_{q_d})^{-1} (\gamma - C_{q_i} \ddot{q}_i) \]</div>
+</div>
+<p>在代码中，这一步通过求解线性方程组 <code class="docutils literal notranslate"><span class="pre">Cq_d_k</span> <span class="pre">*</span> <span class="pre">ddq_d_k</span> <span class="pre">=</span> <span class="pre">gamma_full_k</span> <span class="pre">-</span> <span class="pre">Cq_i_k</span> <span class="pre">*</span> <span class="pre">ddq_i_k_vec</span></code> 实现。</p>
+<p>通过以上步骤，我们建立了完整的2-DOF并联机械手运动学模型，包括位置约束、速度关系和加速度关系。这些方程是进行后续动力学分析和控制系统设计的基础。</p>
+</section>
+</section>
+</section>
+<section id="id12">
+<h2>五、实验步骤<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>熟悉机构与参数定义：</strong></p>
+<ul class="simple">
+<li><p>理解五杆机构的构型，包括各连杆的连接方式、长度参数 <span class="math notranslate nohighlight">\((L_1, L_2, L_3, L_4, L_5)\)</span>。</p></li>
+<li><p>明确广义坐标的选取：四个连杆转角 <span class="math notranslate nohighlight">\((a_1, a_2, a_3, a_4)\)</span> 和四个连杆质心坐标 <span class="math notranslate nohighlight">\((r_{11}, r_{12}), \dots, (r_{41}, r_{42})\)</span>。</p></li>
+<li><p>确定独立驱动关节 (例如，<code class="docutils literal notranslate"><span class="pre">DRIVEN_JOINTS</span> <span class="pre">=</span> <span class="pre">['a1',</span> <span class="pre">'a2']</span></code>)。</p></li>
+</ul>
+</li>
+<li><p><strong>符号推导运动学方程 (基于Python/SymPy)：</strong></p>
+<ul class="simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">sympy</span></code> 定义符号变量，包括时间 <span class="math notranslate nohighlight">\(t\)</span>，广义坐标 <span class="math notranslate nohighlight">\(q_{all\_sym}\)</span>，广义速度 <span class="math notranslate nohighlight">\(dq_{all\_sym}\)</span>，广义加速度 <span class="math notranslate nohighlight">\(ddq_{all\_sym}\)</span>，以及连杆长度 <span class="math notranslate nohighlight">\(L_i\)</span>。</p></li>
+<li><p>根据几何关系，建立5个矢量约束方程 (共10个标量约束方程) <span class="math notranslate nohighlight">\(C(q) = 0\)</span>。</p></li>
+<li><p>计算约束雅可比矩阵 <span class="math notranslate nohighlight">\(C_q = \frac{\partial C}{\partial q}\)</span>。</p></li>
+<li><p>计算加速度分析中的伽马项 <span class="math notranslate nohighlight">\(\gamma = - \frac{\partial (C_q \dot{q})}{\partial q} \dot{q}\)</span>。</p></li>
+<li><p>将符号表达式转换为可进行数值计算的函数 (<code class="docutils literal notranslate"><span class="pre">lambdify</span></code>)。</p></li>
+</ul>
+</li>
+<li><p><strong>设置仿真参数：</strong></p>
+<ul class="simple">
+<li><p>定义连杆的实际数值长度。</p></li>
+<li><p>设置仿真时间范围 <span class="math notranslate nohighlight">\((t_{start}, t_{end})\)</span> 和时间步长 <span class="math notranslate nohighlight">\(dt\)</span>。</p></li>
+<li><p>为所选的独立驱动关节定义输入运动规律，即 <span class="math notranslate nohighlight">\(q_i(t)\)</span>, <span class="math notranslate nohighlight">\(\dot{q}_i(t)\)</span>, <span class="math notranslate nohighlight">\(\ddot{q}_i(t)\)</span>。</p></li>
+</ul>
+</li>
+<li><p><strong>数值求解与仿真：</strong></p>
+<ul class="simple">
+<li><p><strong>初始位置求解：</strong> 给定独立关节的初始角度 <span class="math notranslate nohighlight">\(q_i(t_0)\)</span>，使用数值求解器 (如 <code class="docutils literal notranslate"><span class="pre">fsolve</span></code>) 求解约束方程 <span class="math notranslate nohighlight">\(C(q_i(t_0), q_d) = 0\)</span>，得到非独立坐标的初始值 <span class="math notranslate nohighlight">\(q_d(t_0)\)</span>。</p></li>
+<li><p><strong>循环求解：</strong> 在每个时间步 <span class="math notranslate nohighlight">\(t_k\)</span>:</p>
+<ul>
+<li><p>获取当前时刻独立关节的位移 <span class="math notranslate nohighlight">\(q_i(t_k)\)</span>、速度 <span class="math notranslate nohighlight">\(\dot{q}_i(t_k)\)</span> 和加速度 <span class="math notranslate nohighlight">\(\ddot{q}_i(t_k)\)</span>。</p></li>
+<li><p><strong>位置分析：</strong> 以 <span class="math notranslate nohighlight">\(q_d(t_{k-1})\)</span> 作为初猜，求解 <span class="math notranslate nohighlight">\(C(q_i(t_k), q_d) = 0\)</span> 得到 <span class="math notranslate nohighlight">\(q_d(t_k)\)</span>。更新完整的 <span class="math notranslate nohighlight">\(q(t_k)\)</span>。</p></li>
+<li><p><strong>速度分析：</strong> 利用 <span class="math notranslate nohighlight">\(q(t_k)\)</span> 计算 <span class="math notranslate nohighlight">\(C_{q_i}(t_k)\)</span> 和 <span class="math notranslate nohighlight">\(C_{q_d}(t_k)\)</span>。求解线性方程组 <span class="math notranslate nohighlight">\(C_{q_d}(t_k) \dot{q}_d(t_k) = -C_{q_i}(t_k) \dot{q}_i(t_k)\)</span> 得到 <span class="math notranslate nohighlight">\(\dot{q}_d(t_k)\)</span>。更新完整的 <span class="math notranslate nohighlight">\(\dot{q}(t_k)\)</span>。</p></li>
+<li><p><strong>加速度分析：</strong> 利用 <span class="math notranslate nohighlight">\(q(t_k)\)</span> 和 <span class="math notranslate nohighlight">\(\dot{q}(t_k)\)</span> 计算 <span class="math notranslate nohighlight">\(\gamma(t_k)\)</span>。求解线性方程组 <span class="math notranslate nohighlight">\(C_{q_d}(t_k) \ddot{q}_d(t_k) = \gamma(t_k) - C_{q_i}(t_k) \ddot{q}_i(t_k)\)</span> 得到 <span class="math notranslate nohighlight">\(\ddot{q}_d(t_k)\)</span>。更新完整的 <span class="math notranslate nohighlight">\(\ddot{q}(t_k)\)</span>。</p></li>
+<li><p>存储当前时刻的所有运动学结果。</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>结果可视化与分析：</strong></p>
+<ul class="simple">
+<li><p>绘制各关节角度、角速度、角加速度随时间变化的曲线。</p></li>
+<li><p>绘制特定点（如连杆质心）的运动轨迹。</p></li>
+<li><p>生成机构运动的动画。</p></li>
+</ul>
+</li>
+</ol>
+<section id="id13">
+<h3>建模结果 (预期)<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<p>通过上述步骤，可以得到以下建模成果：</p>
+<ol class="arabic simple">
+<li><p><strong>运动学约束方程组：</strong> 一组包含10个标量代数方程的 <span class="math notranslate nohighlight">\(C(q)=0\)</span>，精确描述了系统中12个广义坐标之间的几何关系。</p></li>
+<li><p><strong>约束雅可比矩阵 <span class="math notranslate nohighlight">\(C_q\)</span>：</strong> 一个 <span class="math notranslate nohighlight">\(10 \times 12\)</span> 的矩阵，其元素是约束方程对广义坐标的偏导数。该矩阵是进行速度和加速度分析的关键。</p></li>
+<li><p><strong>伽马项 <span class="math notranslate nohighlight">\(\gamma\)</span> 的表达式：</strong> 一个 <span class="math notranslate nohighlight">\(10 \times 1\)</span> 的列向量，用于加速度分析，包含了与速度相关的项。</p></li>
+<li><p><strong>独立与非独立变量间的运动传递关系：</strong></p>
+<ul class="simple">
+<li><p>速度层面：<span class="math notranslate nohighlight">\(\dot{q}_d = -(C_{q_d})^{-1} C_{q_i} \dot{q}_i\)</span></p></li>
+<li><p>加速度层面：<span class="math notranslate nohighlight">\(\ddot{q}_d = (C_{q_d})^{-1} (\gamma - C_{q_i} \ddot{q}_i)\)</span>
+这些关系明确了从主动件运动到从动件运动的传递规律。</p></li>
+</ul>
+</li>
+</ol>
+<p>这些模型和公式构成了对2-DOF并联机械手进行运动学仿真和分析的数学基础。</p>
+</section>
+</section>
+<section id="id14">
+<h2>六、实验数据<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
+<p>(此部分通常填写仿真中使用的具体参数值和得到的关键数据点或曲线图的引用。由于目前仅关注模型建立，此处从略。)</p>
+<p>例如：</p>
+<ul class="simple">
+<li><p>连杆长度：<span class="math notranslate nohighlight">\(L_1 = 1.3m, L_2 = 0.6m, L_3 = 1.8m, L_4 = 1.8m, L_5 = 2.9m\)</span>。</p></li>
+<li><p>驱动关节：<span class="math notranslate nohighlight">\(a_1, a_2\)</span>。</p></li>
+<li><p><span class="math notranslate nohighlight">\(a_1\)</span> 输入运动：<span class="math notranslate nohighlight">\(a_1(t) = 1.0 \cdot e^{-t/5.0} \cos(20t)\)</span> rad。</p></li>
+<li><p><span class="math notranslate nohighlight">\(a_2\)</span> 输入运动：<span class="math notranslate nohighlight">\(a_2(t) = (\pi/0.1)t + (\pi/10) \sin(300t)\)</span> rad。</p></li>
+</ul>
+<p>(仿真结果图表等)</p>
+</section>
+<section id="id15">
+<h2>七、实验结果与讨论<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<p>(此部分通常对仿真结果进行分析，并讨论模型的特点、局限性等。由于目前仅关注模型建立，此处从略。)</p>
+<p><strong>从多体动力学原理与机器人应用角度讨论机器人系统运动学建模的步骤：</strong></p>
+<p>机器人系统的运动学建模是理解和控制机器人运动的基础。从多体动力学原理出发，其一般步骤可概括如下：</p>
+<ol class="arabic simple">
+<li><p><strong>明确机构构型与自由度：</strong></p>
+<ul class="simple">
+<li><p>首先，清晰定义机器人的机械结构，包括连杆、关节类型（转动副、移动副等）及其连接关系。</p></li>
+<li><p>绘制机构简图，建立适当的坐标系（全局坐标系和连杆局部坐标系）。</p></li>
+<li><p>通过Grübler公式或其他方法分析机构的自由度（DOF），这决定了独立驱动关节的数量。</p></li>
+</ul>
+</li>
+<li><p><strong>选取广义坐标：</strong></p>
+<ul class="simple">
+<li><p>选择一组足以描述系统所有可能位形的独立参数作为广义坐标。对于复杂系统，可能会选择一组冗余的坐标，然后通过约束方程来关联它们。</p></li>
+<li><p>常见的广义坐标包括关节角度、关节位移、连杆质心坐标、连杆姿态角等。</p></li>
+</ul>
+</li>
+<li><p><strong>建立运动学约束方程：</strong></p>
+<ul class="simple">
+<li><p>基于机构的几何连接关系，建立代数约束方程 <span class="math notranslate nohighlight">\(C(q)=0\)</span>。这些方程表达了广义坐标之间的依赖关系。</p></li>
+<li><p>对于闭环机构，约束方程尤为重要。例如，环路闭合条件、特定点的固定条件等。</p></li>
+</ul>
+</li>
+<li><p><strong>位置分析：</strong></p>
+<ul class="simple">
+<li><p>给定独立（驱动）广义坐标 <span class="math notranslate nohighlight">\(q_i\)</span> 的值，通过求解非线性代数方程组 <span class="math notranslate nohighlight">\(C(q_i, q_d)=0\)</span> 来确定从动（非独立）广义坐标 <span class="math notranslate nohighlight">\(q_d\)</span> 的值。</p></li>
+<li><p>这是运动学正解的一部分，即已知驱动关节的运动，求解机器人末端或其他关键点的位姿。</p></li>
+</ul>
+</li>
+<li><p><strong>速度分析：</strong></p>
+<ul class="simple">
+<li><p>对约束方程 <span class="math notranslate nohighlight">\(C(q)=0\)</span> 对时间求导，得到速度级约束 <span class="math notranslate nohighlight">\(C_q \dot{q} = 0\)</span>。</p></li>
+<li><p><span class="math notranslate nohighlight">\(C_q = \frac{\partial C}{\partial q}\)</span> 是约束雅可比矩阵。</p></li>
+<li><p>通过求解 <span class="math notranslate nohighlight">\(C_{q_d} \dot{q}_d = -C_{q_i} \dot{q}_i\)</span>，可以得到从动速度 <span class="math notranslate nohighlight">\(\dot{q}_d\)</span> 与驱动速度 <span class="math notranslate nohighlight">\(\dot{q}_i\)</span> 的关系。</p></li>
+<li><p>雅可比矩阵在机器人速度分析、奇异位形判断、静力分析等方面有重要应用。</p></li>
+</ul>
+</li>
+<li><p><strong>加速度分析：</strong></p>
+<ul class="simple">
+<li><p>对速度级约束再次对时间求导，得到加速度级约束 <span class="math notranslate nohighlight">\(C_q \ddot{q} = \gamma\)</span>，其中 <span class="math notranslate nohighlight">\(\gamma = -\dot{C}_q \dot{q}\)</span>。</p></li>
+<li><p>通过求解 <span class="math notranslate nohighlight">\(C_{q_d} \ddot{q}_d = \gamma - C_{q_i} \ddot{q}_i\)</span>，可以得到从动加速度 <span class="math notranslate nohighlight">\(\ddot{q}_d\)</span> 与驱动加速度 <span class="math notranslate nohighlight">\(\ddot{q}_i\)</span> 的关系。</p></li>
+<li><p>加速度分析是进行动力学分析的基础。</p></li>
+</ul>
+</li>
+<li><p><strong>运动学逆解 (可选但重要)：</strong></p>
+<ul class="simple">
+<li><p>与正解相反，逆解是已知机器人末端执行器的期望位姿（和可能的姿态），求解所需的驱动关节值。这通常比正解更复杂，可能存在多解或无解的情况。</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>在机器人应用中的意义：</strong></p>
+<ul class="simple">
+<li><p><strong>工作空间分析：</strong> 通过运动学模型可以确定机器人末端执行器能够到达的空间范围。</p></li>
+<li><p><strong>轨迹规划：</strong> 在关节空间或笛卡尔空间为机器人规划运动路径，确保平稳、无碰撞地到达目标。</p></li>
+<li><p><strong>仿真与验证：</strong> 在实际制造和部署机器人之前，通过运动学仿真可以验证设计、检测潜在问题。</p></li>
+<li><p><strong>控制系统设计：</strong> 运动学模型是机器人控制器（如PID控制器、计算力矩控制器等）设计的基础，用于精确控制机器人的运动。</p></li>
+<li><p><strong>奇异性分析：</strong> 通过雅可比矩阵可以识别机器人的奇异位形，在这些位形下机器人会失去某些方向的运动能力或产生极大的关节速度。</p></li>
+</ul>
+<p>本实验通过对一个具体的2-DOF并联机械手进行建模，实践了上述通用步骤中的核心环节，特别是约束方程的建立和基于雅可比矩阵的速度/加速度分析，为更深入的机器人动力学研究和控制打下了基础。</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="02.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">实验二 2dof（五连杆）仿真</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">实验</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">实验一 2dof（五连杆）建模</a><ul>
+<li><a class="reference internal" href="#id1">一、实验名称</a></li>
+<li><a class="reference internal" href="#id2">二、实验目的</a></li>
+<li><a class="reference internal" href="#id3">三、实验设备</a></li>
+<li><a class="reference internal" href="#id4">四、实验原理（或实验方案）</a><ul>
+<li><a class="reference internal" href="#id5">1. 机构简图与坐标系</a></li>
+<li><a class="reference internal" href="#id6">2. 广义坐标的选取</a></li>
+<li><a class="reference internal" href="#id7">3. 自由度分析</a></li>
+<li><a class="reference internal" href="#c-q-0">4. 约束方程的建立 <span class="math notranslate nohighlight">\(C(q)=0\)</span></a></li>
+<li><a class="reference internal" href="#id8">5. 独立变量与非独立变量的剥离</a></li>
+<li><a class="reference internal" href="#id9">6. 运动学方程（速度和加速度分析）</a><ul>
+<li><a class="reference internal" href="#id10">6.1 速度分析与雅可比矩阵</a></li>
+<li><a class="reference internal" href="#id11">6.2 加速度分析与伽马项</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id12">五、实验步骤</a><ul>
+<li><a class="reference internal" href="#id13">建模结果 (预期)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id14">六、实验数据</a></li>
+<li><a class="reference internal" href="#id15">七、实验结果与讨论</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/tabs.js?v=3ee01567"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="../../_static/tex-svg-full.js?v=fe9f5dce"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

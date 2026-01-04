@@ -1,0 +1,109 @@
+# 三轴机器人仿真
+
+## direct
+```matlab
+clear all
+clc
+pkg load symbolic
+
+%% symbols
+syms r11 r12 a1 L1 r21 r22 a2 L2 r31 r32 a3 L3
+
+%% O
+R1 = [[r11];[r12]];
+A1 = [[cos(a1), - sin(a1)]; [sin(a1), cos(a1)]];
+
+% stracture params
+u_o1=[-0.5*L1;0];
+
+ro1=R1+A1*u_o1;
+fun1=ro1-[0;0]
+
+u_a1=[-0.5*L1;0];
+ra1=R1+A1*u_a1;
+
+%% A
+R2 = [[r21];[r22]];
+A2 = [[cos(a2), -sin(a2)]; [sin(a2), cos(a2)]];
+
+% stracture params
+u_a2=[[-0.5*L2];[0]];
+ra2=R2+A2*u_a2;
+
+fun2=ra1-ra2
+
+
+%% B
+R3 = [[r31];[r32]];
+A3 = [[cos(a3), -sin(a3)]; [sin(a3), cos(a3)]];
+
+% stracture params
+u_b3=[[-0.5*L3];[0]];
+rb3=R3+A3*u_b3;
+
+fun3=ra2-rb3
+
+%% direct kinematics
+fun=[fun1;fun2;fun3]
+
+```
+## inverse
+
+$$ r_{p}^3 - \left[vt+a_0,\space vt\cdot\tan(\theta)+b_b \right]^T $$
+
+```matlab
+clear all
+clc
+pkg load symbolic
+
+%% symbols
+syms r11 r12 a1 L1 r21 r22 a2 L2 r31 r32 a3 L3
+
+%% O
+R1 = [[r11];[r12]];
+A1 = [[cos(a1), - sin(a1)]; [sin(a1), cos(a1)]];
+
+% stracture params
+u_o1=[-0.5*L1;0];
+
+ro1=R1+A1*u_o1;
+fun1=ro1-[0;0]
+
+u_a1=[-0.5*L1;0];
+ra1=R1+A1*u_a1;
+
+%% A
+R2 = [[r21];[r22]];
+A2 = [[cos(a2), -sin(a2)]; [sin(a2), cos(a2)]];
+
+% stracture params
+u_a2=[[-0.5*L2];[0]];
+ra2=R2+A2*u_a2;
+
+fun2=ra1-ra2
+
+
+%% B
+R3 = [[r31];[r32]];
+A3 = [[cos(a3), -sin(a3)]; [sin(a3), cos(a3)]];
+
+% stracture params
+u_b3=[[-0.5*L3];[0]];
+rb3=R3+A3*u_b3;
+
+syms a0 v t b0 a % trajectory params
+
+rb3t=[a0+v*t;b0+v*t*tan(a)]
+
+fun31=ra2-rb3
+fun32=rb3-rb3t
+fun3=[fun31;fun32];
+%% inverse kinematics
+fun=[fun1;fun2;fun3]
+
+%% solvution
+%a1 = pi/2;
+res = solve(fun)
+
+
+```

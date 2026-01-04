@@ -1,0 +1,937 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="第八章 线性系统的状态空间表示法" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/40-autocon/80-space.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="8.1 系统数学模型的基本描述方法: 1. 系统动态过程的两类数学描述:(1) 系统的外部描述 (黑箱): 外部描述通常被称为输出-输入描述。对于单输入单输出 (SISO) 线性常系数系统，时间域的外部描述可以用高阶微分方程表示： y^{(n)} + a_{n-1}y^{(n-1)} + \dots + a_1y^{(1)} + a_0y = b_{m}u^{(m)} + b_{m-1}u^..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="8.1 系统数学模型的基本描述方法: 1. 系统动态过程的两类数学描述:(1) 系统的外部描述 (黑箱): 外部描述通常被称为输出-输入描述。对于单输入单输出 (SISO) 线性常系数系统，时间域的外部描述可以用高阶微分方程表示： y^{(n)} + a_{n-1}y^{(n-1)} + \dots + a_1y^{(1)} + a_0y = b_{m}u^{(m)} + b_{m-1}u^..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="机械系统设计" href="../50-mechanic/index.html"><link rel="prev" title="自动控制原理" href="70-fix.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>第八章 线性系统的状态空间表示法 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-interg/index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../80-interg/reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/40-autocon/80-space.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/40-autocon/80-space.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>第八章 线性系统的状态空间表示法<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2>8.1 系统数学模型的基本描述方法<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>1. 系统动态过程的两类数学描述<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<section id="id4">
+<h4>(1) 系统的外部描述 (黑箱)<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<p>外部描述通常被称为输出-输入描述。对于单输入单输出 (SISO) 线性常系数系统，时间域的外部描述可以用高阶微分方程表示：</p>
+<p><span class="math notranslate nohighlight">\( y^{(n)} + a_{n-1}y^{(n-1)} + \dots + a_1y^{(1)} + a_0y = b_{m}u^{(m)} + b_{m-1}u^{(m-1)} + \dots + b_1u^{(1)} + b_0u \)</span></p>
+<p>频率域的等价描述是传递函数：</p>
+<p><span class="math notranslate nohighlight">\( g(s) = \frac{Y(s)}{U(s)} = \frac{b_m s^m + b_{m-1}s^{m-1} + \dots + b_1s + b_0}{s^n + a_{n-1}s^{n-1} + \dots + a_1s + a_0} \)</span></p>
+<p>其中 <span class="math notranslate nohighlight">\(m \le n\)</span>。</p>
+</section>
+<section id="id5">
+<h4>(2) 系统的内部描述 (白箱)<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<p>内部描述是系统内部变量之间的关系。状态空间描述是内部描述的基本形式，它由两个数学方程组表征：状态方程和输出方程。</p>
+</section>
+<section id="id6">
+<h4>(3) 外部描述和内部描述的比较<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>外部描述</strong>：仅是对系统的一种不完全描述，不能反映黑箱内部结构中不可控或不可观测的部分。</p></li>
+<li><p><strong>内部描述</strong>：是对系统的一种完全描述，能够反映系统的所有动力学特性。</p></li>
+</ul>
+</section>
+<section id="id7">
+<h4>状态和状态空间的定义<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>状态变量组</strong>：一个动力学系统的状态变量组定义为能够完全表征其时间域行为的最小内部变量组。</p></li>
+<li><p><strong>状态 (向量)</strong>：一个动力学系统的状态定义为其状态变量组 <span class="math notranslate nohighlight">\(x_1(t), x_2(t), \dots, x_n(t)\)</span> 所组成的一个列向量：
+<span class="math notranslate nohighlight">\( \mathbf{x}(t) = \begin{bmatrix} x_1(t) \\ x_2(t) \\ \vdots \\ x_n(t) \end{bmatrix} \)</span>
+状态 <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> 的维数等于其组成状态变量的个数，即 <span class="math notranslate nohighlight">\(\dim \mathbf{x} = n\)</span>。</p></li>
+<li><p><strong>状态空间</strong>：定义为状态向量的集合。状态空间的维数等于状态的维数。</p></li>
+</ul>
+</section>
+<section id="id8">
+<h4>几点解释 (七点)<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p>状态变量组对系统行为的完全表征性：给定初始时刻 <span class="math notranslate nohighlight">\(t_0\)</span> 的状态变量组和任意时刻 <span class="math notranslate nohighlight">\(t \ge t_0\)</span> 的输入变量组 <span class="math notranslate nohighlight">\(u(t)\)</span>，系统的任意内部变量在 <span class="math notranslate nohighlight">\(t \ge t_0\)</span> 时刻的运动行为都可以完全确定。</p></li>
+<li><p>状态变量组最小性的物理特征：减少一个变量就会破坏系统行为表征的完整性。</p></li>
+<li><p>状态变量组最小性的数学特征：它是系统所有内部变量中一个极大线性无关变量组。</p></li>
+<li><p>状态变量组的不唯一性：系统任意两个状态变量组之间的关系是线性非奇异变换。</p></li>
+<li><p>有穷维系统和无穷维系统。</p></li>
+<li><p>状态空间的属性：建立在实数域 <span class="math notranslate nohighlight">\(\mathbb{R}\)</span> 上的一个 <span class="math notranslate nohighlight">\(n\)</span> 维向量空间 <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>。</p></li>
+</ul>
+</section>
+</section>
+<section id="id9">
+<h3>2. 线性系统的状态空间描述<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>系统的状态空间描述（动态方程或运动方程）是对系统输入、输出和状态变量之间关系的方程组。</p></li>
+<li><p>它包括：</p>
+<ul>
+<li><p><strong>状态方程</strong>（描述输入和状态变量之间的关系）：
+<span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \mathbf{Ax} + \mathbf{Bu} \)</span></p></li>
+<li><p><strong>输出方程</strong>（描述输出和输入、状态变量之间的关系）：
+<span class="math notranslate nohighlight">\( \mathbf{y} = \mathbf{Cx} + \mathbf{Du} \)</span>
+其中 <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> 是状态向量，<span class="math notranslate nohighlight">\(\mathbf{u}\)</span> 是输入向量，<span class="math notranslate nohighlight">\(\mathbf{y}\)</span> 是输出向量，<span class="math notranslate nohighlight">\(\mathbf{A}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{B}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{C}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{D}\)</span> 是矩阵。</p></li>
+</ul>
+</li>
+</ul>
+<hr class="docutils" />
+<p><strong>示例 1: 电路系统状态空间描述</strong></p>
+<p>对于给定的 RLC 电路，确定其状态变量和状态方程。</p>
+<p>解：
+微分方程模型：
+<span class="math notranslate nohighlight">\( L\frac{di}{dt} + Ri + u_C = u, \quad u_C = \frac{1}{C}\int i dt \)</span>
+选择 <span class="math notranslate nohighlight">\(i\)</span> 和 <span class="math notranslate nohighlight">\(u_C\)</span> 作为状态变量：
+设 <span class="math notranslate nohighlight">\(x_1 = u_C\)</span> 和 <span class="math notranslate nohighlight">\(x_2 = i\)</span>。
+则状态方程为：
+<span class="math notranslate nohighlight">\( \begin{cases} \dot{x}_1 = \frac{1}{C}x_2 \\ \dot{x}_2 = -\frac{1}{L}x_1 - \frac{R}{L}x_2 + \frac{1}{L}u \end{cases} \)</span>
+矩阵形式的状态方程：
+<span class="math notranslate nohighlight">\( \begin{bmatrix} \dot{x}_1 \\ \dot{x}_2 \end{bmatrix} = \begin{bmatrix} 0 &amp; \frac{1}{C} \\ -\frac{1}{L} &amp; -\frac{R}{L} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} + \begin{bmatrix} 0 \\ \frac{1}{L} \end{bmatrix} u \)</span>
+输出方程为 <span class="math notranslate nohighlight">\(y = u_C\)</span>，即 <span class="math notranslate nohighlight">\(y = x_1\)</span>。
+矩阵形式的输出方程：
+<span class="math notranslate nohighlight">\( y = \begin{bmatrix} 1 &amp; 0 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} \)</span></p>
+<hr class="docutils" />
+<p><strong>状态空间描述的矩阵形式：</strong></p>
+<p><span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \mathbf{Ax} + \mathbf{Bu} \)</span>
+<span class="math notranslate nohighlight">\( \mathbf{y} = \mathbf{Cx} + \mathbf{Du} \)</span></p>
+<p>其中：</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathbf{A}\)</span> 是 <strong>系统矩阵</strong> (<span class="math notranslate nohighlight">\(n \times n\)</span>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{B}\)</span> 是 <strong>输入矩阵</strong> (<span class="math notranslate nohighlight">\(n \times p\)</span>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{C}\)</span> 是 <strong>输出矩阵</strong> (<span class="math notranslate nohighlight">\(q \times n\)</span>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{D}\)</span> 是 <strong>传输矩阵</strong> (<span class="math notranslate nohighlight">\(q \times p\)</span>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span> 是 <span class="math notranslate nohighlight">\(n\)</span> 维 <strong>状态向量</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{u}\)</span> 是 <span class="math notranslate nohighlight">\(p\)</span> 维 <strong>输入向量</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{y}\)</span> 是 <span class="math notranslate nohighlight">\(q\)</span> 维 <strong>输出向量</strong></p></li>
+</ul>
+<p>这些矩阵由系统的结构和参数决定。</p>
+<p><strong>线性时不变 (LTI) 系统的状态空间描述特点：</strong></p>
+<ol class="arabic simple">
+<li><p><strong>线性属性和时不变属性</strong>：描述形式是线性的，系数矩阵不随时间变化。</p></li>
+<li><p><strong>共性属性和个性属性</strong>：不同系统的状态空间描述具有相同的形式，差别在于参数矩阵的不同。通常用 <span class="math notranslate nohighlight">\((A, B, C, D)\)</span> 来代表一个 LTI 系统。</p></li>
+<li><p><strong>简洁性</strong>：用向量方程形式表示，当状态、输入、输出变量增加时，表达形式的复杂性不增加。</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id10">
+<h2>8.2 系统数学模型间的相互转换<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
+<section id="id11">
+<h3>1. 由系统输入输出描述导出状态空间描述<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>对于单输入单输出 (SISO) 线性时不变系统，其输入输出描述（高阶微分方程或传递函数）可以导出多种形式的状态空间描述（不唯一）。</p>
+<p><strong>结论 1：由输入输出描述导出状态空间描述</strong></p>
+<p>给定单输入单输出线性时不变系统的输入输出描述：
+<span class="math notranslate nohighlight">\( y^{(n)} + a_{n-1}y^{(n-1)} + \dots + a_1y^{(1)} + a_0y = b_m u^{(m)} + b_{m-1}u^{(m-1)} + \dots + b_1u^{(1)} + b_0u \)</span>
+或传递函数：
+<span class="math notranslate nohighlight">\( g(s) = \frac{Y(s)}{U(s)} = \frac{b_m s^m + b_{m-1}s^{m-1} + \dots + b_1s + b_0}{s^n + a_{n-1}s^{n-1} + \dots + a_1s + a_0} \)</span></p>
+<section id="m-0">
+<h4>(1) <span class="math notranslate nohighlight">\(m=0\)</span> 情况<a class="headerlink" href="#m-0" title="Link to this heading">¶</a></h4>
+<p>此时输入输出描述简化为：
+<span class="math notranslate nohighlight">\( y^{(n)} + a_{n-1}y^{(n-1)} + \dots + a_1y^{(1)} + a_0y = b_0u \)</span>
+或传递函数：
+<span class="math notranslate nohighlight">\( g(s) = \frac{b_0}{s^n + a_{n-1}s^{n-1} + \dots + a_1s + a_0} \)</span>
+对应的状态空间描述为：
+<span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \begin{bmatrix} 0 &amp; 1 &amp; &amp; \\ &amp; \ddots &amp; \ddots &amp; \\ &amp; &amp; 0 &amp; 1 \\ -a_0 &amp; -a_1 &amp; \dots &amp; -a_{n-1} \end{bmatrix} \mathbf{x} + \begin{bmatrix} 0 \\ \vdots \\ 0 \\ b_0 \end{bmatrix} u \)</span>
+<span class="math notranslate nohighlight">\( y = \begin{bmatrix} 1 &amp; 0 &amp; \dots &amp; 0 \end{bmatrix} \mathbf{x} \)</span></p>
+</section>
+<section id="m-ne-0">
+<h4>(2) <span class="math notranslate nohighlight">\(m \ne 0\)</span> 情况<a class="headerlink" href="#m-ne-0" title="Link to this heading">¶</a></h4>
+<p>此时输入输出描述为：
+<span class="math notranslate nohighlight">\( y^{(n)} + a_{n-1}y^{(n-1)} + \dots + a_1y^{(1)} + a_0y = b_m u^{(m)} + b_{m-1}u^{(m-1)} + \dots + b_1u^{(1)} + b_0u \)</span>
+或传递函数：
+<span class="math notranslate nohighlight">\( g(s) = \frac{Y(s)}{U(s)} = \frac{b_m s^m + b_{m-1}s^{m-1} + \dots + b_1s + b_0}{s^n + a_{n-1}s^{n-1} + \dots + a_1s + a_0} \)</span>
+其中允许 <span class="math notranslate nohighlight">\(b_n=0\)</span>，包括 <span class="math notranslate nohighlight">\(m &lt; n\)</span> 和 <span class="math notranslate nohighlight">\(m=n\)</span> 两种情形。
+对应的状态空间描述为：
+<span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \begin{bmatrix} 0 &amp; 1 &amp; &amp; \\ &amp; \ddots &amp; \ddots &amp; \\ &amp; &amp; 0 &amp; 1 \\ -a_0 &amp; -a_1 &amp; \dots &amp; -a_{n-1} \end{bmatrix} \mathbf{x} + \begin{bmatrix} \beta_1 \\ \beta_2 \\ \vdots \\ \beta_n \end{bmatrix} u \)</span>
+<span class="math notranslate nohighlight">\( y = \begin{bmatrix} 1 &amp; 0 &amp; \dots &amp; 0 \end{bmatrix} \mathbf{x} + \beta_0 u \)</span>
+其中：
+<span class="math notranslate nohighlight">\( \beta_0 = b_n \)</span>
+<span class="math notranslate nohighlight">\( \beta_1 = b_{n-1} - a_{n-1}\beta_0 \)</span>
+<span class="math notranslate nohighlight">\( \beta_2 = b_{n-2} - a_{n-1}\beta_1 - a_{n-2}\beta_0 \)</span>
+<span class="math notranslate nohighlight">\( \dots \)</span>
+<span class="math notranslate nohighlight">\( \beta_n = b_0 - a_{n-1}\beta_{n-1} - a_{n-2}\beta_{n-2} - \dots - a_0\beta_0 \)</span>
+(注意：当 <span class="math notranslate nohighlight">\(m &lt; n\)</span> 时，<span class="math notranslate nohighlight">\(b_n=0\)</span>。当 <span class="math notranslate nohighlight">\(m=n\)</span> 时，<span class="math notranslate nohighlight">\(b_n \ne 0\)</span>。)</p>
+<hr class="docutils" />
+<p><strong>例 1：</strong> 给定一个单输入单输出线性时不变系统的输入输出描述 <span class="math notranslate nohighlight">\(3\ddot{y} + 6\dot{y} + 12y = 6\dot{u} + 3u\)</span>，导出其状态空间描述。</p>
+<p>解：
+<span class="math notranslate nohighlight">\(m \ne 0\)</span>，<span class="math notranslate nohighlight">\(n=3\)</span>。状态为 3 维。
+系统方程归一化（使 <span class="math notranslate nohighlight">\(y^{(n)}\)</span> 的系数为 1）：
+<span class="math notranslate nohighlight">\( \ddot{y} + 2\dot{y} + 4y = 2\dot{u} + u \)</span>
+（注意：题目原方程为 <span class="math notranslate nohighlight">\(3\ddot{y} + 6\dot{y} + 12y = 6\dot{u} + 3u\)</span>。若按此计算，则 <span class="math notranslate nohighlight">\(a_3=1, a_2=2, a_1=4, a_0=3\)</span>；<span class="math notranslate nohighlight">\(b_2=0, b_1=6, b_0=3\)</span>。但题目中给出的 <span class="math notranslate nohighlight">\(\beta\)</span> 系数公式中，<span class="math notranslate nohighlight">\(b\)</span> 的下标似乎是与 <span class="math notranslate nohighlight">\(u\)</span> 的阶数相关，并且与 <span class="math notranslate nohighlight">\(n\)</span> 的大小有关。此处，按照标准形式，将 <span class="math notranslate nohighlight">\(u\)</span> 的最高阶导数阶数记为 <span class="math notranslate nohighlight">\(m\)</span>，则 <span class="math notranslate nohighlight">\(m=1\)</span>。）
+<strong>若按照标准格式 <span class="math notranslate nohighlight">\(y^{(n)} + \dots = b_m u^{(m)} + \dots\)</span> 来处理，且 <span class="math notranslate nohighlight">\(m=1\)</span>, <span class="math notranslate nohighlight">\(n=3\)</span>:</strong>
+<span class="math notranslate nohighlight">\(a_3 = 1, a_2 = 2, a_1 = 4, a_0 = 3\)</span>。
+<span class="math notranslate nohighlight">\(b_1 = 2, b_0 = 1\)</span>。<span class="math notranslate nohighlight">\(m=1 &lt; n=3\)</span>。
+令 <span class="math notranslate nohighlight">\(b_2=0, b_3=0\)</span>。
+计算 <span class="math notranslate nohighlight">\(\beta\)</span> 系数：
+<span class="math notranslate nohighlight">\( \beta_0 = b_3 = 0 \)</span>
+<span class="math notranslate nohighlight">\( \beta_1 = b_2 - a_2\beta_0 = 0 - 2 \times 0 = 0 \)</span>
+<span class="math notranslate nohighlight">\( \beta_2 = b_1 - a_2\beta_1 - a_1\beta_0 = 2 - 2 \times 0 - 4 \times 0 = 2 \)</span>
+<span class="math notranslate nohighlight">\( \beta_3 = b_0 - a_2\beta_2 - a_1\beta_1 - a_0\beta_0 = 1 - 2 \times 2 - 4 \times 0 - 3 \times 0 = 1 - 4 = -3 \)</span></p>
+<p>状态空间描述：
+<span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \begin{bmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ -3 &amp; -4 &amp; -2 \end{bmatrix} \mathbf{x} + \begin{bmatrix} 0 \\ 2 \\ -3 \end{bmatrix} u \)</span>
+<span class="math notranslate nohighlight">\( y = \begin{bmatrix} 1 &amp; 0 &amp; 0 \end{bmatrix} \mathbf{x} \)</span></p>
+<p><strong>注意：</strong> 如果按照题目中的 <span class="math notranslate nohighlight">\(a_3 = 1,a_2 = 2,a_1 = 4,a_0 = 3\)</span> 和 <span class="math notranslate nohighlight">\(b_3 = 0,b_2 = 0,b_1 = 2,b_0 = 1\)</span> 来计算，那么 <span class="math notranslate nohighlight">\(m=1\)</span>（因为 <span class="math notranslate nohighlight">\(b_1\)</span> 和 <span class="math notranslate nohighlight">\(b_0\)</span> 是 <span class="math notranslate nohighlight">\(u\)</span> 的导数项），但 <span class="math notranslate nohighlight">\(b_3\)</span> 和 <span class="math notranslate nohighlight">\(b_2\)</span> 却是 0。通常 <span class="math notranslate nohighlight">\(b_m\)</span> 是 <span class="math notranslate nohighlight">\(u\)</span> 的最高阶导数系数。在这里，可能是 <span class="math notranslate nohighlight">\(b_1 = 6\)</span>, <span class="math notranslate nohighlight">\(b_0 = 3\)</span> （原方程）。如果原方程是 <span class="math notranslate nohighlight">\(3\ddot{y} + 6\dot{y} + 12y = 6\dot{u} + 3u\)</span>，则归一化后为 <span class="math notranslate nohighlight">\(\ddot{y} + 2\dot{y} + 4y = 2\dot{u} + u\)</span>.
+那么 <span class="math notranslate nohighlight">\(a_3=1, a_2=2, a_1=4, a_0=3\)</span>, <span class="math notranslate nohighlight">\(b_1=2, b_0=1\)</span>. <span class="math notranslate nohighlight">\(m=1\)</span>.
+如果按照PPT中的示例计算 <span class="math notranslate nohighlight">\(a_3 = 1,a_2 = 2,a_1 = 4,a_0 = 3\)</span> 和 <span class="math notranslate nohighlight">\(b_3 = 0,b_2 = 0,b_1 = 2,b_0 = 1\)</span>. 并且 <span class="math notranslate nohighlight">\(\beta_0 = b_3 = 0, \beta_1 = b_2 - a_2\beta_0 = 0, \beta_2 = b_1 - a_2\beta_1 - a_1\beta_0 = 2, \beta_3 = b_0 - a_2\beta_2 - a_1\beta_1 - a_0\beta_0 = 1 - 2(2) - 4(0) - 3(0) = -3\)</span>.
+状态空间描述：
+<span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \begin{bmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ -3 &amp; -4 &amp; -2 \end{bmatrix} \mathbf{x} + \begin{bmatrix} 0 \\ 2 \\ -3 \end{bmatrix} u \)</span>
+<span class="math notranslate nohighlight">\( y = \begin{bmatrix} 1 &amp; 0 &amp; 0 \end{bmatrix} \mathbf{x} \)</span>
+<strong>PPT 的示例计算结果:</strong>
+<span class="math notranslate nohighlight">\( \beta_0 = b_3 = 0 \)</span>
+<span class="math notranslate nohighlight">\( \beta_1 = b_2 - a_2\beta_0 = 0 - 2 \times 0 = 0 \)</span>
+<span class="math notranslate nohighlight">\( \beta_2 = b_1 - a_2\beta_1 - a_1\beta_0 = 2 - 2 \times 0 - 4 \times 0 = 2 \)</span>
+<span class="math notranslate nohighlight">\( \beta_3 = b_0 - a_2\beta_2 - a_1\beta_1 - a_0\beta_0 = 1 - 2 \times 2 - 4 \times 0 - 3 \times 0 = -3 \)</span>
+PPT 的计算结果是正确的，但是 <span class="math notranslate nohighlight">\(b_3\)</span> 的定义在这里可能有点误导，通常 <span class="math notranslate nohighlight">\(b_m\)</span> 是 <span class="math notranslate nohighlight">\(u^{(m)}\)</span> 的系数。
+正确的理解应该是：
+<span class="math notranslate nohighlight">\(y^{(3)} + 2\ddot{y} + 4\dot{y} + 3y = 2\dot{u} + u\)</span>.
+<span class="math notranslate nohighlight">\(a_3=1, a_2=2, a_1=4, a_0=3\)</span>.
+<span class="math notranslate nohighlight">\(b_2=2, b_1=1\)</span>. <span class="math notranslate nohighlight">\(m=2\)</span>.
+所以 <span class="math notranslate nohighlight">\(m=2\)</span>.
+<strong>重新计算 <span class="math notranslate nohighlight">\(\beta\)</span>:</strong>
+<span class="math notranslate nohighlight">\( \beta_0 = b_3 = 0 \)</span> (因为 <span class="math notranslate nohighlight">\(m=2\)</span>, <span class="math notranslate nohighlight">\(b_3\)</span> 应该为 0)
+<span class="math notranslate nohighlight">\( \beta_1 = b_2 - a_2\beta_0 = 2 - 2 \times 0 = 2 \)</span>
+<span class="math notranslate nohighlight">\( \beta_2 = b_1 - a_2\beta_1 - a_1\beta_0 = 1 - 2 \times 2 - 4 \times 0 = 1 - 4 = -3 \)</span>
+<span class="math notranslate nohighlight">\( \beta_3 = b_0 - a_2\beta_2 - a_1\beta_1 - a_0\beta_0 = 0 - 2 \times (-3) - 4 \times 2 - 3 \times 0 = 6 - 8 = -2 \)</span></p>
+<p><strong>看来，PPT的例子直接使用了 <span class="math notranslate nohighlight">\(a_i\)</span> 和 <span class="math notranslate nohighlight">\(b_i\)</span> 作为系数，而没有明确 <span class="math notranslate nohighlight">\(m\)</span> 和 <span class="math notranslate nohighlight">\(n\)</span>。</strong>
+<strong>最标准的做法是：</strong>
+<span class="math notranslate nohighlight">\(y^{(n)} + a_{n-1}y^{(n-1)} + \dots + a_0y = b_m u^{(m)} + \dots + b_0 u\)</span>.
+这里 <span class="math notranslate nohighlight">\(n=3\)</span>. <span class="math notranslate nohighlight">\(a_2=2, a_1=4, a_0=3\)</span>.
+<span class="math notranslate nohighlight">\(m=1\)</span>. <span class="math notranslate nohighlight">\(b_1=2, b_0=1\)</span>.
+<span class="math notranslate nohighlight">\(\dot{y}^{(3)} \rightarrow y^{(3)}\)</span>
+<span class="math notranslate nohighlight">\(3\ddot{y} \rightarrow \ddot{y}\)</span>
+<span class="math notranslate nohighlight">\(6\dot{y} \rightarrow \dot{y}\)</span>
+<span class="math notranslate nohighlight">\(12y \rightarrow y\)</span>
+<span class="math notranslate nohighlight">\(6\dot{u} \rightarrow \dot{u}\)</span>
+<span class="math notranslate nohighlight">\(3u \rightarrow u\)</span>
+所以 <span class="math notranslate nohighlight">\(a_3=1, a_2=2, a_1=4, a_0=3\)</span>.
+<span class="math notranslate nohighlight">\(b_1=2, b_0=1\)</span>. <span class="math notranslate nohighlight">\(m=1\)</span>.
+<strong>状态方程和输出方程</strong>（标准形式，<span class="math notranslate nohighlight">\(m \le n\)</span>）：
+<span class="math notranslate nohighlight">\( \dot{x}_1 = x_2 \)</span>
+<span class="math notranslate nohighlight">\( \dot{x}_2 = x_3 \)</span>
+<span class="math notranslate nohighlight">\( \dot{x}_3 = -a_0 x_1 - a_1 x_2 - a_2 x_3 + b_0 u \)</span>
+<span class="math notranslate nohighlight">\( y = b_1 x_3 + b_0 u \)</span>
+（这是另一种形式，由伯德图推导而来）</p>
+<p><strong>回到 PPT 中的标准形式：</strong>
+<span class="math notranslate nohighlight">\( y^{(n)} + a_{n-1}y^{(n-1)} + \dots + a_0y = b_m u^{(m)} + \dots + b_0u \)</span>
+<span class="math notranslate nohighlight">\(g(s) = \frac{\hat{y}(s)}{\hat{u}(s)} = \frac{b_m s^m + \dots + b_0}{s^n + a_{n-1}s^{n-1} + \dots + a_0}\)</span>
+<strong>在例1中：</strong>
+<span class="math notranslate nohighlight">\(3\ddot{y} + 6\dot{y} + 12y = 6\dot{u} + 3u\)</span>
+<span class="math notranslate nohighlight">\(\ddot{y} + 2\dot{y} + 4y = 2\dot{u} + u\)</span>
+<span class="math notranslate nohighlight">\(n=3\)</span>. <span class="math notranslate nohighlight">\(a_2=2, a_1=4, a_0=3\)</span>.
+<span class="math notranslate nohighlight">\(m=1\)</span>. <span class="math notranslate nohighlight">\(b_1=2, b_0=1\)</span>.
+<strong>结论 1 (2) 的形式：</strong>
+<span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \begin{bmatrix} 0 &amp; 1 &amp; &amp; \\ &amp; \ddots &amp; \ddots &amp; \\ &amp; &amp; 0 &amp; 1 \\ -a_0 &amp; -a_1 &amp; \dots &amp; -a_{n-1} \end{bmatrix} \mathbf{x} + \begin{bmatrix} \beta_1 \\ \beta_2 \\ \vdots \\ \beta_n \end{bmatrix} u \)</span>
+<span class="math notranslate nohighlight">\( y = \begin{bmatrix} 1 &amp; 0 &amp; \dots &amp; 0 \end{bmatrix} \mathbf{x} + \beta_0 u \)</span>
+这里的 <span class="math notranslate nohighlight">\(\beta\)</span> 系数计算方法是：
+<span class="math notranslate nohighlight">\(\beta_0 = b_n\)</span>.  (这里 <span class="math notranslate nohighlight">\(b_3=0\)</span>)
+<span class="math notranslate nohighlight">\(\beta_1 = b_{n-1} - a_{n-1}\beta_0 = b_2 - a_2\beta_0\)</span>.  (这里 <span class="math notranslate nohighlight">\(b_2=0\)</span>)
+<span class="math notranslate nohighlight">\(\beta_2 = b_{n-2} - a_{n-1}\beta_1 - a_{n-2}\beta_0 = b_1 - a_2\beta_1 - a_1\beta_0\)</span>.  (这里 <span class="math notranslate nohighlight">\(b_1=2\)</span>)
+<span class="math notranslate nohighlight">\(\beta_3 = b_{n-3} - a_{n-1}\beta_2 - a_{n-2}\beta_1 - a_{n-3}\beta_0 = b_0 - a_2\beta_2 - a_1\beta_1 - a_0\beta_0\)</span>.  (这里 <span class="math notranslate nohighlight">\(b_0=1\)</span>)</p>
+<p><strong>按照 PPT 的计算：</strong>
+<span class="math notranslate nohighlight">\(a_3 = 1, a_2 = 2, a_1 = 4, a_0 = 3\)</span>.
+<span class="math notranslate nohighlight">\(b_3 = 0, b_2 = 0, b_1 = 2, b_0 = 1\)</span>.
+<span class="math notranslate nohighlight">\(\beta_0 = b_3 = 0\)</span>
+<span class="math notranslate nohighlight">\(\beta_1 = b_2 - a_2\beta_0 = 0 - 2 \times 0 = 0\)</span>
+<span class="math notranslate nohighlight">\(\beta_2 = b_1 - a_2\beta_1 - a_1\beta_0 = 2 - 2 \times 0 - 4 \times 0 = 2\)</span>
+<span class="math notranslate nohighlight">\(\beta_3 = b_0 - a_2\beta_2 - a_1\beta_1 - a_0\beta_0 = 1 - 2 \times 2 - 4 \times 0 - 3 \times 0 = -3\)</span></p>
+<p><strong>状态空间描述 (PPT 结果):</strong>
+<span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \begin{bmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ -3 &amp; -4 &amp; -2 \end{bmatrix} \mathbf{x} + \begin{bmatrix} 0 \\ 2 \\ -3 \end{bmatrix} u \)</span>
+<span class="math notranslate nohighlight">\( y = \begin{bmatrix} 1 &amp; 0 &amp; 0 \end{bmatrix} \mathbf{x} \)</span></p>
+</section>
+</section>
+<section id="id12">
+<h3>2. 由状态空间描述导出传递函数矩阵<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>对状态空间描述取拉普拉斯变换，并令初始状态 <span class="math notranslate nohighlight">\(x(0)=0\)</span>:
+<span class="math notranslate nohighlight">\( s\mathbf{X}(s) = \mathbf{AX}(s) + \mathbf{BU}(s) \)</span>
+<span class="math notranslate nohighlight">\( \mathbf{Y}(s) = \mathbf{CX}(s) + \mathbf{DU}(s) \)</span>
+整理得到：
+<span class="math notranslate nohighlight">\( (s\mathbf{I} - \mathbf{A})\mathbf{X}(s) = \mathbf{BU}(s) \)</span>
+<span class="math notranslate nohighlight">\( \mathbf{X}(s) = (s\mathbf{I} - \mathbf{A})^{-1}\mathbf{BU}(s) \)</span>
+代入输出方程：
+<span class="math notranslate nohighlight">\( \mathbf{Y}(s) = \mathbf{C}(s\mathbf{I} - \mathbf{A})^{-1}\mathbf{BU}(s) + \mathbf{DU}(s) \)</span>
+<span class="math notranslate nohighlight">\( \mathbf{Y}(s) = [\mathbf{C}(s\mathbf{I} - \mathbf{A})^{-1}\mathbf{B} + \mathbf{D}]\mathbf{U}(s) \)</span></p>
+<p><strong>结论 2：<span class="math notranslate nohighlight">\(G(s)\)</span> 的基本关系式</strong></p>
+<p>对于多输入多输出线性时不变系统，传递函数矩阵 <span class="math notranslate nohighlight">\(G(s)\)</span> 与系数矩阵 <span class="math notranslate nohighlight">\(\{A, B, C, D\}\)</span> 的基本关系式为：
+<span class="math notranslate nohighlight">\( G(s) = C(sI - A)^{-1}B + D \)</span></p>
+<ul class="simple">
+<li><p><strong>特征矩阵</strong>：<span class="math notranslate nohighlight">\(\Delta(sI - A)\)</span></p></li>
+<li><p><strong>特征多项式</strong>：<span class="math notranslate nohighlight">\(\det(sI - A) = s^n + a_{n-1}s^{n-1} + \dots + a_1s + a_0\)</span>
+(注意：特征矩阵 <span class="math notranslate nohighlight">\(sI-A\)</span> 必为非奇异，其逆矩阵称为预解矩阵。)</p></li>
+</ul>
+<p><strong>结论 3：<span class="math notranslate nohighlight">\(G(s)\)</span> 的实用算式</strong></p>
+<p>首先计算特征多项式 <span class="math notranslate nohighlight">\(a(s) = \det(sI - A) = s^n + a_{n-1}s^{n-1} + \dots + a_1s + a_0\)</span>。
+然后计算一组系数矩阵 <span class="math notranslate nohighlight">\(E_{n-1}, E_{n-2}, \dots, E_0\)</span>:
+<span class="math notranslate nohighlight">\( E_{n-1} = CB \)</span>
+<span class="math notranslate nohighlight">\( E_{n-2} = CAB + a_{n-1}CB \)</span>
+<span class="math notranslate nohighlight">\( \dots \)</span>
+<span class="math notranslate nohighlight">\( E_1 = CA^{n-2}B + a_{n-1}CA^{n-3}B + \dots + a_2CB \)</span>
+<span class="math notranslate nohighlight">\( E_0 = CA^{n-1}B + a_{n-1}CA^{n-2}B + \dots + a_1CB \)</span></p>
+<p>则计算 <span class="math notranslate nohighlight">\(G(s)\)</span> 的一个实用关系式为：
+<span class="math notranslate nohighlight">\( G(s) = \frac{1}{a(s)}[E_{n-1}s^{n-1} + E_{n-2}s^{n-2} + \dots + E_1s + E_0] + D \)</span></p>
+<hr class="docutils" />
+<p><strong>例 1：</strong> 给定一个线性时不变系统的状态空间描述，计算系统的传递函数矩阵 <span class="math notranslate nohighlight">\(G(s)\)</span>。
+<span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \begin{bmatrix} 2 &amp; 0 &amp; 0 \\ 0 &amp; 2 &amp; 0 \\ 0 &amp; 3 &amp; 1 \end{bmatrix} \mathbf{x} + \begin{bmatrix} 1 &amp; 2 \\ 1 &amp; 0 \\ 3 &amp; 1 \end{bmatrix} u \)</span>
+<span class="math notranslate nohighlight">\( y = \begin{bmatrix} 1 &amp; 1 &amp; 2 \end{bmatrix} \mathbf{x} \)</span></p>
+<p>解：
+(1) 计算特征多项式：
+<span class="math notranslate nohighlight">\( A = \begin{bmatrix} 2 &amp; 0 &amp; 0 \\ 0 &amp; 2 &amp; 0 \\ 0 &amp; 3 &amp; 1 \end{bmatrix} \)</span>
+<span class="math notranslate nohighlight">\( sI - A = \begin{bmatrix} s-2 &amp; 0 &amp; 0 \\ 0 &amp; s-2 &amp; 0 \\ 0 &amp; -3 &amp; s-1 \end{bmatrix} \)</span>
+<span class="math notranslate nohighlight">\( \alpha(s) = \det(sI - A) = (s-2)(s-2)(s-1) = (s^2 - 4s + 4)(s-1) = s^3 - s^2 - 4s^2 + 4s + 4s - 4 = s^3 - 5s^2 + 8s - 4 \)</span></p>
+<p>(2) 计算系数矩阵 <span class="math notranslate nohighlight">\(n=3\)</span>:
+<span class="math notranslate nohighlight">\( B = \begin{bmatrix} 1 &amp; 2 \\ 1 &amp; 0 \\ 3 &amp; 1 \end{bmatrix} \)</span>, <span class="math notranslate nohighlight">\( C = \begin{bmatrix} 1 &amp; 1 &amp; 2 \end{bmatrix} \)</span>
+<span class="math notranslate nohighlight">\( E_2 = CB = \begin{bmatrix} 1 &amp; 1 &amp; 2 \end{bmatrix} \begin{bmatrix} 1 &amp; 2 \\ 1 &amp; 0 \\ 3 &amp; 1 \end{bmatrix} = \begin{bmatrix} 1 \times 1 + 1 \times 1 + 2 \times 3 &amp; 1 \times 2 + 1 \times 0 + 2 \times 1 \end{bmatrix} = \begin{bmatrix} 8 &amp; 4 \end{bmatrix} \)</span>
+<span class="math notranslate nohighlight">\( E_1 = CAB + a_2CB \)</span>
+<span class="math notranslate nohighlight">\( a_2 = -5 \)</span> (从 <span class="math notranslate nohighlight">\(s^3 - 5s^2 + 8s - 4\)</span> 得到)
+<span class="math notranslate nohighlight">\( CA = \begin{bmatrix} 1 &amp; 1 &amp; 2 \end{bmatrix} \begin{bmatrix} 2 &amp; 0 &amp; 0 \\ 0 &amp; 2 &amp; 0 \\ 0 &amp; 3 &amp; 1 \end{bmatrix} = \begin{bmatrix} 2 &amp; 8 &amp; 2 \end{bmatrix} \)</span>
+<span class="math notranslate nohighlight">\( CAB = \begin{bmatrix} 2 &amp; 8 &amp; 2 \end{bmatrix} \begin{bmatrix} 1 &amp; 2 \\ 1 &amp; 0 \\ 3 &amp; 1 \end{bmatrix} = \begin{bmatrix} 2 \times 1 + 8 \times 1 + 2 \times 3 &amp; 2 \times 2 + 8 \times 0 + 2 \times 1 \end{bmatrix} = \begin{bmatrix} 16 &amp; 6 \end{bmatrix} \)</span>
+<span class="math notranslate nohighlight">\( E_1 = \begin{bmatrix} 16 &amp; 6 \end{bmatrix} + (-5)\begin{bmatrix} 8 &amp; 4 \end{bmatrix} = \begin{bmatrix} 16 - 40 &amp; 6 - 20 \end{bmatrix} = \begin{bmatrix} -24 &amp; -14 \end{bmatrix} \)</span>
+<span class="math notranslate nohighlight">\( E_0 = CA^2B + a_2CAB + a_1CB \)</span>
+<span class="math notranslate nohighlight">\( a_1 = 8 \)</span>
+<span class="math notranslate nohighlight">\( A^2 = \begin{bmatrix} 2 &amp; 0 &amp; 0 \\ 0 &amp; 2 &amp; 0 \\ 0 &amp; 3 &amp; 1 \end{bmatrix} \begin{bmatrix} 2 &amp; 0 &amp; 0 \\ 0 &amp; 2 &amp; 0 \\ 0 &amp; 3 &amp; 1 \end{bmatrix} = \begin{bmatrix} 4 &amp; 0 &amp; 0 \\ 0 &amp; 4 &amp; 0 \\ 0 &amp; 9 &amp; 1 \end{bmatrix} \)</span>
+<span class="math notranslate nohighlight">\( CA^2 = \begin{bmatrix} 1 &amp; 1 &amp; 2 \end{bmatrix} \begin{bmatrix} 4 &amp; 0 &amp; 0 \\ 0 &amp; 4 &amp; 0 \\ 0 &amp; 9 &amp; 1 \end{bmatrix} = \begin{bmatrix} 4 &amp; 13 &amp; 2 \end{bmatrix} \)</span>
+<span class="math notranslate nohighlight">\( CA^2B = \begin{bmatrix} 4 &amp; 13 &amp; 2 \end{bmatrix} \begin{bmatrix} 1 &amp; 2 \\ 1 &amp; 0 \\ 3 &amp; 1 \end{bmatrix} = \begin{bmatrix} 4 \times 1 + 13 \times 1 + 2 \times 3 &amp; 4 \times 2 + 13 \times 0 + 2 \times 1 \end{bmatrix} = \begin{bmatrix} 17 &amp; 10 \end{bmatrix} \)</span>
+<span class="math notranslate nohighlight">\( E_0 = \begin{bmatrix} 17 &amp; 10 \end{bmatrix} + (-5)\begin{bmatrix} 16 &amp; 6 \end{bmatrix} + 8\begin{bmatrix} 8 &amp; 4 \end{bmatrix} = \begin{bmatrix} 17 - 80 + 64 &amp; 10 - 30 + 32 \end{bmatrix} = \begin{bmatrix} 1 &amp; 12 \end{bmatrix} \)</span></p>
+<p><strong>(3) 计算传递函数矩阵:</strong>
+<span class="math notranslate nohighlight">\( G(s) = \frac{1}{a(s)}[E_2s^2 + E_1s + E_0] + D \)</span>
+这里 <span class="math notranslate nohighlight">\(D = 0\)</span> (因为输入和输出之间没有直接联系)。
+<span class="math notranslate nohighlight">\( G(s) = \frac{1}{s^3 - 5s^2 + 8s - 4} \left( \begin{bmatrix} 8 &amp; 4 \end{bmatrix} s^2 + \begin{bmatrix} -24 &amp; -14 \end{bmatrix} s + \begin{bmatrix} 1 &amp; 12 \end{bmatrix} \right) \)</span>
+<span class="math notranslate nohighlight">\( G(s) = \frac{1}{s^3 - 5s^2 + 8s - 4} \begin{bmatrix} 8s^2 - 24s + 1 &amp; 4s^2 - 14s + 12 \end{bmatrix} \)</span>
+<strong>注意：</strong> PPT 中的 <span class="math notranslate nohighlight">\(E_0\)</span> 计算结果是 <span class="math notranslate nohighlight">\([16 \ 12]\)</span>。
+<span class="math notranslate nohighlight">\(E_0 = CA^2B + a_2CAB + a_1CB\)</span>
+<span class="math notranslate nohighlight">\(a_1=8\)</span>
+<span class="math notranslate nohighlight">\(CA^2B = [17 \ 10]\)</span>
+<span class="math notranslate nohighlight">\(a_2CAB = -5 \times [16 \ 6] = [-80 \ -30]\)</span>
+<span class="math notranslate nohighlight">\(a_1CB = 8 \times [8 \ 4] = [64 \ 32]\)</span>
+<span class="math notranslate nohighlight">\(E_0 = [17 - 80 + 64, 10 - 30 + 32] = [1, 12]\)</span>
+<strong>PPT 中的 <span class="math notranslate nohighlight">\(E_0\)</span> 计算结果是 <span class="math notranslate nohighlight">\([16 \ 12]\)</span>。</strong> 存在计算错误。
+<strong>PPT 的 <span class="math notranslate nohighlight">\(E_0\)</span> 计算:</strong>
+<span class="math notranslate nohighlight">\(E_0 = CA^2 B + a_2CAB + a_1CB = [16 \ 12]\)</span>
+这里 <span class="math notranslate nohighlight">\(a_1=8\)</span>
+<span class="math notranslate nohighlight">\(CA^2B\)</span> 似乎是 <span class="math notranslate nohighlight">\([16 \ 12]\)</span>。
+<span class="math notranslate nohighlight">\(a_2CAB = -5 \times [16 \ 6] = [-80 \ -30]\)</span>
+<span class="math notranslate nohighlight">\(a_1CB = 8 \times [8 \ 4] = [64 \ 32]\)</span></p>
+<p><strong>根据 PPT 中的结果：</strong>
+<span class="math notranslate nohighlight">\( G(s) = \frac{1}{s^3 - 5s^2 + 8s - 4} \begin{bmatrix} 8s^2 - 24s + 16 &amp; 4s^2 - 14s + 12 \end{bmatrix} \)</span>
+（这里 PPT 示例中的 <span class="math notranslate nohighlight">\(E_1\)</span> 是 <span class="math notranslate nohighlight">\([-24 \ -14]\)</span> 且 <span class="math notranslate nohighlight">\(E_0\)</span> 是 <span class="math notranslate nohighlight">\([16 \ 12]\)</span>）</p>
+</section>
+<section id="matlab">
+<h3>Matlab 命令<a class="headerlink" href="#matlab" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>传递函数矩阵 <span class="math notranslate nohighlight">\(\rightarrow\)</span> 状态空间描述:</strong>
+<code class="docutils literal notranslate"><span class="pre">[A,</span> <span class="pre">B,</span> <span class="pre">C,</span> <span class="pre">D]</span> <span class="pre">=</span> <span class="pre">tf2ss(num,</span> <span class="pre">den)</span></code></p></li>
+<li><p><strong>状态空间描述 <span class="math notranslate nohighlight">\(\rightarrow\)</span> 传递函数矩阵:</strong>
+<code class="docutils literal notranslate"><span class="pre">[num,</span> <span class="pre">den]</span> <span class="pre">=</span> <span class="pre">ss2tf(A,</span> <span class="pre">B,</span> <span class="pre">C,</span> <span class="pre">D,</span> <span class="pre">iu)</span></code>
+其中 <code class="docutils literal notranslate"><span class="pre">iu</span></code> 表示输入的代号。</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id13">
+<h2>2.3 系统的能控性与能观性分析<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h2>
+<section id="id14">
+<h3>1. 线性连续系统的能控性与能观测性<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>直观讨论</strong>：</p>
+<ul>
+<li><p><strong>能控性</strong>：研究系统内部状态是否可由输入影响。如果系统内部每个状态变量都可由输入完全影响，则系统状态完全能控。</p></li>
+<li><p><strong>能观测性</strong>：研究系统内部状态是否可由输出反映。如果系统内部每个状态变量都可由输出完全反映，则系统状态完全能观测。</p></li>
+</ul>
+</li>
+<li><p><strong>定义</strong>：</p>
+<ul>
+<li><p><strong>能控性</strong>：在指定初始时刻 <span class="math notranslate nohighlight">\(t_0\)</span>，存在一个控制输入 <span class="math notranslate nohighlight">\(u(t)\)</span> 和一个时刻 <span class="math notranslate nohighlight">\(t_1 &gt; t_0\)</span>，使得系统状态能从任意初始状态 <span class="math notranslate nohighlight">\(x(t_0)\)</span> 转移到零状态 <span class="math notranslate nohighlight">\(x(t_1) = 0\)</span>。</p></li>
+<li><p><strong>能达性</strong>：在指定初始时刻 <span class="math notranslate nohighlight">\(t_0\)</span>，存在一个控制输入 <span class="math notranslate nohighlight">\(u(t)\)</span> 和一个时刻 <span class="math notranslate nohighlight">\(t_1 &gt; t_0\)</span>，使得系统状态能从零状态 <span class="math notranslate nohighlight">\(x(t_0) = 0\)</span> 转移到任意目标状态 <span class="math notranslate nohighlight">\(x(t_1) = x_f\)</span>。</p>
+<ul>
+<li><p>对于连续时间线性时不变系统，能控性和能达性等价。</p></li>
+</ul>
+</li>
+<li><p><strong>不能观测性</strong>：如果存在一个时刻 <span class="math notranslate nohighlight">\(t_1 &gt; t_0\)</span>，使得系统以 <span class="math notranslate nohighlight">\(x(t_0)\)</span> 为初始状态的输出 <span class="math notranslate nohighlight">\(y(t)\)</span> 恒为零（即 <span class="math notranslate nohighlight">\(\forall t \in [t_0, t_1], y(t) = 0\)</span> 成立），则该初始状态 <span class="math notranslate nohighlight">\(x(t_0)\)</span> 是不能观测的。</p></li>
+<li><p><strong>系统能观测性</strong>：</p>
+<ul>
+<li><p><strong>完全能观测</strong>：存在有限时刻 <span class="math notranslate nohighlight">\(t_1 &gt; t_0\)</span>，使得输出 <span class="math notranslate nohighlight">\(y(t)\)</span> 能唯一确定状态向量的初值 <span class="math notranslate nohighlight">\(x(t_0)\)</span>。</p></li>
+<li><p><strong>不完全能观测</strong>：存在一个非零状态或一个非空状态集合在时刻 <span class="math notranslate nohighlight">\(t_0\)</span> 为不能观测。</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id15">
+<h3>2. 连续时间线性时不变系统的能控性判据<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<section id="id16">
+<h4>(1) 格拉姆矩阵判据<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
+<p>系统完全能控的充分必要条件是存在时刻 <span class="math notranslate nohighlight">\(t_1 &gt; 0\)</span>，使得格拉姆矩阵 <span class="math notranslate nohighlight">\(W_c[0, t_1] = \int_0^{t_1} e^{-A\tau}BB^T e^{-A^T\tau} d\tau\)</span> 非奇异。</p>
+<ul class="simple">
+<li><p><strong>意义</strong>：理论分析和推导。</p></li>
+<li><p>对于完全能控的 LTI 系统，格拉姆矩阵非奇异也意味着系统完全能达。</p></li>
+</ul>
+</section>
+<section id="id17">
+<h4>(2) 秩判据<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h4>
+<p>构造能控性判别矩阵：
+<span class="math notranslate nohighlight">\( Q_c = [B, AB, A^2B, \dots, A^{n-1}B] \)</span>
+系统完全能控的充分必要条件是 <span class="math notranslate nohighlight">\(\text{rank}(Q_c) = n\)</span>。</p>
+<hr class="docutils" />
+<p><strong>例 1：</strong> 判断系统是否完全能控。
+<span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \begin{bmatrix} 4 &amp; 0 \\ 0 &amp; -5 \end{bmatrix} \mathbf{x} + \begin{bmatrix} 1 \\ 2 \end{bmatrix} u \)</span>
+<span class="math notranslate nohighlight">\( Q_c = [B, AB] = \begin{bmatrix} 1 &amp; 4 \\ 2 &amp; -10 \end{bmatrix} \)</span>
+<span class="math notranslate nohighlight">\(\text{rank}(Q_c) = 2 = n\)</span>。因此，系统完全能控。</p>
+<p><strong>例 2：</strong> 图示电路，判断系统能控性。
+（需要根据电路图列出状态方程，然后计算 <span class="math notranslate nohighlight">\(Q_c\)</span> 的秩。）</p>
+<p><strong>例 3：</strong> 判断系统是否完全能控。
+<span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \begin{bmatrix} -1 &amp; -4 &amp; -2 \\ 0 &amp; 6 &amp; -1 \\ 1 &amp; 7 &amp; -1 \end{bmatrix} \mathbf{x} + \begin{bmatrix} 2 &amp; 0 \\ 0 &amp; 1 \\ 1 &amp; 1 \end{bmatrix} u \)</span>
+<span class="math notranslate nohighlight">\( Q_c = [B, AB, A^2B] \)</span>
+计算 <span class="math notranslate nohighlight">\(A^2B\)</span> 和 <span class="math notranslate nohighlight">\(Q_c\)</span> 的秩。
+<span class="math notranslate nohighlight">\(\text{rank}(Q_c) = 3 = n\)</span>。因此，系统完全能控。</p>
+</section>
+</section>
+<section id="id18">
+<h3>3. 连续时间线性时不变系统的能观测性判据<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<p>能控性和能观测性在概念、特性和判据上都是对偶的。</p>
+<section id="id19">
+<h4>(1) 格拉姆矩阵判据<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h4>
+<p>系统完全能观测的充分必要条件是存在时刻 <span class="math notranslate nohighlight">\(t_1 &gt; 0\)</span>，使得格拉姆矩阵 <span class="math notranslate nohighlight">\(W_o[0, t_1] = \int_0^{t_1} e^{A^T\tau}C^T C e^{A\tau} d\tau\)</span> 非奇异。</p>
+</section>
+<section id="id20">
+<h4>(2) 秩判据<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h4>
+<p>构造能观测性判别矩阵：
+<span class="math notranslate nohighlight">\( Q_o = \begin{bmatrix} C \\ CA \\ \vdots \\ CA^{n-1} \end{bmatrix} \)</span>
+系统完全能观测的充分必要条件是 <span class="math notranslate nohighlight">\(\text{rank}(Q_o) = n\)</span>。</p>
+<hr class="docutils" />
+<p><strong>例 4：</strong> 判断系统是否完全能观测。
+<span class="math notranslate nohighlight">\( \dot{\mathbf{x}} = \begin{bmatrix} -1 &amp; -4 &amp; -2 \\ 0 &amp; 6 &amp; -1 \\ 1 &amp; 7 &amp; -1 \end{bmatrix} \mathbf{x} \)</span>
+<span class="math notranslate nohighlight">\( y = \begin{bmatrix} 0 &amp; 2 &amp; 1 \\ 1 &amp; 1 &amp; 0 \end{bmatrix} \mathbf{x} \)</span>
+计算 <span class="math notranslate nohighlight">\(C, CA, CA^2\)</span> 并构造 <span class="math notranslate nohighlight">\(Q_o\)</span>。
+<span class="math notranslate nohighlight">\(\text{rank}(Q_o) = 3 = n\)</span>。因此，系统完全能观测。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id21">
+<h3>Matlab 命令<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>能控性矩阵</strong>：<code class="docutils literal notranslate"><span class="pre">Uc</span> <span class="pre">=</span> <span class="pre">ctrb(A,</span> <span class="pre">B)</span></code></p></li>
+<li><p><strong>能观测性矩阵</strong>：<code class="docutils literal notranslate"><span class="pre">Vo</span> <span class="pre">=</span> <span class="pre">obsv(A,</span> <span class="pre">C)</span></code></p></li>
+<li><p><strong>能控性（秩）判据</strong>：计算 <code class="docutils literal notranslate"><span class="pre">rank(ctrb(A,</span> <span class="pre">B))</span></code> 是否等于 <span class="math notranslate nohighlight">\(n\)</span>。</p></li>
+<li><p><strong>能观测性（秩）判据</strong>：计算 <code class="docutils literal notranslate"><span class="pre">rank(obsv(A,</span> <span class="pre">C))</span></code> 是否等于 <span class="math notranslate nohighlight">\(n\)</span>。</p></li>
+<li><p><strong>格拉姆矩阵</strong>：<code class="docutils literal notranslate"><span class="pre">Wc</span> <span class="pre">=</span> <span class="pre">gram(A,</span> <span class="pre">B)</span></code> (能控性)，<code class="docutils literal notranslate"><span class="pre">Wo</span> <span class="pre">=</span> <span class="pre">gram(A',</span> <span class="pre">C')</span></code> (能观测性)。</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id22">
+<h2>本章小结<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>掌握线性连续控制系统的状态空间描述法。</p></li>
+<li><p>了解传递函数与状态空间描述之间的转换方法。</p></li>
+<li><p>理解系统的能控性与能观测性。</p></li>
+</ol>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../50-mechanic/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">机械系统设计</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="70-fix.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">自动控制原理</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">第八章 线性系统的状态空间表示法</a><ul>
+<li><a class="reference internal" href="#id2">8.1 系统数学模型的基本描述方法</a><ul>
+<li><a class="reference internal" href="#id3">1. 系统动态过程的两类数学描述</a><ul>
+<li><a class="reference internal" href="#id4">(1) 系统的外部描述 (黑箱)</a></li>
+<li><a class="reference internal" href="#id5">(2) 系统的内部描述 (白箱)</a></li>
+<li><a class="reference internal" href="#id6">(3) 外部描述和内部描述的比较</a></li>
+<li><a class="reference internal" href="#id7">状态和状态空间的定义</a></li>
+<li><a class="reference internal" href="#id8">几点解释 (七点)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id9">2. 线性系统的状态空间描述</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id10">8.2 系统数学模型间的相互转换</a><ul>
+<li><a class="reference internal" href="#id11">1. 由系统输入输出描述导出状态空间描述</a><ul>
+<li><a class="reference internal" href="#m-0">(1) <span class="math notranslate nohighlight">\(m=0\)</span> 情况</a></li>
+<li><a class="reference internal" href="#m-ne-0">(2) <span class="math notranslate nohighlight">\(m \ne 0\)</span> 情况</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id12">2. 由状态空间描述导出传递函数矩阵</a></li>
+<li><a class="reference internal" href="#matlab">Matlab 命令</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id13">2.3 系统的能控性与能观性分析</a><ul>
+<li><a class="reference internal" href="#id14">1. 线性连续系统的能控性与能观测性</a></li>
+<li><a class="reference internal" href="#id15">2. 连续时间线性时不变系统的能控性判据</a><ul>
+<li><a class="reference internal" href="#id16">(1) 格拉姆矩阵判据</a></li>
+<li><a class="reference internal" href="#id17">(2) 秩判据</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id18">3. 连续时间线性时不变系统的能观测性判据</a><ul>
+<li><a class="reference internal" href="#id19">(1) 格拉姆矩阵判据</a></li>
+<li><a class="reference internal" href="#id20">(2) 秩判据</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id21">Matlab 命令</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id22">本章小结</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="../_static/tex-svg-full.js?v=fe9f5dce"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

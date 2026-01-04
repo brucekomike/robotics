@@ -1,0 +1,1240 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="第二章 机器人工作站系统组织结构与设计选型" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/80-interg/02.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="2022年9月27日 本章学习要点: 本章学习提要:: 机器人工作站系统是组成机器人生产线的基础,通过本章学习,了解机器人工作站系统的构成及特点,掌握工业机器人的类型,技术参数与选型依据;掌握机器人末端执行器的类型、原理与设计;熟悉机器人外围设备的类型及作用,掌握机器人工作站的一般设计原则与设计流程。掌握机器人旋量理论及其应用,会利用旋量理论判断任意复杂机器人的自由度数目与类型。 内容简介:..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="2022年9月27日 本章学习要点: 本章学习提要:: 机器人工作站系统是组成机器人生产线的基础,通过本章学习,了解机器人工作站系统的构成及特点,掌握工业机器人的类型,技术参数与选型依据;掌握机器人末端执行器的类型、原理与设计;熟悉机器人外围设备的类型及作用,掌握机器人工作站的一般设计原则与设计流程。掌握机器人旋量理论及其应用,会利用旋量理论判断任意复杂机器人的自由度数目与类型。 内容简介:..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="第三章：基于机器人控制器的系统集成" href="03.html"><link rel="prev" title="机器人系统集成概述" href="01.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>第二章 机器人工作站系统组织结构与设计选型 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/80-interg/02.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/80-interg/02.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>第二章 机器人工作站系统组织结构与设计选型<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p><strong>2022年9月27日</strong></p>
+<hr class="docutils" />
+<section id="id2">
+<h2>本章学习要点<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>本章学习提要:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>机器人工作站系统是组成机器人生产线的基础,通过本章学习,了解机器人工作站系统的构成及特点,掌握工业机器人的类型,技术参数与选型依据;掌握机器人末端执行器的类型、原理与设计;熟悉机器人外围设备的类型及作用,掌握机器人工作站的一般设计原则与设计流程。掌握机器人旋量理论及其应用,会利用旋量理论判断任意复杂机器人的自由度数目与类型。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h2>内容简介<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>旋量理论</p></li>
+<li><p>自由度分析基本原理</p></li>
+<li><p>旋量理论求解机构自由度</p></li>
+<li><p>案例</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>1. 旋量理论<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<section id="id6">
+<h3>线矢量、偶量和螺旋<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>对于螺旋 <span class="math notranslate nohighlight">\((S;r \times S + hS)\)</span>, 当节距 <span class="math notranslate nohighlight">\(h\)</span> 变化时:</p>
+<ul>
+<li><p>若 <span class="math notranslate nohighlight">\(h=0\)</span>, 螺旋变为 <span class="math notranslate nohighlight">\((S; r \times S)\)</span></p></li>
+<li><p>若 <span class="math notranslate nohighlight">\(h=\infty\)</span>, <span class="math notranslate nohighlight">\((S; r \times S + hS) = (\frac{S}{h}; \frac{r \times S}{h} + S) \to (0; S)\)</span></p></li>
+</ul>
+</li>
+</ul>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>名称</p></th>
+<th class="head text-left"><p>符号</p></th>
+<th class="head text-left"><p>条件</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>螺旋</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\((S; S^0)\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(S \neq 0, S \cdot S^0 \neq 0, \infty \neq h \neq 0\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>线矢量</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\((S; S_0)\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(S \neq 0, S \cdot S_0 = 0, h = 0\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>偶量</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\((0; S)\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(S \neq 0, h = \infty\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>零螺旋</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(S = 0, S^0 = 0, h\)</span> 不定</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id7">
+<h3>螺旋的代数运算<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<section id="id8">
+<h4>螺旋的代数和<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<p>两个螺旋的原部和对偶部分别求和,称为两螺旋的代数和。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ S_1 + S_2 = (S_1 + S_2) + \epsilon (S_1^0 + S_2^0) \]</div>
+</div>
+<ul class="simple">
+<li><p>两个节距为非零有限值的螺旋之和一般仍然是节距为非零有限值的螺旋,但也可能出现节距为零的线矢量。</p></li>
+<li><p>不共面的两线矢之和一般为节距不为零的螺旋。</p></li>
+</ul>
+</section>
+<section id="id9">
+<h4>螺旋的互易积<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h4>
+<p>两螺旋的原部矢量与对偶矢量下标交换后做点积之和称为两螺旋的互易积。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ S_1 \circ S_2 = S_1 \cdot S_2^0 + S_2 \cdot S_1^0 \]</div>
+</div>
+<ul class="simple">
+<li><p>两个螺旋 <span class="math notranslate nohighlight">\((S_1; S_1^0), S_2 (S_2; S_2^0)\)</span>, 它们的互易积与坐标系的选择无关。</p></li>
+</ul>
+</section>
+</section>
+<section id="id10">
+<h3>运动螺旋<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>用角速度的线矢量表示转动:</strong></p>
+<ul>
+<li><p>与转轴重合的单位线矢量 <span class="math notranslate nohighlight">\(S = (S; S^0)\)</span></p></li>
+<li><p>转动运动的 Plücker 坐标为 <span class="math notranslate nohighlight">\(w\$ = w(S; S_0) = (w; v_0)\)</span></p></li>
+<li><p>即角速度的大小与一个表示转轴作用线的单位线矢之积。</p></li>
+</ul>
+</li>
+<li><p><strong>用偶量表示移动:</strong></p>
+<ul>
+<li><p>刚体移动可以看作是绕距原点无限远处轴线的瞬时转动,转轴可用一个偶量表示为 <span class="math notranslate nohighlight">\(S = (0; S)\)</span></p></li>
+<li><p>移动运动的 Plücker 坐标: <span class="math notranslate nohighlight">\(v\$ = v(0; S) = (0; v)\)</span></p></li>
+<li><p>即线速度的大小与偶量 <span class="math notranslate nohighlight">\(S\)</span> 之积。</p></li>
+<li><p>移动运动的方向矢量空间任意平移,并不改变刚体的运动状态, <span class="math notranslate nohighlight">\((0; S)\)</span> 为一个自由矢量。</p></li>
+<li><p>更一般的螺旋运动则可看作移动与转动的合成。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id11">
+<h3>力螺旋<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>用线矢量表示力:</strong></p>
+<ul>
+<li><p>与作用力重合的单位线矢量 <span class="math notranslate nohighlight">\(S = (S; S_0)\)</span></p></li>
+<li><p>力的 Plücker 坐标可写为 <span class="math notranslate nohighlight">\(f\$ = f(S; S_0) = (f; C_0)\)</span></p></li>
+<li><p>即力的大小与和约束力重合的单位线矢之积。</p></li>
+</ul>
+</li>
+<li><p><strong>用偶量表示力偶:</strong></p>
+<ul>
+<li><p>力偶是自由矢量,其在刚体内的平移不会改变对刚体的作用效果。</p></li>
+<li><p>自由矢量可表示为 <span class="math notranslate nohighlight">\(S = (0; S)\)</span></p></li>
+<li><p>力偶的 Plücker 坐标 <span class="math notranslate nohighlight">\(C\$ = C(0; S) = (0; C)\)</span></p></li>
+<li><p>即力偶大小与自由矢量之积。</p></li>
+<li><p>力螺旋可看作力线矢与共线的力偶的合成。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id12">
+<h3>运动螺旋和力螺旋的对比<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>节距</p></th>
+<th class="head text-left"><p>运动学</p></th>
+<th class="head text-left"><p>静力学</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(h \neq 0\)</span></p></td>
+<td class="text-left"><p>螺旋 (运动螺旋) <span class="math notranslate nohighlight">\(( \omega; r \times \omega + h\omega )\)</span></p></td>
+<td class="text-left"><p>螺旋 (力螺旋) <span class="math notranslate nohighlight">\((f; r \times f + hf )\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(h = 0\)</span></p></td>
+<td class="text-left"><p>线矢量 (角速度线矢量) <span class="math notranslate nohighlight">\(( \omega; r \times \omega )\)</span></p></td>
+<td class="text-left"><p>线矢量 (力线矢) <span class="math notranslate nohighlight">\((f; r \times f )\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(h = \infty\)</span></p></td>
+<td class="text-left"><p>自由矢量 (移动速度) <span class="math notranslate nohighlight">\((0; \nu)\)</span></p></td>
+<td class="text-left"><p>自由矢量 (力偶矢) <span class="math notranslate nohighlight">\((0; C)\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id13">
+<h3>螺旋系及其相关性<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<section id="id14">
+<h4>螺旋的相关性<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<ul>
+<li><p>对于 <span class="math notranslate nohighlight">\(n\)</span> 个螺旋, <span class="math notranslate nohighlight">\(S_i = (S_i; S_i^0), i=1,2 \dots n\)</span> 若可以找到一组不全为零的实数 <span class="math notranslate nohighlight">\(\omega_i\)</span>, 使得和螺旋为零, <span class="math notranslate nohighlight">\(\sum_{n} \omega_i S_i = 0\)</span>, 则这 <span class="math notranslate nohighlight">\(n\)</span> 个螺旋为线性相关。</p></li>
+<li><p>按螺旋的加法规则, 则这些螺旋的原部和对偶部的和分别为零, 即:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \sum_{n} \omega_i S_i = 0 \quad \sum_{n} \omega_i S_i^0 = 0 \]</div>
+</div>
+</li>
+</ul>
+</section>
+<section id="id15">
+<h4>螺旋系的线性相关<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p>螺旋系的线性相关可以由用 Plücker 坐标所表示的螺旋矩阵的秩来判断。</p></li>
+<li><p>如前所述螺旋的 Plücker 坐标可以表示为这样的 6 个元素 <span class="math notranslate nohighlight">\((lmn;pqr)\)</span>。 <span class="math notranslate nohighlight">\(n\)</span> 个螺旋系的相关性, 就可以由螺旋系的 Plücker 坐标表示的矩阵的秩来判断:</p></li>
+</ul>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}
+l_1 &amp; m_1 &amp; n_1 &amp; p_1 &amp; q_1 &amp; r_1 \\
+l_2 &amp; m_2 &amp; n_2 &amp; p_2 &amp; q_2 &amp; r_2 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+l_n &amp; m_n &amp; n_n &amp; p_n &amp; q_n &amp; r_n
+\end{bmatrix}\end{split}\]</div>
+</div>
+<ul class="simple">
+<li><p>螺旋的相关性与坐标系的选择无关。</p></li>
+<li><p>螺旋的 Plücker 坐标有 6 个分量, 显然三维空间中线性无关的螺旋的数目最多 6 个。</p></li>
+</ul>
+</section>
+</section>
+<section id="id16">
+<h3>线矢和偶量在不同几何条件下的最大线性无关数<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>序号</p></th>
+<th class="head text-left"><p>几何特点</p></th>
+<th class="head text-left"><p>图示</p></th>
+<th class="head text-left"><p>线矢 <span class="math notranslate nohighlight">\(h=0\)</span></p></th>
+<th class="head text-left"><p>偶量 <span class="math notranslate nohighlight">\(h=\infty\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>1</p></td>
+<td class="text-left"><p>共轴</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p>1</p></td>
+<td class="text-left"><p>1</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>2</p></td>
+<td class="text-left"><p>共面平行</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p>2</p></td>
+<td class="text-left"><p>1</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>3</p></td>
+<td class="text-left"><p>平面汇交</p></td>
+<td class="text-left"><p>(星形图)</p></td>
+<td class="text-left"><p>2</p></td>
+<td class="text-left"><p>2</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>4</p></td>
+<td class="text-left"><p>空间平行</p></td>
+<td class="text-left"><p>(平行线和平面)</p></td>
+<td class="text-left"><p>3</p></td>
+<td class="text-left"><p>1</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>5</p></td>
+<td class="text-left"><p>共面</p></td>
+<td class="text-left"><p>(平面内的两条线)</p></td>
+<td class="text-left"><p>3</p></td>
+<td class="text-left"><p>2</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>6</p></td>
+<td class="text-left"><p>空间共点</p></td>
+<td class="text-left"><p>(空间汇交点)</p></td>
+<td class="text-left"><p>3</p></td>
+<td class="text-left"><p>3</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>7</p></td>
+<td class="text-left"><p>单页双曲面上不相交的直线</p></td>
+<td class="text-left"><p>(双曲面形状)</p></td>
+<td class="text-left"><p>3</p></td>
+<td class="text-left"><p>-</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>8</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p>(a) 有公共交线, 交角为直角;</p></td>
+<td class="text-left"><p>4</p></td>
+<td class="text-left"><p>-</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p>(b) 有公共交线, 且交角为一定;</p></td>
+<td class="text-left"><p>4</p></td>
+<td class="text-left"><p>-</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p>© 有一条公共交线;</p></td>
+<td class="text-left"><p>5</p></td>
+<td class="text-left"><p>-</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p>(d) 有两条公共交线;</p></td>
+<td class="text-left"><p>4</p></td>
+<td class="text-left"><p>-</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p>(e) 有三条公共交线;</p></td>
+<td class="text-left"><p>3</p></td>
+<td class="text-left"><p>-</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>9</p></td>
+<td class="text-left"><p>平行平面, 且无公垂线</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p>5</p></td>
+<td class="text-left"><p>-</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>10</p></td>
+<td class="text-left"><p>无公共交线, 空间交错</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p>5</p></td>
+<td class="text-left"><p>-</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>11</p></td>
+<td class="text-left"><p>三维空间任意情况</p></td>
+<td class="text-left"><p>(任意分布的点)</p></td>
+<td class="text-left"><p>6</p></td>
+<td class="text-left"><p>3</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>12</p></td>
+<td class="text-left"><p>两平行线矢和一法向偶量</p></td>
+<td class="text-left"><p>(平行线矢和与之垂直的偶量)</p></td>
+<td class="text-left"><p>2</p></td>
+<td class="text-left"><p>-</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>13</p></td>
+<td class="text-left"><p>平面 3 线矢和一法向偶量</p></td>
+<td class="text-left"><p>(平面内三条线矢和一个垂直于平面的偶量)</p></td>
+<td class="text-left"><p>3</p></td>
+<td class="text-left"><p>-</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>14</p></td>
+<td class="text-left"><p>空间平行 3 线矢及一个相垂直的偶量</p></td>
+<td class="text-left"><p>(空间平行三条线矢和一个与之相垂直的偶量)</p></td>
+<td class="text-left"><p>3</p></td>
+<td class="text-left"><p>-</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id17">
+<h3>螺旋的相逆性<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>通过对比前两页结果,可以得到一个重要结论: 表示力螺旋和运动螺旋的互易积正是该两螺旋产生的瞬时功率。</p></li>
+<li><p>如果所研究的两螺旋互易积为零:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \omega_1 S_1 \circ f_2 S_2 = 0 \]</div>
+</div>
+<p>这表示力螺旋对作螺旋运动物体作用的瞬时功率为零。
+这里称这个与螺旋 1 构成互易积为零的螺旋 2 为螺旋 1 的<strong>反螺旋</strong>。</p>
+</li>
+<li><p><strong>当两个螺旋的互易积为零时:</strong></p>
+<ul class="simple">
+<li><p>(1) 若一个螺旋表示了机械系统的约束反力, 另一个则是为机械系统所允许的运动;</p></li>
+<li><p>(2) 反之, 若一个螺旋表示了物体的运动, 另一个则是机械系统所产生的约束。</p></li>
+</ul>
+</li>
+<li><p><strong>当两个螺旋的互易积不为零时:</strong></p>
+<ul class="simple">
+<li><p>(1) 若物体发生了运动, 则这个做功的力就是物体的驱动力;</p></li>
+<li><p>(2) 若该力螺旋表示机械系统的约束反力, 则满足互易。</p></li>
+</ul>
+</li>
+<li><p>螺旋的相逆性只与两个螺旋的参数有关,而与坐标系的选择无关。</p></li>
+</ul>
+</section>
+<section id="id18">
+<h3>螺旋相逆性<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>两线矢相逆的充要条件是它们共面。</p></li>
+<li><p>两个偶量必相逆。</p></li>
+<li><p>线矢与偶量仅当垂直时才相逆。</p></li>
+<li><p>线矢和偶量皆自逆。</p></li>
+</ul>
+<section id="id19">
+<h4>与已知螺旋系相逆的反螺旋<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p>当螺旋系同时含有若干线矢量和偶量:</p>
+<ol class="arabic simple">
+<li><p>与此螺旋系相逆的线矢量, 必须与所有偶量相垂直且与所有线矢量相交。</p></li>
+<li><p>与此螺旋系相逆的偶量必须与螺旋系的所有线矢量垂直。</p></li>
+</ol>
+</li>
+</ul>
+</section>
+</section>
+<section id="id20">
+<h3>串联运动链的微小位移/力旋量子空间<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<p>(图形示意图，表示不同子空间之间的关系)</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id21">
+<h2>2. 自由度分析基本原理<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h2>
+<section id="iftomm">
+<h3>IFTOMM 定义<a class="headerlink" href="#iftomm" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>确定机构或运动链位形所需的独立参数的数目。</p></li>
+<li><p>IFToMM 定义中强调的是数目。但仅仅确定自由度数目是远远不能全面描述此类新机构的特点的, 尤其是对于并联机构, 研究其末端执行器的运动性质尤为重要。</p></li>
+</ul>
+</section>
+<section id="id22">
+<h3>机构的自由度<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>机构或运动链在三维空间所具有的稳定的独立运动的能力。</p>
+<ol class="arabic simple">
+<li><p>这个能力的大小以确定机构或运动链位形所需要的独立参数的数目表示。</p></li>
+<li><p>这个能力的性质以机构杆件所具有的移动自由度和转动自由度来表示。</p></li>
+<li><p>这个自由度能力表现在时空上应该具有连续不变性, 它应该是全周的。</p></li>
+</ol>
+</li>
+</ul>
+<section id="id23">
+<h4>1. 自由度数目与类型<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>自由度数目</strong>是指机器人末端执行器在空间运动所需的独立变量数 (也是确定机器人末端刚体位置与姿态 (位形) 的独立变量数目), 用以表示机器人动作灵活程度的参数, 一般是以沿轴线移动和绕轴线转动的独立运动的数目来表示。</p></li>
+<li><p><strong>自由度类型</strong>则是机器人所能实现的运动类型, 通常采用 3T, 3R, 3R-1T 等形式描述。</p></li>
+</ul>
+<p><strong>注意区分机器人末端执行器自由度与机器人活动度</strong></p>
+<ul class="simple">
+<li><p>对机器人而言, 大多数情况下, 其活动度数与自由度数是一样的, 但有时两者并不相同, 机器人的自由度一般是指机器人末端执行器的自由度。例如, 一个具有 7 个运动副的串联冗余机器人的活动度是 7, 但其末端执行器的自由度却是 6; 一个由 6 个移动副串联而成的机器人机构其活动度是 6, 但其末端执行器的自由度却是 3 (三维移动)。</p></li>
+<li><p>利用冗余的自由度可以增加机器人的灵活性, 提高其避障能力并改善动力学性能。</p></li>
+</ul>
+</section>
+</section>
+<section id="id24">
+<h3>机构的自由度 (机械原理)<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h3>
+<section id="id25">
+<h4>自由度公式<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>平面机构自由度公式:</strong>
+$<span class="math notranslate nohighlight">\( M = 3N - 2P_2 - P_1 \)</span>$</p></li>
+<li><p><strong>空间机构自由度公式:</strong>
+$<span class="math notranslate nohighlight">\( M = 6N - 5p_5 - 4p_4 - 3p_3 - 2p_2 - p_1 \)</span>$</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(M\)</span> —— 机构的自由度</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> —— 表示机构中除去机架总的活动构件的数目</p></li>
+<li><p><span class="math notranslate nohighlight">\(p_i\)</span> —— 表示机构具有 <span class="math notranslate nohighlight">\(i\)</span> 个约束的运动副的数目</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="g-k">
+<h4>G-K 公式<a class="headerlink" href="#g-k" title="Link to this heading">¶</a></h4>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ M = d(n - g - 1) + \sum_{i=1}^{g} f_i \]</div>
+</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(d\)</span> —— 机构的阶, 一般而言平面机构的阶是 3, 空间机构的阶为 6。</p></li>
+<li><p><span class="math notranslate nohighlight">\(n\)</span> —— 表示机构中包括机架总的活动构件的数目。</p></li>
+<li><p><span class="math notranslate nohighlight">\(g\)</span> —— 运动副的数目。</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_i\)</span> —— 第 <span class="math notranslate nohighlight">\(i\)</span> 个运动副的自由度数目。</p></li>
+</ul>
+<p><strong>G-K 公式示例:</strong>
+平面五杆平行四边形机构的自由度计算:
+<span class="math notranslate nohighlight">\(M = 3 \times (5 - 6 - 1) + 6 = ?\)</span> (计算错误提示)
+按照自由度计算的一般公式, 自由度为 1。</p>
+<p><strong>G-K 公式在并联机构中的应用:</strong>
+(展示 3-RPS, 4-URU, 3-RRC 并联机构的示意图, 并附带 G-K 公式)
+<strong>机构中存在相当数量的不起约束作用的过约束。一般的自由度计算公式将这部分自由度重复计算。</strong></p>
+</section>
+<section id="id26">
+<h4>修正的 G-K 公式<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h4>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ M = d(n - g - 1) + \sum_{i=1}^{g} f_i + \nu - \zeta \]</div>
+</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(M\)</span> —— 机构的自由度;</p></li>
+<li><p><span class="math notranslate nohighlight">\(d\)</span> —— 机构的阶数 (6 - 公共约束数 <span class="math notranslate nohighlight">\(\lambda\)</span>);</p></li>
+<li><p><span class="math notranslate nohighlight">\(n\)</span> —— 机构的构件数 (包括机架);</p></li>
+<li><p><span class="math notranslate nohighlight">\(g\)</span> —— 运动副的个数;</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_i\)</span> —— 第 <span class="math notranslate nohighlight">\(i\)</span> 个运动副的自由度;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\nu\)</span> —— 多环并联结构在去除公共约束因素后的冗余约束;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\zeta\)</span> —— 机构中存在的局部自由度。</p></li>
+</ul>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id27">
+<h2>3. 旋量理论求解机构自由度<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h2>
+<section id="id28">
+<h3>机构运动副的螺旋表达<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
+<p>运动副每个自由度对应一个螺旋 (线矢量/偶量)。</p>
+<ul class="simple">
+<li><p><strong>转动副 (Revolute Pair, R)</strong></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(r = [x \ y \ z]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(S_R = [0 \ 0 \ 1 \ y \ -x \ 0] = [0 \ 0 \ 1 \ a \ b \ 0]\)</span></p></li>
+<li><p>线矢量, <span class="math notranslate nohighlight">\(M=1\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>移动副 (Prismatic Pair, P)</strong></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(S_P = [0 \ 0 \ 0 \ 0 \ 0 \ 1]\)</span></p></li>
+<li><p>偶量, <span class="math notranslate nohighlight">\(M=1\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>螺旋副 (Helical Pair, H)</strong></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(S_1 = [0 \ 0 \ 1 \ a \ b \ 0]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(S_2 = [0 \ 0 \ 0 \ 0 \ 0 \ c]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(S_H = S_1 + S_2 = [0 \ 0 \ 1 \ a \ b \ c]\)</span></p></li>
+<li><p>旋量, <span class="math notranslate nohighlight">\(M=1\)</span>, <span class="math notranslate nohighlight">\(c\)</span>: 节距</p></li>
+</ul>
+</li>
+<li><p><strong>圆柱副 (Cylindrical Pair, C)</strong></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(S_{C1} = [0 \ 0 \ 1 \ a \ b \ 0]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(S_{C2} = [0 \ 0 \ 0 \ 0 \ 0 \ 1]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(M=2\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>球面副 (Spherical Pair, S)</strong></p>
+<ul>
+<li><p>等效于三个汇交不共面的转动副 <span class="math notranslate nohighlight">\(S = RRR\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(M=3\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>万向铰 (Universal joint)</strong></p>
+<ul>
+<li><p>相当于轴线相交的两个转动副 <span class="math notranslate nohighlight">\(U = RR\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(M=2\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>平面副 (Planar Pair, E)</strong></p>
+<ul>
+<li><p>与平面副等效的运动副可以是 <span class="math notranslate nohighlight">\(2P-R\)</span>, <span class="math notranslate nohighlight">\(2R-P\)</span>, <span class="math notranslate nohighlight">\(3R\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(M=3\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id29">
+<h3>机构的阶<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>机构的阶:</strong> 机构运动螺旋系的阶指的是机构所有构件允许的运动维数, 一般情况下平面机构的阶为 3, 空间机构的阶为 6。</p></li>
+<li><p><strong>机构的阶 = 6 - 公共约束数</strong></p></li>
+</ul>
+</section>
+<section id="id30">
+<h3>机构的公共约束<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
+<section id="id31">
+<h4>基于约束螺旋分析机构自由度的原理:<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h4>
+<p>用单位螺旋在运动学上描述运动副具有的自由度, 则其反螺旋可看作是作用在构件上的力螺旋, 两者的互易积表示力对于运动的功率。互易积为零, 即作用在构件上的力不做功, 相当于约束力。
+反螺旋 (约束力螺旋) 与运动螺旋的互易积为零: <span class="math notranslate nohighlight">\(S_m^r \circ S_m' = 0\)</span></p>
+</section>
+<section id="id32">
+<h4>公共约束:<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h4>
+<p>当机构所有运动副均以运动螺旋 <span class="math notranslate nohighlight">\(S^m\)</span> 表示, 它们构成螺旋系 <span class="math notranslate nohighlight">\(A\)</span>, 若存在一个与螺旋系 <span class="math notranslate nohighlight">\(A\)</span> 中每一个螺旋均相逆的反螺旋, 这个反螺旋就是该机构的公共约束。由反螺旋组成的反螺旋系 (约束螺旋系) <span class="math notranslate nohighlight">\(B\)</span> 的秩就是该机构公共约束数:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \lambda = \text{rank}(B) = \text{rank}(\{S^r | S^r \circ S^m = 0, S^m \in A\}) \]</div>
+</div>
+</section>
+<section id="id33">
+<h4>公共约束的分析流程:<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>将每个运动副具有的自由度表达为运动螺旋 <span class="math notranslate nohighlight">\(S_i^m\)</span>。</p></li>
+<li><p>将运动螺旋整合为螺旋系 <span class="math notranslate nohighlight">\(A = [S_1^m; S_2^m; \dots S_n^m]\)</span>。</p></li>
+<li><p>求 <span class="math notranslate nohighlight">\(A\)</span> 的反螺旋系 <span class="math notranslate nohighlight">\(B\)</span> 的零空间。</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda = \text{rank}(B)\)</span> 得到机构的公共约束数。</p></li>
+</ol>
+<p><strong>零空间的求法: 求解如下线性方程组的基础解系</strong>
+已知: <span class="math notranslate nohighlight">\(S_1^m = (L_1, M_1, N_1; P_1, Q_1, R_1)\)</span>
+<span class="math notranslate nohighlight">\(S_2^m = (L_2, M_2, N_2; P_2, Q_2, R_2)\)</span>
+…
+<span class="math notranslate nohighlight">\(S_n^m = (L_n, M_n, N_n; P_n, Q_n, R_n)\)</span>
+未知: <span class="math notranslate nohighlight">\(S^r = (L', M', N'; P', Q', R')\)</span></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}
+L_1 &amp; M_1 &amp; N_1 &amp; P_1 &amp; Q_1 &amp; R_1 \\
+L_2 &amp; M_2 &amp; N_2 &amp; P_2 &amp; Q_2 &amp; R_2 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+L_n &amp; M_n &amp; N_n &amp; P_n &amp; Q_n &amp; R_n
+\end{bmatrix}
+\begin{bmatrix}
+L' \\
+M' \\
+N' \\
+P' \\
+Q' \\
+R'
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\
+0 \\
+0 \\
+0 \\
+0 \\
+0
+\end{bmatrix}
+\end{split}\]</div>
+</div>
+</section>
+</section>
+<section id="id34">
+<h3>局部自由度<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>局部自由度不影响机构输出件的自由度,是一个多余的自由度,一般通过观察获得。</p></li>
+</ul>
+</section>
+<section id="id35">
+<h3>平面四杆机构自由度分析案例<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h3>
+<p>(展示四杆机构的示意图,并给出运动螺旋, 零空间, 约束力螺旋, 以及自由度计算结果)</p>
+<ul class="simple">
+<li><p><strong>自由度:</strong> <span class="math notranslate nohighlight">\(M = d(n-g-1) + \sum_{i=1}^{g} f_i + \nu - \zeta = (6-3) \times (5-6-1) + 6 + 1 = 1\)</span></p></li>
+</ul>
+</section>
+<section id="id36">
+<h3>串联开式运动链<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h3>
+<p>(展示串联开式运动链的示意图,并给出运动螺旋和反螺旋)</p>
+<ul class="simple">
+<li><p><strong>反螺旋 (约束力螺旋):</strong></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(S_1^r = (0 \ 0 \ 0; \ 0 \ 1 \ 0)\)</span> : y 方向的约束力偶</p></li>
+<li><p><span class="math notranslate nohighlight">\(S_2^r = (0 \ 0 \ 0; \ 0 \ 0 \ 1)\)</span> : z 方向的约束力偶</p></li>
+<li><p><span class="math notranslate nohighlight">\(S_3^r = (1 \ 0 \ 0; \ 0 \ 0 \ 0)\)</span> : x 方向的约束力</p></li>
+</ul>
+</li>
+<li><p>公共约束数: 3, 不是并联机构, 冗余约束为: 0</p></li>
+<li><p><span class="math notranslate nohighlight">\(M = d(n-g-1) + \sum f_i + \nu = 3(6-5-1) + 5 + 0 = 5\)</span></p></li>
+<li><p>机构的活动度为 5, 末端执行器的自由度为 3, 存在两个局部自由度。</p></li>
+<li><p>若各转动副的轴线不平行, 5 个运动螺旋相互独立, 则机构不存在局部自由度, 机构的活动度为 5, 自由度数也为 5。</p></li>
+</ul>
+</section>
+<section id="id37">
+<h3>结论:<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h3>
+<p>串联机构的活动度数等于其运动副自由度之和, 其末端执行器的自由度数为串联机构运动螺旋系的秩。</p>
+<p>(展示不同串联机构的活动度和自由度)</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id38">
+<h2>4. 案例<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h2>
+<section id="rrc">
+<h3>3-RRC 机构自由度计算<a class="headerlink" href="#rrc" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>RRC 分支的运动螺旋系:</strong></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(S_1 = (1 \ 0 \ 0; \ 0 \ 0 \ 0)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(S_2 = (1 \ 0 \ 0; \ 0 \ e_2 \ f_2)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(S_3 = (1 \ 0 \ 0; \ 0 \ e_3 \ f_3)\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>分支约束力螺旋系为:</strong></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(S_1^r = (0 \ 0 \ 0; \ 0 \ 1 \ 0)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(S_2^r = (0 \ 0 \ 0; \ 0 \ 0 \ 1)\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>若考虑公共约束:</strong></p>
+<ul>
+<li><p>机构存在一个公共约束。共面不汇交的三个约束力偶中又存在一个并联冗余约束。</p></li>
+<li><p><span class="math notranslate nohighlight">\(M = d(n-g-1) + \sum f_i + \nu = 5(8-9-1) + 12 + 1 = 3\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>若不考虑公共约束:</strong></p>
+<ul>
+<li><p>机构的阶仍然取 6。</p></li>
+<li><p>三个分支一共对动平台施加了六个约束力偶。三维空间偶量的最大线性无关数为 3, 所以独立的约束只有 3 个。存在 3 个冗余约束。</p></li>
+<li><p><span class="math notranslate nohighlight">\(M = 6(n-g-1) + \sum f_i + \nu = 6(8-9-1) + 12 + 3 = 3\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="upu">
+<h3>3-UPU 机构自由度计算<a class="headerlink" href="#upu" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>UPU 分支的运动螺旋系:</strong></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(S_1 = (1 \ 0 \ 0; \ 0 \ 0 \ 0)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(S_2 = (0 \ 1 \ 0; \ 0 \ 0 \ 0)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(S_3 = (0 \ 0 \ 0; \ d_3 \ 0 \ f_3)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(S_4 = (0 \ 1 \ 0; \ -d_4 \ 0 \ f_4)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(S_5 = (1 \ 0 \ 0; \ 0 \ e_5 \ 0)\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>分支约束力螺旋系为:</strong></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(S_1^r = (0 \ 0 \ 0; \ 0 \ 0 \ 1)\)</span></p></li>
+</ul>
+</li>
+<li><p>三个分支的三个约束力偶在空间分别垂直各自的 U 副平面, 它们相互并不平行, 彼此线性无关。</p></li>
+<li><p>由修正的 G-K 公式计算可得: <span class="math notranslate nohighlight">\(M = d(n-g-1) + \sum f_i + \nu = 6(8-9-1) + 15 = 3\)</span></p></li>
+<li><p>三个约束力偶限制了三个转动自由度, 上平台只具有三个移动自由度。</p></li>
+<li><p>无论平台如何移动, 其分支中的两个 U 副平面始终平行。机构的自由度性质不会改变。</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id39">
+<h2>总结: 并联机构自由度判断步骤<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Step1:</strong> 建立分支坐标系, 根据运动副类型列写分支运动螺旋系 (坐标系任意建立, 要求分支运动螺旋系列写方便)。</p></li>
+<li><p><strong>Step2:</strong> 根据运动螺旋与约束力螺旋间互易积为零的原理, 列写齐次线性方程组, 求解分支约束力螺旋系。</p></li>
+<li><p><strong>Step3:</strong> 查看各分支是否有相同的约束力螺旋, 根据其数目确定公共约束数目 <span class="math notranslate nohighlight">\(\lambda\)</span>。</p></li>
+<li><p><strong>Step4:</strong> 从各分支总的约束力螺旋中去除公共约束, 求解剩余约束力螺旋组成的螺旋系的秩, 确定并联冗余约束数目 <span class="math notranslate nohighlight">\(\nu\)</span> 可根据螺旋系相关性表格判断。</p></li>
+<li><p><strong>Step5:</strong> 确定构件数目 <span class="math notranslate nohighlight">\(n\)</span>, 运动副数目 <span class="math notranslate nohighlight">\(g\)</span>, 各运动副自由度数目 <span class="math notranslate nohighlight">\(f_i\)</span>, 观察是否存在局部自由度, 确定局部自由度数目 <span class="math notranslate nohighlight">\(\zeta\)</span>。</p></li>
+<li><p><strong>Step6:</strong> 带入修正 G-K 公式求解自由度数目, 并根据约束力螺旋的类型, 判断自由度类型。</p></li>
+</ol>
+<hr class="docutils" />
+<p>同学们下节课见!</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="03.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">第三章：基于机器人控制器的系统集成</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="01.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">机器人系统集成概述</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">第二章 机器人工作站系统组织结构与设计选型</a><ul>
+<li><a class="reference internal" href="#id2">本章学习要点</a><ul>
+<li><a class="reference internal" href="#id3">本章学习提要:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">内容简介</a></li>
+<li><a class="reference internal" href="#id5">1. 旋量理论</a><ul>
+<li><a class="reference internal" href="#id6">线矢量、偶量和螺旋</a></li>
+<li><a class="reference internal" href="#id7">螺旋的代数运算</a><ul>
+<li><a class="reference internal" href="#id8">螺旋的代数和</a></li>
+<li><a class="reference internal" href="#id9">螺旋的互易积</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id10">运动螺旋</a></li>
+<li><a class="reference internal" href="#id11">力螺旋</a></li>
+<li><a class="reference internal" href="#id12">运动螺旋和力螺旋的对比</a></li>
+<li><a class="reference internal" href="#id13">螺旋系及其相关性</a><ul>
+<li><a class="reference internal" href="#id14">螺旋的相关性</a></li>
+<li><a class="reference internal" href="#id15">螺旋系的线性相关</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id16">线矢和偶量在不同几何条件下的最大线性无关数</a></li>
+<li><a class="reference internal" href="#id17">螺旋的相逆性</a></li>
+<li><a class="reference internal" href="#id18">螺旋相逆性</a><ul>
+<li><a class="reference internal" href="#id19">与已知螺旋系相逆的反螺旋</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id20">串联运动链的微小位移/力旋量子空间</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id21">2. 自由度分析基本原理</a><ul>
+<li><a class="reference internal" href="#iftomm">IFTOMM 定义</a></li>
+<li><a class="reference internal" href="#id22">机构的自由度</a><ul>
+<li><a class="reference internal" href="#id23">1. 自由度数目与类型</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id24">机构的自由度 (机械原理)</a><ul>
+<li><a class="reference internal" href="#id25">自由度公式</a></li>
+<li><a class="reference internal" href="#g-k">G-K 公式</a></li>
+<li><a class="reference internal" href="#id26">修正的 G-K 公式</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id27">3. 旋量理论求解机构自由度</a><ul>
+<li><a class="reference internal" href="#id28">机构运动副的螺旋表达</a></li>
+<li><a class="reference internal" href="#id29">机构的阶</a></li>
+<li><a class="reference internal" href="#id30">机构的公共约束</a><ul>
+<li><a class="reference internal" href="#id31">基于约束螺旋分析机构自由度的原理:</a></li>
+<li><a class="reference internal" href="#id32">公共约束:</a></li>
+<li><a class="reference internal" href="#id33">公共约束的分析流程:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id34">局部自由度</a></li>
+<li><a class="reference internal" href="#id35">平面四杆机构自由度分析案例</a></li>
+<li><a class="reference internal" href="#id36">串联开式运动链</a></li>
+<li><a class="reference internal" href="#id37">结论:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id38">4. 案例</a><ul>
+<li><a class="reference internal" href="#rrc">3-RRC 机构自由度计算</a></li>
+<li><a class="reference internal" href="#upu">3-UPU 机构自由度计算</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id39">总结: 并联机构自由度判断步骤</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="../_static/tex-svg-full.js?v=fe9f5dce"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

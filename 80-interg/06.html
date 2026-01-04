@@ -1,0 +1,1474 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="第六章 工业机器人数据与编程基础" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/80-interg/06.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="2022年10月27日 本章学习要点: 本章学习提要:: 机器人操作与编程是实现机器人集成系统工作的基础,本章将以ABB机器人为例,着重讲解机器人编程的必备知识,目的在于:掌握RAPID语言中的常用数据类型与用法,了解RAPID程序的架构与分类,掌握常用的程序控制指令、运算指令以及机器人运动指令。 内容简介: RAPID语言中的指令, RAPID编程实例, RAPID编程操作技巧. 1. R..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="2022年10月27日 本章学习要点: 本章学习提要:: 机器人操作与编程是实现机器人集成系统工作的基础,本章将以ABB机器人为例,着重讲解机器人编程的必备知识,目的在于:掌握RAPID语言中的常用数据类型与用法,了解RAPID程序的架构与分类,掌握常用的程序控制指令、运算指令以及机器人运动指令。 内容简介: RAPID语言中的指令, RAPID编程实例, RAPID编程操作技巧. 1. R..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="第七章 工业机器人高级编程" href="07.html"><link rel="prev" title="第五章 机器人操作基础" href="05.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>第六章 工业机器人数据与编程基础 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/80-interg/06.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/80-interg/06.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>第六章 工业机器人数据与编程基础<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p><strong>2022年10月27日</strong></p>
+<hr class="docutils" />
+<section id="id2">
+<h2>本章学习要点<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>本章学习提要:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>机器人操作与编程是实现机器人集成系统工作的基础,本章将以ABB机器人为例,着重讲解机器人编程的必备知识,目的在于:掌握RAPID语言中的常用数据类型与用法,了解RAPID程序的架构与分类,掌握常用的程序控制指令、运算指令以及机器人运动指令。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h2>内容简介<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>RAPID语言中的指令</p></li>
+<li><p>RAPID编程实例</p></li>
+<li><p>RAPID编程操作技巧</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="rapid">
+<h2>1. RAPID语言中的指令<a class="headerlink" href="#rapid" title="Link to this heading">¶</a></h2>
+<section id="id5">
+<h3>指令<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>指令是指能够在一段程序语句中起主导作用的将相应数据和函数按照某种方式来运算的功能说明,相应的有逻辑指令,运动指令,判断指令,等待指令等等,如if、while 有运动指令如 moveL、moveC、waittime等。</p>
+</section>
+<section id="id6">
+<h3>基本指令 – 赋值指令<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>赋值指令用于对程序数据进行赋值。赋值可以是一个常量或数学表达式,比如:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PROC main()
+a:=10;
+b:=a+5;
+ENDPROC
+</pre></div>
+</div>
+<p><strong>（1）添加活动:</strong></p>
+<p>首先在示据,右边选择</p>
+<p><strong>（2）添加</strong></p>
+<p>首先同样</p>
+<p><strong>b</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>b:=&lt;EXP&gt;;
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>表达式赋值<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>点击第一个【<EXP>】选择数字类型中的a变量,选择另一个【<EXP>】,选择编辑中的【仅限选定内容】,在新出现的键盘中选择【5】,确定,如图2。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id8">
+<h2>信号控制指令<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<p>信号控制指令用控制系统匹配好的I/O信号实现通信控制,下表为常用I/O控制指令说明表。</p>
+<p>在一,若存在Set、Reset指令前有运动指令MoveJ、MoveL、MoveC、MoveAbsJ运动语句,则运动语句的转弯区数据使用fine才可以准确地输出I/O信号状态的变化。</p>
+<p>WaitDI、WaitDO为数字输入信号判断指令,在程序执行这两种指令时,等待输入信号或者输出信号的值为1或者0。如果实现了目的信号状态的改变,则程序继续往下执行;最大等待时间300s,等待至300秒目的信号状态还是没有达到,则机器人报警或进入出错处理程序。</p>
+<section id="i-o">
+<h3>表 常用I/O控制指令表<a class="headerlink" href="#i-o" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>指令</p></th>
+<th class="head text-left"><p>说明</p></th>
+<th class="head text-left"><p>例子</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Set</p></td>
+<td class="text-left"><p>数字信号置位指令用于将数字输出(Digital Output)置位为“1”。</p></td>
+<td class="text-left"><p>Set do5;</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Reset</p></td>
+<td class="text-left"><p>数字信号复位指令用于将数字输出(Digital Output)置位为“0”。</p></td>
+<td class="text-left"><p>Reset do5;</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>WaitDI</p></td>
+<td class="text-left"><p>数字输入信号判断指令用于判断数字输入信号的值是否与目标一致</p></td>
+<td class="text-left"><p>WaitDI di3, 1;</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>WaitDO</p></td>
+<td class="text-left"><p>数字输出信号判断指令用于判断数字输出信号的值是否与目标一致</p></td>
+<td class="text-left"><p>WaitDO do3, 0;</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="waituntil">
+<h3>WaitUntil 信号判断指令<a class="headerlink" href="#waituntil" title="Link to this heading">¶</a></h3>
+<p>WaitUntil信号判断指令可用于布尔量、数字量和I/O信号值的判断,如果条件到达指令中的设定值,程序继续往下执行,否则就一直等待,除非设定了最大等待时间。</p>
+<p>例:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>WaitUntil di1 = 1;
+WaitUntil do1 = 0;
+WaitUntil flag = TRUE;
+WaitUntil gil = 6;
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id9">
+<h3>程序调用指令<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<p>程序调用指令在编程中非常常见,相关指令有ProcCall、CallByVar、RETURN等,下表针对三种指令进行说明分析。</p>
+</section>
+<section id="id10">
+<h3>表 调用程序指令表<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>指令</p></th>
+<th class="head text-left"><p>ProcCall</p></th>
+<th class="head text-left"><p>CallByVar</p></th>
+<th class="head text-left"><p>RETURN</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>说明</p></td>
+<td class="text-left"><p>调用例行程序</p></td>
+<td class="text-left"><p>通过带变量的例行程序名称调用返回原例行程序</p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>解析</p></td>
+<td class="text-left"><p>可将例行程序中参数进行赋值例行程序</p></td>
+<td class="text-left"><p>CallByVar Name,Number; Name: 例行程序名称第一部分 (String) Number: 例行程序名称第二部分 (num) 应用:通过指令中相应数据,机器人调用想用例行程序,但无法调用带参例行程序。</p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p></p></td>
+<td class="text-left"><p>ProcCall Procedure {Argument} ; <br> Procedure:程序名 <br> {Argument}:程序参数 <br> 机器人调用相应例行程序,同时给带有参数的例行程序中相应参数赋值。</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>例:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CallByVar “proc”,numal;
+</pre></div>
+</div>
+<p>需要指出的是:使用ProcCall调用程序不会在代码中显示“ProcCall”,而只会显示调用程序的名称。如“ProcCall proc3&quot;</p>
+</section>
+<hr class="docutils" />
+<section id="id11">
+<h3>数据运算相关指令及函数<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>数据运算是程序中不可或缺的,一些常用的运算功能在机器人控制系统中已经封装为对应指令,可以直接在编程时使用,如求余数、求正弦、判断数据类型、数据转换等运算指令,下表为常用数据运算指令。</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>名称</p></th>
+<th class="head text-left"><p>指令/函数</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>赋值指令</p></td>
+<td class="text-left"><p>:=</p></td>
+<td class="text-left"><p>对程序数据进行赋值</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>等待指令</p></td>
+<td class="text-left"><p>WaitTime</p></td>
+<td class="text-left"><p>等待一个指定的时间,程序再往下执行</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p></p></td>
+<td class="text-left"><p>WaitUntil</p></td>
+<td class="text-left"><p>等待一个条件满足后,程序继续往下执行</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p></p></td>
+<td class="text-left"><p>WaitDI</p></td>
+<td class="text-left"><p>等待一个输入信号状态为设定值</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p></p></td>
+<td class="text-left"><p>WaitDO</p></td>
+<td class="text-left"><p>等待一个输出信号状态为设定值</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>程序注释</p></td>
+<td class="text-left"><p>comment</p></td>
+<td class="text-left"><p>对程序进行注释编程表示为“!”,程序编辑器中的编辑栏“备注行”</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>变量函数功能</p></td>
+<td class="text-left"><p>TryInt</p></td>
+<td class="text-left"><p>判断数据是否是有效的整数</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p></p></td>
+<td class="text-left"><p>Dim</p></td>
+<td class="text-left"><p>获取一个数组的维数</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p></p></td>
+<td class="text-left"><p>Present</p></td>
+<td class="text-left"><p>读取(测试)带参数例行程序的可选参数值</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p></p></td>
+<td class="text-left"><p>IsPers</p></td>
+<td class="text-left"><p>判断一个参数是不是可变量</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p></p></td>
+<td class="text-left"><p>IsVar</p></td>
+<td class="text-left"><p>判断一个参数是不是变量</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>数据转换功能</p></td>
+<td class="text-left"><p>StrToByte</p></td>
+<td class="text-left"><p>将字符串转换为指定格式的字节数据</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p></p></td>
+<td class="text-left"><p>NumToStr</p></td>
+<td class="text-left"><p>将数字数据转换为字符串</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p></p></td>
+<td class="text-left"><p>ByteToStr</p></td>
+<td class="text-left"><p>将字节数据转换成字符串</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id12">
+<h3>常用的逻辑指令<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>IF条件逻辑判断指令用于对条件进行判断后,执行相应的操作,是RAPID中重要的组成部分。</p>
+<p>IF条件判断指令,就是根据不同的条件去执行不同的指令。条件判定的条件数量可以根据实际情况进行增加与减少。也就是相应的增加或减少“ELSEIF… THEN;”的数量。</p>
+<p>指令解析:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>IF di1 = 1 THEN
+Bool1:=FALSE;
+ELSEIF di2 = 1 THEN
+Bool2:=TRUE;
+ELSE
+Reset do0;
+ENDIF
+</pre></div>
+</div>
+<p>如果只有一个条件的来判断,可以简略只用IF指令,代码如下:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>IF dil = 1 Reset do0;
+</pre></div>
+</div>
+<p><strong>案例: 分析下面例行程序</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>VAR num b;
+PROC Path_10()
+a:=10;
+b:=5;
+al:
+b:=b+1;
+IF b=10 stop;
+Goto al;
+ENDPROC
+</pre></div>
+</div>
+</section>
+<section id="for">
+<h3>FOR重复执行判断指令<a class="headerlink" href="#for" title="Link to this heading">¶</a></h3>
+<p>FOR重复执行判断指令,是用于一个或多个指令需要重复执行次数的情况,示例代码如下:</p>
+<p><strong>例1:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>FOR i FROM 1 TO 100 DO
+PROCA1;
+ENDFOR
+</pre></div>
+</div>
+<p><strong>例2:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>VAR num a
+VAR num b
+FOR i FROM 1 TO 100 DO
+a:=a+b;
+ENDFOR
+</pre></div>
+</div>
+</section>
+<section id="while">
+<h3>WHILE条件判断指令<a class="headerlink" href="#while" title="Link to this heading">¶</a></h3>
+<p>WHILE条件判断指令,用于在给定条件满足的情况下,一直重复执行对应的指令。</p>
+<p><strong>例3:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>WHILE REG1 = REG2 DO
+REG1:= REG1+3;
+ENDWHILE
+</pre></div>
+</div>
+</section>
+<section id="id13">
+<h3>逻辑指令<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PROC Routine2()
+TPReadNum W1, &quot;height&quot;;
+TPReadFK W3, &quot;gender&quot;, &quot;men&quot;, &quot;women&quot;, stEmpty, stEmpty, stEmpty;
+IF W3 = 1THEN
+GOTO bl;
+ELSEIF W3 =2 THEN
+goto b2;
+ELSE
+TPWrite &quot;erro&quot;;
+Stop;
+ENDIF
+b1:
+IF W1 &gt;160 THEN
+string1:=&quot;high&quot;;
+ELSE
+string1:=&quot;low&quot;;
+GOTO b3;
+ENDIF
+b2:
+IF W1 &gt;148 THEN
+string1:=&quot;high&quot;;
+ELSE
+string1:= &quot;low&quot;;
+GOTO b3;
+ENDIF
+b3:
+TPWrite &quot;you are &quot; + string1;
+ENDPROC
+</pre></div>
+</div>
+</section>
+<section id="whilefor-123-10">
+<h3>通过使用WHILE或FOR循环,计算1<em>2</em>3*…10的结果,代码如下:<a class="headerlink" href="#whilefor-123-10" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PROC yunsuan()
+s1:=1;
+FOR i FROM 1 TO 10 do
+s1:=s1*i;
+ENDFOR
+TPWrite&quot;result is &quot;\Num:=s1;
+s2:=1;
+H1:=1;
+WHILE H1&lt;=10 DO
+s2:=H1*s2;
+H1:=H1+1;
+ENDWHILE
+TPWrite&quot;result is &quot;\Num:=s2;
+ENDPROC
+</pre></div>
+</div>
+</section>
+<section id="id14">
+<h3>逻辑指令<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<p>通过下面的一段程序代码体会判断逻辑指令在运算程序中的应用。在此程序中含有四种运算功能:“Abs” “Sqrt&quot; &quot;Pow”“Sin”,它们是系统内置的系统内置功能函数FUNCTION.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PROC abs1()
+TPReadNum W1, &quot;the first number&quot;;
+TPReadFK W3, &quot;choose &quot;, &quot;sqrt&quot;, &quot;2&quot;, &quot;SIN&quot;, stEmpty, stEmpty;
+W1 := Abs(W1);
+IF W3 = 1 THEN
+W4 := Sqrt(W1);
+ELSEIF W3 = 2 THEN
+W4 := Pow(W1,2);
+ELSE
+W4 := Sin(W1);
+ENDIF
+TPWrite &quot;the result is &quot;\Num:=W4;
+ENDPROC
+</pre></div>
+</div>
+</section>
+<section id="id15">
+<h3>逻辑指令<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<p>RAPID编程中的系统内置功能函数FUNCTION是非常常用的编程技巧,ABB机器人RAPID编程中的功能(FUNCTION)就是系统内置的有返回值程序,在执行完了以后可以返回一个数值。使用功能可以有效地提高编程和程序执行的效率。</p>
+<p>功能(函数)有两种来源,一种是系统内部的可调用的,另一种就是建立功能程序。下面是带有功能(函数)程序进行学习。</p>
+<p>功能“Offs”的作用是位置目标点phome基于p0 X方向偏移100mm,Y方向偏移0mm,Z方向偏移200mm,这段程序的意义也可以是的实现了,机器人tcp运动到距离p0点X方向100mm,Z方向200mm的位置。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PROC main()
+a:=1;
+c:=1;
+MoveJ p0,v100,z100,MyNewTool1\WObj:=Wobj1;
+PHOME:=offs(p0,100,0,200);
+MoveJ phome,v100,z100,MyNewTool1\WObj:=Wobj1;
+ENDPROC
+</pre></div>
+</div>
+</section>
+<section id="id16">
+<h3>逻辑判断语句<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+</section>
+<section id="id17">
+<h3>表 常用程序逻辑判断指令表<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>指令</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>IF</p></td>
+<td class="text-left"><p>条件判断,若满足相应条件择运行相应语句</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>FOR</p></td>
+<td class="text-left"><p>制定重复次数型重复</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>WHILE</p></td>
+<td class="text-left"><p>条件判断重复</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>TEST</p></td>
+<td class="text-left"><p>对一个变量进行判断,从而执行不同的程序 Test data 和Test value是不同的,前者是判断数据变量后者是值</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>GOTO</p></td>
+<td class="text-left"><p>跳转到例行程序内标签的位置与Label同时使用</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Label</p></td>
+<td class="text-left"><p>标签</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id18">
+<h3>指令<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>指令</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Stop</p></td>
+<td class="text-left"><p>停止程序执行 指令就绪之前,将完成当前执行的所有移动,停止在当前运行程序行,运行完指令停止,按下示教器“Start”键继续运行</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>EXIT</p></td>
+<td class="text-left"><p>终止程序执行 在执行指令EXIT后,程序指针消失。继续开始程序需要将指针调到首行</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Break</p></td>
+<td class="text-left"><p>临时停止程序的执行,用于手动调试</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>SystemStopA</p></td>
+<td class="text-left"><p>停止程序执行与机器人运动</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>ction</p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>ExitCycle</p></td>
+<td class="text-left"><p>中止当前程序的运行并将程序指针PP复位到主程序的第一条指令。如果选择了程序连续运行模式,程序将从主程序的第一句重新执行</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id19">
+<h3>程序停止<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<p>BREAK和stop指令的不同在于,在运行一段圆弧指令之初,候执行break 停止指令,机器人工具tcp马上停止在圆弧开始起点位置;而运行stop指令,机器人会保持运行到圆弧运动第一个点位。如图所示。</p>
+</section>
+<hr class="docutils" />
+<section id="id20">
+<h3>基础运动控制指令<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<p>机器人在空间中运动主要有关节运动MoveJ、线性运动MoveL、圆弧运动MoveC和绝对位置运动MoveAbsJ四种方式。编辑运动语句前一定要在“手动操纵”界面,在添加或修改机器人的运动指令之前,要选用好相应工具坐标与工件坐标;</p>
+<p><strong>(1)关节运动指令</strong></p>
+<p>关节运动指令是对路径精度要求不高的情况下,机器人的工具中心点TCP从一个位置移动到另一个位置,两个位置之间的路径不一定是直线,下面一段运动指令代码,其中代码解析见下表,运动路径及姿态下图所示。</p>
+</section>
+<section id="id21">
+<h3>指令解析:<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>]]
+MoveJ p1, v1000, z50, tool1\Wobj:=wobj1;
+MoveJ p2, v1000, z50, tool1\Wobj:=wobj1;
+]]
+</pre></div>
+</div>
+</section>
+<section id="id22">
+<h3>运动语句分析表<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>参数</p></th>
+<th class="head text-left"><p>含义</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>P1</p></td>
+<td class="text-left"><p>目标点位置数据</p></td>
+<td class="text-left"><p>TCP点的运动目标空间位置</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>P2</p></td>
+<td class="text-left"><p>目标点位置数据</p></td>
+<td class="text-left"><p>TCP点的运动目标空间位置</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>v1000</p></td>
+<td class="text-left"><p>运动速度数据1000</p></td>
+<td class="text-left"><p>单位mm/s</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>z50</p></td>
+<td class="text-left"><p>转弯区数据</p></td>
+<td class="text-left"><p>转弯半径,单位mm</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>tool1</p></td>
+<td class="text-left"><p>工具坐标数据</p></td>
+<td class="text-left"><p>当前指令使用的工具</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>wobj1</p></td>
+<td class="text-left"><p>工件坐标数据</p></td>
+<td class="text-left"><p>当前指令使用的工件坐标</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id23">
+<h3>机器人运动指令<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
+</section>
+<section id="id24">
+<h3>机器人运动控制指令表<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>指令</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>MoveJ</p></td>
+<td class="text-left"><p>关节运动</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>MoveC</p></td>
+<td class="text-left"><p>TCP圆弧运动</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>MoveL</p></td>
+<td class="text-left"><p>TCP线性运动</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>MoveAbsJ</p></td>
+<td class="text-left"><p>轴绝对角度位置运动</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>MoveCDO</p></td>
+<td class="text-left"><p>TCP圆弧运动的同时触发一个输出信号</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>MoveJDO</p></td>
+<td class="text-left"><p>关节运动的同时触发一个输出信号</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>MoveLDO</p></td>
+<td class="text-left"><p>TCP线性运动的同时触发一个输出信号</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>MoveCSync</p></td>
+<td class="text-left"><p>TCP圆弧运动的同时执行一个例行程序</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>MoveJSync</p></td>
+<td class="text-left"><p>关节运动的同时执行一个例行程序</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>MoveLSync</p></td>
+<td class="text-left"><p>TCP线性运动的同时执行一个例行程序</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="movejmovecmovel">
+<h3>1.运动指令MoveJ、MoveC和MoveL<a class="headerlink" href="#movejmovecmovel" title="Link to this heading">¶</a></h3>
+<p>指令MoveJ、MoveC、MoveL的变元相似,下表以MoveJ为例来解析相关元素,指令MoveC、MoveL的用法参考MoveJ。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>MoveJ [\Conc] ToPoint Speed [\V] | [\T] Zone [\Z] [\Inpos]Tool [\WObj]
+MoveC [\Conc] ToPoint Speed [\V] | [\T] Zone [\Z] [\Inpos]Tool [\WObj]=
+MoveL [\Conc] ToPoint Speed [\V] | [\T] Zone [\Z] [\Inpos]Tool [\WObj]=
+</pre></div>
+</div>
+</section>
+<section id="id25">
+<h3>指令解析<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
+</section>
+<section id="id26">
+<h3>机器人运动指令<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
+</section>
+<section id="id27">
+<h3>指令解析<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>元素</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>【\Conc】</p></td>
+<td class="text-left"><p>Concurrent数据类型:switch <br> 系统中的协调同步移动,协作运动开关。</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>ToPoint</p></td>
+<td class="text-left"><p>数据类型:robtarget <br> 机器人和外部轴的目标点。定义为已命名的位置或直接存储在指令中(在指令中加*标记)。</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>【\v】</p></td>
+<td class="text-left"><p>Velocity数据类型:num <br> 以mm/s计,特殊运动速度,取代速度数据中指定的相关速率。</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>【\T】</p></td>
+<td class="text-left"><p>Time数据类型:num <br> 该参数用于规定机械臂运动的总时间,以秒计。随后,取代相关的速度数据。</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Zone</p></td>
+<td class="text-left"><p>数据类型:zonedata <br> 相关移动的区域数据。区域数据描述了所生成拐角路径的大小。 <br> Zone数据类型:num</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>【\z】</p></td>
+<td class="text-left"><p>该参数用于规定指令中机械臂TCP的位置精度。角路径的长度以mm计,其替代区域数据中指定的相关区域。</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>【\Inpos】</p></td>
+<td class="text-left"><p>In position数据类型: stoppointdata <br> 该参数用于规定停止点中机械臂TCP位置的收敛准则。停止点数据取代Zone参数中的指定区域。</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Tool</p></td>
+<td class="text-left"><p>数据类型:tooldata <br> 移动机械臂时正在使用的工具。工具中心点是指移动至指定目的点的点。</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>【\WObj】</p></td>
+<td class="text-left"><p>Work Object数据类型: wobjdata <br> 指令中机器人位置关联的工件(坐标系)。可省略该参数,位置与世界坐标系相关。另一方面,如果使用固定式TCP或协调的外轴,则必须指定该参数。</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id28">
+<h3>机器人运动指令<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
+<p>下面是一个例子:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>MoveJ \Conc, P1, v2000, z40, grip3;
+</pre></div>
+</div>
+<p>【\Conc】是grip3工具的TCP沿非线性路径运动至(通过、接近)指令中储存的位置时,机械臂运动继续执行MoveJ运动至P1点,同时执行后续逻辑指令。</p>
+</section>
+<section id="movejdo">
+<h3>关节运动指令 MoveJDO<a class="headerlink" href="#movejdo" title="Link to this heading">¶</a></h3>
+<p>MoveJDO一种通过移动机械臂设置拐角处的数字信号输出指令的关节运动指令,指令格式为</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>MoveJDO ToPoint Speed [\T] Zone Tool [\WObj] Signal Value
+</pre></div>
+</div>
+<p>其中我们重点对比指令MoveJ,其中的不同的变元是Signal和Value,其余变元的含义可参考MoveJ。</p>
+<p>Signal的数据类型为signaldo,是待改变的数字信号输出信号。</p>
+<p>Value的数据类型为dionum,是信号的值(0或1)。</p>
+</section>
+<section id="id29">
+<h3>关节运动指令 MoveJDO<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h3>
+<p>举例来说:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>MoveJDO p2, v1000, z30, tool2, do1, 1;
+</pre></div>
+</div>
+<p>这条指令用来描述下图的运动。如图所示,机器人工具的TCP点tool2 沿非线性路径由位置p1移动至位置p2到p3,其速度数据为v1000,且区域数据为z30。运动时在最接近P2位置时,将输出信号do1置位为1。图中体现出来运动路径和出发信号的相对关系。由于图中区域数据Zone的数据为Z30,如图当运动路径在距离P2点最近位置时信号 do1输出1。</p>
+<p>指令MoveLDO、MoveCDO、MoveJAO、MoveJGO与MoveJDO用法类似。</p>
+</section>
+<section id="movejsync">
+<h3>MoveJSync<a class="headerlink" href="#movejsync" title="Link to this heading">¶</a></h3>
+<p>MoveJSync通过接头移动来移动机械臂,执行RAPID无返回值程序。变元为:MoveJSync ToPoint [\ID] Speed [\T] Zone Tool [\WObj] ProcName.</p>
+<p>ProcName 数据类型为string。是在机器人运动角路径中间位置执行的RAPID无返回值程序的名称。调试时候,单步运行执行调用例行程序会会出现在错误, stop当前指令会出错,可采用StopInstr指令代替stop指令。</p>
+</section>
+<section id="id30">
+<h3>MoveJSync<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
+<p><strong>例1:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>MoveJSync Pal, v500, z80, tool1, &quot;pr1&quot;;
+</pre></div>
+</div>
+<p>工具中心点tool1沿非线性路径移动至位置Pa1,其速度数据为v500,且区域数据为z80。在Pa1处角路径中部执行无返回值程序pr1。</p>
+<p><strong>例2:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>MoveJSync Pal, v500, z80, tool1,&quot;Module2: pr2&quot;;
+</pre></div>
+</div>
+<p>将在角路径中部调用模块Module2中局部声明的无返回值程序pr2。</p>
+</section>
+<section id="moveabsj">
+<h3>MoveAbsJ<a class="headerlink" href="#moveabsj" title="Link to this heading">¶</a></h3>
+<p>MoveAbsJ是指移动机械臂至绝对位置,常用于将机器人六个轴调回到机械零点(0度),指令变元与MoveJ的区别是:</p>
+<ol class="arabic simple">
+<li><p>参数TojointPos与MoveJ指令的参数ToPoint相同</p></li>
+<li><p>参数[\NoEoffs],为外轴偏差开关,数据类型为是 switch,如果参数【\NoEOffs】得以设置,则关于MoveAbsJ的运动将不受外轴有效偏移量的影响。</p></li>
+</ol>
+<p><strong>例1:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>MoveAbsJ p0, v100, z30, tooll;
+</pre></div>
+</div>
+<p>通过速度数据v100和区域数据z30,机械臂以及工具tool1 得以沿非线性路径运动(单轴运动)到绝对轴位置p0。</p>
+<p><strong>例2:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>MoveAbsJ P1\NoEOffs, v1000, z50, tool1\Wobj:=wobj1;
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id31">
+<h3>探索及配置监测指令<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h3>
+<p>在工业机器人运动过程中,运动探索及搜索功能是将运动指令和传感器及相关信号参数进行有机结合,提供里一种更为优秀的编程思路,极大的优化程序,相关指令见下表。</p>
+</section>
+<section id="id32">
+<h3>探索指令表<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>指令</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>SearchC</p></td>
+<td class="text-left"><p>TCP圆弧搜索运动</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>SearchL</p></td>
+<td class="text-left"><p>TCP线性搜索运动</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>SearchExtJ</p></td>
+<td class="text-left"><p>外轴搜索运动</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id33">
+<h3>探索及配置监测指令<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h3>
+<p><strong>例:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SearchL\Stop, di103, Ts10, p20, v20, XP02;
+</pre></div>
+</div>
+<p>以上代码的意义是:机械臂用工具XP02沿直线以20mm/s的速度向着点p20的方向进行直线运动,直到输入信号di103变为1(有效)时候停止,并将位置存储到变量点Ts10中。</p>
+<p>指令ConfL:指定机器人在线性运动及圆弧运动过程中是否严格遵循程序中已设定的轴配置参数。在默认情况下,轴配置监控是打开的,当关闭轴配置监控后,机器人在运动过程中采取最接近当前轴配置数据的配置到达指定目标点。</p>
+</section>
+<section id="p10-1-0-1-0">
+<h3>例如: 目标点p10中,数据[1,0,1,0]就是此目标点的轴配置数据:<a class="headerlink" href="#p10-1-0-1-0" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CONST robtarget p10 := [[*,*,*],[*,*,*,*],[1,0,1,0],[9E9, 9E9, 9E9, 9E9, 9E9,
+9E9]];
+ConfL \Off;
+MoveL p10, v1000, fine, tool0;
+</pre></div>
+</div>
+<p>机器人自动匹配一组最接近当前各关节轴姿态的轴配置数据移动至目标点p10,到达p10时,轴配置数据不一定为程序中指定的[1,0,1,0]。</p>
+<p>此外,ConfJ用法与ConfL相同,区别为前者是关节运动过程中的轴监控开关,影响对应的MoveJ指令;而后者为线性运动过程中的轴监控开关,影响的是MoveL指令。</p>
+</section>
+<hr class="docutils" />
+<section id="id34">
+<h3>运动加速度控制指令<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h3>
+</section>
+<section id="id35">
+<h3>速度控制指令表<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>指令</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>AccSet</p></td>
+<td class="text-left"><p>定义机器人的加速度</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>VelSet</p></td>
+<td class="text-left"><p>设定最大的速度与倍率</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>SpeedRefresh</p></td>
+<td class="text-left"><p>更新当前运动的速度倍率</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="accset">
+<h3>指令解析AccSet:<a class="headerlink" href="#accset" title="Link to this heading">¶</a></h3>
+<p>AccSet Acc Ramp [\FinePointRamp]</p>
+<p>变元:Acc的数据类型为num,定义加速度和减速度的百分比。100%相当于最大加速度。最大值:100%。输入值&lt;20%,得出最大加速度的20%。</p>
+<p>变元:Ramp的数据类型为num,定义加速度与减速度比率的百分比。通过降低该值,可限制顿挫。100%相当于最大加速率。最大值:100%。输入值&lt;10%,得出最大加速率的10%。</p>
+<p>若没有进行AccSet限速则执行默认值AccSet100,100</p>
+<p>例子:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>AccSet100,100; AccSet30,100; AccSet100,30.
+</pre></div>
+</div>
+</section>
+<section id="id36">
+<h3>运动速度控制指令<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h3>
+<p>VelSet:用于限定机器人TCP的运动速度,指令MoveL、MoveJ等均可设置机器人TCP的运动速度,但机器人TCP的实际速度还会受到VelSet指令的影响。VelSet指令影响后续指令的运动速度,直至新的VelSet指令被执行。</p>
+<p>格式:VelSet Override Max</p>
+<p>说明:Override的数据类型为num,所需速率占编程速率的百分比。100%相当于编程速率。</p>
+<p>Max的数据类型为num,最大TCP速率,以mm/s计。</p>
+<p>通过以下实例代码分析VelSet指令的用法及速度数据算法。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>VelSet 50, 800;
+MoveL pa, v1000, z10, tool1;
+MoveL pb, v2000, z10, tool1;
+MoveL pc, v1000\T:=5, z10, tooll;
+</pre></div>
+</div>
+<p>点pa的速度为500mm/s,点pb的速度为800mm/s。从pb移动至pc需耗时5秒,当在定位指令中规定了时间时,将不考虑最大速度。</p>
+</section>
+<section id="speedrefresh">
+<h3>SpeedRefresh: 函数应用实例代码如下:<a class="headerlink" href="#speedrefresh" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>VAR num change_speed:=70;
+SpeedRefresh changespeed;
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id37">
+<h2>2. Rapid编程实例<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h2>
+<section id="id38">
+<h3>线性运动实例<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h3>
+<p>线性运动是机器人的TCP从起点到终点之间的路径始终保持为直线。一般如焊接、涂胶等应用对路径要求高的场合使用此指令,如图所示。</p>
+</section>
+<section id="id39">
+<h3>圆弧运动指令<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h3>
+<p>圆弧路径是在机器人可到达的控件范围内定义三个位置点,第一个点是圆弧的起点,第二个点用于圆弧的曲率,第三个点是圆弧的终点,准确绘制一段圆弧需要两条运动指令,因为首先需要保证机器人到达圆弧起始位置,代码如下,首先通过关节运动到达P1位置,然后通过圆弧运动通过P2点最后到达圆弧终点位置P3。</p>
+</section>
+<section id="id40">
+<h3>指令解析:<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>]]
+MoveJ p1, v1000, fine, tool1\Wobj:=wobj1;
+MoveC p2, p3, v1000, z1, tool1\Wobj:=wobj1;
+]]
+</pre></div>
+</div>
+</section>
+<section id="id41">
+<h3>运动指令的使用示例<a class="headerlink" href="#id41" title="Link to this heading">¶</a></h3>
+<p>代码如下,运动轨迹示意如图所示,通过使用的工具数据是tool1,工件坐标数据是wobj1。</p>
+<p>指令:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>]]
+MoveJ Pal, v100, fine, tool1\Wobj:=wobj1;
+MoveL Pa2, v100, fine, tooll\Wobj:=wobj1;
+MoveC Pa3, Pa4 v100, z10, tool1\Wobj:=wobj1;
+MoveL Pa5, v120, fine, tool1\Wobj:=wobj1;
+MoveC Pa6, Pa7 v80, z1, tool1\Wobj:=wobj1;
+MoveL Pa8, v300, z100, tool1\Wobj:=wobj1;
+MoveL Pa9, v150, z1, tool1\Wobj:=wobj1;
+MoveJ Pal, v80, fine, tool1\Wobj:=wobj1;
+]]
+</pre></div>
+</div>
+</section>
+<section id="id42">
+<h3>运动程序示例<a class="headerlink" href="#id42" title="Link to this heading">¶</a></h3>
+<p>编制一个程序的基本流程是:</p>
+<ol class="arabic simple">
+<li><p>建立相应模块,比如运算模块,程序数据定义模块,逻辑控制模块,信号处理模块等;</p></li>
+<li><p>在模块下建立相应的例行程序,如针对实际控制功能进行归类,如抓手末端执行器的控制,以及整个动作工作流程分割成若干的部分,每一部分的运动语句放到一个例行程序里面。</p></li>
+</ol>
+</section>
+<section id="id43">
+<h3>建立运动程序<a class="headerlink" href="#id43" title="Link to this heading">¶</a></h3>
+</section>
+<section id="id44">
+<h3>建立RAPID程序实例<a class="headerlink" href="#id44" title="Link to this heading">¶</a></h3>
+<p>首先要建立好工具和用户坐标系,匹配好I/O通讯板卡和di1、di2、di3。其次要建立一个新的模块“Module1”, 建立主程序“main”,并建立相应的例行程序:rHome(回原点程序)、rInitAll(初始化程序)、PR1、PR2、PR3等(运动路径程序),具体操作步骤如下:</p>
+<p>在常规的行程序中,加入在程序正式运行前,需要作初始化的内容,如速度限定、夹具复位等。具体根据需要添加。在此例行程序rInitAll中只增加了两条速度控制的指令和调用了回原点位的例行程序rHome,若程序有中断的必要,中断声明一般添加在初始化程序中,下面代码中断相关语句已经被屏蔽,可忽略。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PROC rInitAll()
+AccSet 100, 100;
+VelSet 100, 5000;
+rHome;
+! IDelete intno1;
+! CONNECT intno1 WITH ZHONGDUAN;
+! ISignalDI\Single, di4, 1, intno1;
+ENDPROC
+</pre></div>
+</div>
+</section>
+<section id="id45">
+<h3>建立运动例行程序<a class="headerlink" href="#id45" title="Link to this heading">¶</a></h3>
+<p>分别是三个部分的轨迹运行程序和回原点程序,分别为:PR1、PR2、PR3和rHome,其中PR1、PR2、PR3分别对应的是A/B/C三个区域的运动。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PROC main()
+rInitAll;
+WHILE TRUE DO
+IF dil = 1 THEN
+PR1;
+ELSEIF di2 = 1 THEN
+PR2;
+ELSEIF di3 = 1 THEN
+PR3;
+ENDIF
+WaitTime 0.3;
+ENDWHILE
+ENDPROC
+</pre></div>
+</div>
+</section>
+<section id="id46">
+<h3>程序调试<a class="headerlink" href="#id46" title="Link to this heading">¶</a></h3>
+<p>工业机器人程序编辑完成后需要对编辑好的程序进行调试和验证,具体调试方式如下:</p>
+<p>(1)编程结束后,需要打开示教器“调试”菜单,单击“检查程序”,对程序的语法进行检查,单击“确定”完成。如果有错,系统会提示出错的具体位置与建议操作。</p>
+<p>(2)调试非主程序的例行程序时,必须进行低速或者超低速单步调试,打开“调试”菜单,选择“PP移至例行程序”选择想要调试的例行程序,左手按下使能键,进入“电动机开启”状态。按以下“单步向前”按键,并小心观察机器人的移动。一定要记住在按下“程序停止”键后,才可以松开使能键。</p>
+</section>
+<section id="id47">
+<h3>程序调试<a class="headerlink" href="#id47" title="Link to this heading">¶</a></h3>
+<p>(3)观察程序指针位置和实际的机器人动作及位置,下面图是左边紫色箭头是:程序指针(紫色小箭头)的简称。程序指针永远指向将要执行的指令。左侧的深色机器人的简化下图标表示当前机器人已经到达了该语句的运动位置。</p>
+</section>
+<section id="id48">
+<h3>程序调试<a class="headerlink" href="#id48" title="Link to this heading">¶</a></h3>
+<p>(4)在程序调试过程中,如只想试运行某一个语句或者在段语句开始执行程序,先在示教器中选择那一句语句,使用“PP移至光标”,如前图所示,可以将程序指针移至想要执行的指令,进行执行,方便程序的调试。此功能只能将PP在同一个例行程序中跳转。如要将PP移至其他例行程序,可先使用“PP移至例行程序”功能。</p>
+<p>(5)通过上述方法已经将例行程序进行一一的调试无误后可对main主程序进行调试,在调试菜单下选择“PP移至Main”, PP便会自动指向主程序的第一句指令。首先将机器人速度调节到尽可能的低速位置。左手激活使能键,进入“电动机开启”状态,按一下“程序启动”按键,并小心观察机器人的移动,进行调试。</p>
+</section>
+<section id="id49">
+<h3>自动运行调试<a class="headerlink" href="#id49" title="Link to this heading">¶</a></h3>
+<p>在手动状态下,完成了调试确认运动与逻辑控制正确之后,就可以将机器人系统投入自动运行状态,以下就RAPID程序自动运行的操作:</p>
+<p>(1)将控制柜模式选择钥匙左旋至自动状态,示教器上单击“确定”,确认状态的切换,然后单击“PP移至Mian”,将PP指向主程序的第一句语句,按下系统控制柜白色电机上电按钮。</p>
+<p>(2)将速度调节至合适状态,建议第一次试运行,速度调试在5%左右,</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id50">
+<h2>3. Rapid编程操作技巧<a class="headerlink" href="#id50" title="Link to this heading">¶</a></h2>
+<p>通常而言,同一种工艺或者行业的机器人工作站程序的编写、运行、逻辑及运算方式等较为接近,因此,使用时,只要将相似工业机器人的程序模块导入到新的工作站,即可大大提高编程效率。</p>
+<section id="id51">
+<h3>导入与保存程序模块<a class="headerlink" href="#id51" title="Link to this heading">¶</a></h3>
+</section>
+<section id="eio">
+<h3>导入EIO文件<a class="headerlink" href="#eio" title="Link to this heading">¶</a></h3>
+<p>EIO文件是工业机器IO分配源文件。</p>
+<p>导入EIO文件后就不需要再分配相关I/O,能够快速进行按照EIO文件里的分配方式I/O分配,不再需要再人工分配I/O。导入EIO文件前需要确认EIO文件对应的工业机器人及相关通讯方式及通讯板卡相同或者相近。</p>
+</section>
+<section id="id52">
+<h3>调用带参数的例行程序<a class="headerlink" href="#id52" title="Link to this heading">¶</a></h3>
+<p>参数在例行程序的局部变量表中定义。参数必须有一个符号名、一个变量类型和一个数据类型。例行程序之间可以交换最多16个参数。</p>
+<p>例: 子程序(带参数的例行程序)</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>MODULE MainModule
+VAR num nuf:=0;
+PROC Pr1(num nuf)
+FOR i FROM 1 TO nuf DO
+nuf := nuf * 2;
+ENDFOR
+reg4 := nuf;
+TPWrite NumToStr(reg4,1);
+ENDPROC
+PROC main()
+Pr1 (7);
+ENDPROC
+ENDMODULE
+</pre></div>
+</div>
+</section>
+<section id="id53">
+<h3>调用带参数的例行程序<a class="headerlink" href="#id53" title="Link to this heading">¶</a></h3>
+<p>运行主程序,计算为2的7次方再乘以7,最后示教器显示如图所示。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id54">
+<h2>作业讲解<a class="headerlink" href="#id54" title="Link to this heading">¶</a></h2>
+<section id="id55">
+<h3>运料车自动装、卸料控制<a class="headerlink" href="#id55" title="Link to this heading">¶</a></h3>
+<p>控制要求:①某运料车如图所示,可在A、B两地分别启动。运料车启动后,自动返回A地停止,同时控制料斗门的电磁阀Y1打开,开始下料。1分钟后,电磁阀Y1断开,关闭料斗门,运料车自动向B地运行。到达B地后停止,小车底门由电磁阀Y2控制打开,开始卸料。1分钟后,运料车底门关闭,开始返回A地。之后重复运行。
+②运料车在运行过程中,可用手动开关使其停车。再次启动后,可重复①中内容。</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="07.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">第七章 工业机器人高级编程</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="05.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">第五章 机器人操作基础</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">第六章 工业机器人数据与编程基础</a><ul>
+<li><a class="reference internal" href="#id2">本章学习要点</a><ul>
+<li><a class="reference internal" href="#id3">本章学习提要:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">内容简介</a></li>
+<li><a class="reference internal" href="#rapid">1. RAPID语言中的指令</a><ul>
+<li><a class="reference internal" href="#id5">指令</a></li>
+<li><a class="reference internal" href="#id6">基本指令 – 赋值指令</a></li>
+<li><a class="reference internal" href="#id7">表达式赋值</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8">信号控制指令</a><ul>
+<li><a class="reference internal" href="#i-o">表 常用I/O控制指令表</a></li>
+<li><a class="reference internal" href="#waituntil">WaitUntil 信号判断指令</a></li>
+<li><a class="reference internal" href="#id9">程序调用指令</a></li>
+<li><a class="reference internal" href="#id10">表 调用程序指令表</a></li>
+<li><a class="reference internal" href="#id11">数据运算相关指令及函数</a></li>
+<li><a class="reference internal" href="#id12">常用的逻辑指令</a></li>
+<li><a class="reference internal" href="#for">FOR重复执行判断指令</a></li>
+<li><a class="reference internal" href="#while">WHILE条件判断指令</a></li>
+<li><a class="reference internal" href="#id13">逻辑指令</a></li>
+<li><a class="reference internal" href="#whilefor-123-10">通过使用WHILE或FOR循环,计算1<em>2</em>3*…10的结果,代码如下:</a></li>
+<li><a class="reference internal" href="#id14">逻辑指令</a></li>
+<li><a class="reference internal" href="#id15">逻辑指令</a></li>
+<li><a class="reference internal" href="#id16">逻辑判断语句</a></li>
+<li><a class="reference internal" href="#id17">表 常用程序逻辑判断指令表</a></li>
+<li><a class="reference internal" href="#id18">指令</a></li>
+<li><a class="reference internal" href="#id19">程序停止</a></li>
+<li><a class="reference internal" href="#id20">基础运动控制指令</a></li>
+<li><a class="reference internal" href="#id21">指令解析:</a></li>
+<li><a class="reference internal" href="#id22">运动语句分析表</a></li>
+<li><a class="reference internal" href="#id23">机器人运动指令</a></li>
+<li><a class="reference internal" href="#id24">机器人运动控制指令表</a></li>
+<li><a class="reference internal" href="#movejmovecmovel">1.运动指令MoveJ、MoveC和MoveL</a></li>
+<li><a class="reference internal" href="#id25">指令解析</a></li>
+<li><a class="reference internal" href="#id26">机器人运动指令</a></li>
+<li><a class="reference internal" href="#id27">指令解析</a></li>
+<li><a class="reference internal" href="#id28">机器人运动指令</a></li>
+<li><a class="reference internal" href="#movejdo">关节运动指令 MoveJDO</a></li>
+<li><a class="reference internal" href="#id29">关节运动指令 MoveJDO</a></li>
+<li><a class="reference internal" href="#movejsync">MoveJSync</a></li>
+<li><a class="reference internal" href="#id30">MoveJSync</a></li>
+<li><a class="reference internal" href="#moveabsj">MoveAbsJ</a></li>
+<li><a class="reference internal" href="#id31">探索及配置监测指令</a></li>
+<li><a class="reference internal" href="#id32">探索指令表</a></li>
+<li><a class="reference internal" href="#id33">探索及配置监测指令</a></li>
+<li><a class="reference internal" href="#p10-1-0-1-0">例如: 目标点p10中,数据[1,0,1,0]就是此目标点的轴配置数据:</a></li>
+<li><a class="reference internal" href="#id34">运动加速度控制指令</a></li>
+<li><a class="reference internal" href="#id35">速度控制指令表</a></li>
+<li><a class="reference internal" href="#accset">指令解析AccSet:</a></li>
+<li><a class="reference internal" href="#id36">运动速度控制指令</a></li>
+<li><a class="reference internal" href="#speedrefresh">SpeedRefresh: 函数应用实例代码如下:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id37">2. Rapid编程实例</a><ul>
+<li><a class="reference internal" href="#id38">线性运动实例</a></li>
+<li><a class="reference internal" href="#id39">圆弧运动指令</a></li>
+<li><a class="reference internal" href="#id40">指令解析:</a></li>
+<li><a class="reference internal" href="#id41">运动指令的使用示例</a></li>
+<li><a class="reference internal" href="#id42">运动程序示例</a></li>
+<li><a class="reference internal" href="#id43">建立运动程序</a></li>
+<li><a class="reference internal" href="#id44">建立RAPID程序实例</a></li>
+<li><a class="reference internal" href="#id45">建立运动例行程序</a></li>
+<li><a class="reference internal" href="#id46">程序调试</a></li>
+<li><a class="reference internal" href="#id47">程序调试</a></li>
+<li><a class="reference internal" href="#id48">程序调试</a></li>
+<li><a class="reference internal" href="#id49">自动运行调试</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id50">3. Rapid编程操作技巧</a><ul>
+<li><a class="reference internal" href="#id51">导入与保存程序模块</a></li>
+<li><a class="reference internal" href="#eio">导入EIO文件</a></li>
+<li><a class="reference internal" href="#id52">调用带参数的例行程序</a></li>
+<li><a class="reference internal" href="#id53">调用带参数的例行程序</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id54">作业讲解</a><ul>
+<li><a class="reference internal" href="#id55">运料车自动装、卸料控制</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

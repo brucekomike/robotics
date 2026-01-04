@@ -1,0 +1,724 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="拉格朗日动力学方程（含约束）" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/55-multibody/59-dynamics.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="图片顶部的第一个公式是包含约束力的拉格朗日方程的一种形式：\frac{d}{dt} \left( \frac{\partial T}{\partial \dot{q}} \right)^T - \left( \frac{\partial T}{\partial q} \right)^T + C_q^T \lambda + C \dot{q} + K q = Q_e 符号解释: T: 系统的总..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="图片顶部的第一个公式是包含约束力的拉格朗日方程的一种形式：\frac{d}{dt} \left( \frac{\partial T}{\partial \dot{q}} \right)^T - \left( \frac{\partial T}{\partial q} \right)^T + C_q^T \lambda + C \dot{q} + K q = Q_e 符号解释: T: 系统的总..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="附录" href="97-appendix.html"><link rel="prev" title="实验二 2dof（五连杆）仿真" href="51-exp/02.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>拉格朗日动力学方程（含约束） - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-interg/index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../80-interg/reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/55-multibody/59-dynamics.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/55-multibody/59-dynamics.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>拉格朗日动力学方程（含约束）<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>图片顶部的第一个公式是包含约束力的拉格朗日方程的一种形式：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\frac{d}{dt} \left( \frac{\partial T}{\partial \dot{q}} \right)^T - \left( \frac{\partial T}{\partial q} \right)^T + C_q^T \lambda + C \dot{q} + K q = Q_e
+\]</div>
+</div>
+<p><strong>符号解释:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\( T \)</span>: 系统的总<strong>动能</strong> (Kinetic Energy)。通常是广义坐标 <span class="math notranslate nohighlight">\( q \)</span> 和广义速度 <span class="math notranslate nohighlight">\( \dot{q} \)</span> 的函数，<span class="math notranslate nohighlight">\( T = T(q, \dot{q}) \)</span>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">T</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( q \)</span>: 系统的<strong>广义坐标</strong> (Generalized Coordinates) 列向量。它包含了描述系统位形所需的最少数量的独立或非独立的坐标。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">q</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( \dot{q} \)</span>: 系统的<strong>广义速度</strong> (Generalized Velocities) 列向量，即 <span class="math notranslate nohighlight">\( \dot{q} = \frac{dq}{dt} \)</span>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">\dot{q}</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( \frac{\partial T}{\partial \dot{q}} \)</span>: 动能 <span class="math notranslate nohighlight">\( T \)</span> 对广义速度 <span class="math notranslate nohighlight">\( \dot{q} \)</span> 的<strong>偏导数</strong>。这是一个与广义动量相关的向量。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">\frac{\partial</span> <span class="pre">T}{\partial</span> <span class="pre">\dot{q}}</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( \frac{\partial T}{\partial q} \)</span>: 动能 <span class="math notranslate nohighlight">\( T \)</span> 对广义坐标 <span class="math notranslate nohighlight">\( q \)</span> 的<strong>偏导数</strong>。当动能不仅依赖于速度，还显式地依赖于坐标时（例如在旋转坐标系或变质量系统中），此项不为零。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">\frac{\partial</span> <span class="pre">T}{\partial</span> <span class="pre">q}</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( \frac{d}{dt} (\cdot) \)</span>: 对时间 <span class="math notranslate nohighlight">\( t \)</span> 的<strong>全导数</strong>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">\frac{d}{dt}</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( (\cdot)^T \)</span>: 向量或矩阵的<strong>转置</strong> (Transpose)。<em>注意：在此图中，转置符号 <span class="math notranslate nohighlight">\( ^T \)</span> 应用于偏导数项的方式可能与某些标准教材略有不同，这可能是由于符号约定或推导过程的差异。通常，拉格朗日方程最终会得到一个列向量形式的方程。一种可能的解释是 <span class="math notranslate nohighlight">\( \frac{\partial T}{\partial \dot{q}} \)</span> 和 <span class="math notranslate nohighlight">\( \frac{\partial T}{\partial q} \)</span> 在这里被视为行向量形式的梯度，然后转置为列向量。</em></p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">^T</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( C(q, t) = 0 \)</span>: 系统的<strong>约束方程</strong> (Constraint Equations)。这是一个向量方程，描述了广义坐标之间必须满足的几何或运动学关系。这些通常是完整约束（Holonomic Constraints）。见图右侧的 <span class="math notranslate nohighlight">\( C(q, t) = 0_{n_c \times 1} \)</span>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">C(q,</span> <span class="pre">t)</span> <span class="pre">=</span> <span class="pre">0</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( C_q \)</span>: 约束方程关于广义坐标 <span class="math notranslate nohighlight">\( q \)</span> 的<strong>雅可比矩阵</strong> (Jacobian Matrix)，即 <span class="math notranslate nohighlight">\( C_q = \frac{\partial C}{\partial q} \)</span>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">C_q</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( \lambda \)</span>: <strong>拉格朗日乘子</strong> (Lagrange Multipliers) 列向量。它与约束相关，<span class="math notranslate nohighlight">\( C_q^T \lambda \)</span> 代表了维持约束所需的广义约束力/力矩。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">\lambda</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( C \)</span>: <strong>阻尼矩阵</strong> (Damping Matrix)。<span class="math notranslate nohighlight">\( C \dot{q} \)</span> 代表系统中的粘性阻尼力或耗散力。假设是线性的。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">C</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( K \)</span>: <strong>刚度矩阵</strong> (Stiffness Matrix)。<span class="math notranslate nohighlight">\( K q \)</span> 代表系统中的弹性恢复力（类似弹簧力），假设是线性的，并且源于某个势能 <span class="math notranslate nohighlight">\( V = \frac{1}{2} q^T K q \)</span>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">K</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( Q_e \)</span>: <strong>广义外力</strong> (Generalized External Forces) 列向量。它包含了所有未被 <span class="math notranslate nohighlight">\( K q \)</span> (保守内力) 和 <span class="math notranslate nohighlight">\( C \dot{q} \)</span> (阻尼力) 以及 <span class="math notranslate nohighlight">\( C_q^T \lambda \)</span> (约束力) 描述的力/力矩，例如驱动力、重力（如果未包含在 <span class="math notranslate nohighlight">\(T\)</span> 或 <span class="math notranslate nohighlight">\(K\)</span> 中）等。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">Q_e</span></code></p></li>
+</ul>
+</li>
+</ul>
+<hr class="docutils" />
+<section id="id2">
+<h2>方程的展开与重组<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>接下来的几组公式是对第一个方程进行展开和重新整理：</p>
+<p><strong>第二组公式:</strong></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\left\{
+\begin{aligned}
+M \ddot{q} + \dot{M} \dot{q} - \left( \frac{\partial T}{\partial q} \right)^T + C_q^T \lambda + C \dot{q} + K q &amp;= Q_e \\
+Q_v = -\dot{M} \dot{q} + \left( \frac{\partial T}{\partial q} \right)^T
+\end{aligned}
+\right.
+\end{split}\]</div>
+</div>
+<p><strong>新增符号解释:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\( M \)</span>: 系统的<strong>质量矩阵</strong>或<strong>惯性矩阵</strong> (Mass Matrix / Inertia Matrix)。它通常是广义坐标 <span class="math notranslate nohighlight">\( q \)</span> 的函数，<span class="math notranslate nohighlight">\( M = M(q) \)</span>，并且是对称正定的。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">M</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( \ddot{q} \)</span>: 系统的<strong>广义加速度</strong> (Generalized Accelerations) 列向量，即 <span class="math notranslate nohighlight">\( \ddot{q} = \frac{d^2q}{dt^2} \)</span>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">\ddot{q}</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( \dot{M} \)</span>: 质量矩阵 <span class="math notranslate nohighlight">\( M(q) \)</span> 对时间的<strong>全导数</strong>。由于 <span class="math notranslate nohighlight">\( M \)</span> 是 <span class="math notranslate nohighlight">\( q \)</span> 的函数，根据链式法则，<span class="math notranslate nohighlight">\( \dot{M} = \frac{dM}{dt} = \frac{\partial M}{\partial q} \dot{q} \)</span>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">\dot{M}</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p><strong>推导关系:</strong>
+对于典型的机械系统，动能可以写成 <span class="math notranslate nohighlight">\( T = \frac{1}{2} \dot{q}^T M(q) \dot{q} \)</span>。
+那么，<span class="math notranslate nohighlight">\( \frac{\partial T}{\partial \dot{q}} = M(q) \dot{q} \)</span>。
+其对时间的全导数为 <span class="math notranslate nohighlight">\( \frac{d}{dt} \left( \frac{\partial T}{\partial \dot{q}} \right) = \frac{d}{dt} (M \dot{q}) = \dot{M} \dot{q} + M \ddot{q} \)</span>。
+将此代入第一个公式（并再次假设转置符号 <span class="math notranslate nohighlight">\(^T\)</span> 的作用是得到列向量形式），得到第二组的第一个方程。</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\( Q_v \)</span>: 定义为<strong>科里奥利力/离心力</strong>相关的广义力向量 (Generalized forces due to Coriolis and centrifugal effects)。它包含了 <span class="math notranslate nohighlight">\( \dot{M} \dot{q} \)</span> 项和 <span class="math notranslate nohighlight">\( \frac{\partial T}{\partial q} \)</span> 项。注意这里的符号定义 <span class="math notranslate nohighlight">\( Q_v = -\dot{M} \dot{q} + (\frac{\partial T}{\partial q})^T \)</span>。<em>（在许多文献中，科里奥利/离心力项 <span class="math notranslate nohighlight">\( C(q, \dot{q})\dot{q} \)</span> 定义为 <span class="math notranslate nohighlight">\( \dot{M}\dot{q} - \frac{1}{2} \dot{q}^T \frac{\partial M}{\partial q} \dot{q} \)</span>，或者通过克氏符号定义，这里的 <span class="math notranslate nohighlight">\( Q_v \)</span> 定义可能与具体推导有关，特别是 <span class="math notranslate nohighlight">\( (\frac{\partial T}{\partial q})^T \)</span> 项的处理）。</em></p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">Q_v</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p><strong>第三组公式:</strong></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\left\{
+\begin{aligned}
+M \ddot{q} + C_q^T \lambda &amp;= Q_e + Q_v - C \dot{q} - K q \\
+M \ddot{q} + C_q^T \lambda &amp;= Q_{ev} \\
+Q_{ev} &amp;= Q_e + Q_v - C \dot{q} - K q
+\end{aligned}
+\right.
+\end{split}\]</div>
+</div>
+<p><strong>新增符号解释:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\( Q_{ev} \)</span>: 定义的一个<strong>等效广义力</strong>向量。它将所有非惯性项（<span class="math notranslate nohighlight">\( M \ddot{q} \)</span>）和非约束力项（<span class="math notranslate nohighlight">\( C_q^T \lambda \)</span>）合并到方程右侧。它包括了外部力 <span class="math notranslate nohighlight">\( Q_e \)</span>、科里奥利/离心力 <span class="math notranslate nohighlight">\( Q_v \)</span>，以及阻尼力 <span class="math notranslate nohighlight">\( -C \dot{q} \)</span> 和弹性力 <span class="math notranslate nohighlight">\( -K q \)</span> 的贡献。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">Q_{ev}</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>这组公式将动力学方程整理成 <span class="math notranslate nohighlight">\( M \ddot{q} + C_q^T \lambda = Q_{ev} \)</span> 的形式，显式地分开了惯性项、约束力项和其他所有力的项。这对于数值求解或控制设计通常很有用。</p>
+</section>
+<hr class="docutils" />
+<section id="id3">
+<h2>约束与坐标变换<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>图片右侧的公式涉及约束和坐标的选择：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
+C(q, t) = 0_{n_c \times 1} \\
+q = [q^{1T} \ q^{2T} \ q^{3T}]^T_{1 \dots n} \\
+q_n = [q_i^T \ q_d^T]^T_{1 \dots n}
+\end{cases}
+\end{split}\]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
+q_d = f(q_i) \\
+\dot{q}_n = B \dot{q}_i \\
+\ddot{q}_n = B \ddot{q}_i + \dot{B} \dot{q}_i
+\end{cases}
+\end{split}\]</div>
+</div>
+<p><strong>符号解释:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\( n_c \)</span>: <strong>约束方程的数量</strong>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">n_c</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( n \)</span>: <strong>广义坐标的总数</strong>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">n</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( q = [q^{1T} \ q^{2T} \ q^{3T}]^T \)</span>: 将广义坐标向量 <span class="math notranslate nohighlight">\( q \)</span> <strong>分块</strong>。具体含义 <span class="math notranslate nohighlight">\( q^1, q^2, q^3 \)</span> 需要上下文确定，可能代表不同子系统或不同类型的坐标。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">q</span> <span class="pre">=</span> <span class="pre">[q^{1T}</span> <span class="pre">\</span> <span class="pre">q^{2T}</span> <span class="pre">\</span> <span class="pre">q^{3T}]^T</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( q_n \)</span>: 可能是指<strong>完整的 <span class="math notranslate nohighlight">\( n \)</span> 维广义坐标向量</strong>（与之前的 <span class="math notranslate nohighlight">\( q \)</span> 相同，只是换了个符号强调维度）。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">q_n</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( q_i \)</span>: <strong>独立广义坐标</strong> (Independent Generalized Coordinates) 向量。其数量为 <span class="math notranslate nohighlight">\( n - n_c \)</span>（假设约束是独立的）。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">q_i</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( q_d \)</span>: <strong>相关（或从属）广义坐标</strong> (Dependent Generalized Coordinates) 向量。其数量为 <span class="math notranslate nohighlight">\( n_c \)</span>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">q_d</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( q_n = [q_i^T \ q_d^T]^T \)</span>: 将完整坐标向量 <span class="math notranslate nohighlight">\( q_n \)</span> 划分为<strong>独立坐标 <span class="math notranslate nohighlight">\( q_i \)</span> 和相关坐标 <span class="math notranslate nohighlight">\( q_d \)</span></strong>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">q_n</span> <span class="pre">=</span> <span class="pre">[q_i^T</span> <span class="pre">\</span> <span class="pre">q_d^T]^T</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( q_d = f(q_i) \)</span>: 对于完整约束，相关坐标 <span class="math notranslate nohighlight">\( q_d \)</span> 可以表示为独立坐标 <span class="math notranslate nohighlight">\( q_i \)</span> 的<strong>函数</strong>。这个函数关系 <span class="math notranslate nohighlight">\( f \)</span> 由约束方程 <span class="math notranslate nohighlight">\( C(q, t) = 0 \)</span> 隐式定义。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">q_d</span> <span class="pre">=</span> <span class="pre">f(q_i)</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( \dot{q}_n = B \dot{q}_i \)</span>: 完整坐标的速度 <span class="math notranslate nohighlight">\( \dot{q}_n \)</span> 与独立坐标的速度 <span class="math notranslate nohighlight">\( \dot{q}_i \)</span> 之间的<strong>线性关系</strong>。<span class="math notranslate nohighlight">\( B \)</span> 是一个 <span class="math notranslate nohighlight">\( n \times (n-n_c) \)</span> 的<strong>速度变换矩阵</strong>（或雅可比矩阵），<span class="math notranslate nohighlight">\( B = \begin{bmatrix} I \\ \frac{\partial f}{\partial q_i} \end{bmatrix} \)</span>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">\dot{q}_n</span> <span class="pre">=</span> <span class="pre">B</span> <span class="pre">\dot{q}_i</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( B \)</span>: <strong>速度/雅可比变换矩阵</strong>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">B</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( \ddot{q}_n = B \ddot{q}_i + \dot{B} \dot{q}_i \)</span>: 完整坐标的加速度 <span class="math notranslate nohighlight">\( \ddot{q}_n \)</span> 与独立坐标的加速度 <span class="math notranslate nohighlight">\( \ddot{q}_i \)</span> 之间的关系。注意这里出现了 <span class="math notranslate nohighlight">\( \dot{B} \dot{q}_i \)</span> 项，表示加速度层面的变换不是简单的线性关系。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">\ddot{q}_n</span> <span class="pre">=</span> <span class="pre">B</span> <span class="pre">\ddot{q}_i</span> <span class="pre">+</span> <span class="pre">\dot{B}</span> <span class="pre">\dot{q}_i</span></code></p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\( \dot{B} \)</span>: 矩阵 <span class="math notranslate nohighlight">\( B \)</span> 对时间的<strong>全导数</strong>。</p>
+<ul>
+<li><p>LaTeX: <code class="docutils literal notranslate"><span class="pre">\dot{B}</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>这些关系允许将系统的动力学方程从包含 <span class="math notranslate nohighlight">\( n \)</span> 个（可能相关的）广义坐标和 <span class="math notranslate nohighlight">\( n_c \)</span> 个约束方程以及拉格朗日乘子 <span class="math notranslate nohighlight">\( \lambda \)</span> 的形式，转换为只包含 <span class="math notranslate nohighlight">\( n - n_c \)</span> 个独立坐标 <span class="math notranslate nohighlight">\( q_i \)</span> 的、去除了 <span class="math notranslate nohighlight">\( \lambda \)</span> 的最小坐标形式的动力学方程。</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="97-appendix.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">附录</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="51-exp/02.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">实验二 2dof（五连杆）仿真</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">拉格朗日动力学方程（含约束）</a><ul>
+<li><a class="reference internal" href="#id2">方程的展开与重组</a></li>
+<li><a class="reference internal" href="#id3">约束与坐标变换</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="../_static/tex-svg-full.js?v=fe9f5dce"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

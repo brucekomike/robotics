@@ -1,0 +1,1084 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="第九章 工业机器人在线编程与控制" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/80-interg/09.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="本章学习要点: 本章学习提要:: 第五、六、七、八章介绍了RAPID语言的数据结构、编程基础、高级编程以及仿真软件高级应用，其中RAPID语言的数据结构、编程基础、高级编程既可用于离线编程仿真，也可用于在线编程与控制。在此方面，本章将重点介绍ABB机器人的基于示教器的在线编程以及基于RobotStudio的在线编程与控制技术。 内容简介: 示教编程, 在线编程与控制. 1. 示教编程: 1...." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="本章学习要点: 本章学习提要:: 第五、六、七、八章介绍了RAPID语言的数据结构、编程基础、高级编程以及仿真软件高级应用，其中RAPID语言的数据结构、编程基础、高级编程既可用于离线编程仿真，也可用于在线编程与控制。在此方面，本章将重点介绍ABB机器人的基于示教器的在线编程以及基于RobotStudio的在线编程与控制技术。 内容简介: 示教编程, 在线编程与控制. 1. 示教编程: 1...." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="第十章 机器人系统集成典型应用" href="10.html"><link rel="prev" title="第八章 工业机器人仿真软件高级应用" href="08.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>第九章 工业机器人在线编程与控制 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/80-interg/09.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/80-interg/09.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>第九章 工业机器人在线编程与控制<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2>本章学习要点<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>本章学习提要:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>第五、六、七、八章介绍了RAPID语言的数据结构、编程基础、高级编程以及仿真软件高级应用，其中RAPID语言的数据结构、编程基础、高级编程既可用于离线编程仿真，也可用于在线编程与控制。在此方面，本章将重点介绍ABB机器人的基于示教器的在线编程以及基于RobotStudio的在线编程与控制技术。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h2>内容简介<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>示教编程</strong></p></li>
+<li><p><strong>在线编程与控制</strong></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>1. 示教编程<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<section id="id6">
+<h3>1.1 示教编程<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>早期的机器人编程几乎都是采用示教编程方法，而且它仍是目前工业机器人使用最普遍的方法。采用这种方法时，程序编制是在机器人现场进行的。如图6-1所示，为示教再现式机器人控制系统的工作原理图，其工作过程分为“示教”和“再现”两个阶段。</p>
+<p><strong>图6-1 示教再现式机器人控制系统工作原理</strong></p>
+<p><em>(Diagram showing Teach Pendant -&gt; Memory Device -&gt; Servo Amplifier -&gt; Working Device, with “Teach Part”, “Reproduce Part”, and “Common Part” indicated.)</em></p>
+</section>
+<section id="id7">
+<h3>优点与缺点<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p><strong>优点:</strong></p>
+<ul class="simple">
+<li><p>操作简单、易于掌握</p></li>
+<li><p>示教再现过程很快，示教之后即可应用</p></li>
+<li><p>随时监视机器人动作，避免发生错误指令</p></li>
+</ul>
+<p><strong>缺点:</strong></p>
+<ul class="simple">
+<li><p>编程占用机器人作业时间</p></li>
+<li><p>很难规划复杂的运动轨迹以及准确的直线运动</p></li>
+<li><p>难以与传感信息相配合</p></li>
+<li><p>难以与其他操作同步</p></li>
+</ul>
+</section>
+<section id="id8">
+<h3>1.2 机器人语言编程<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<p>机器人语言编程实现了计算机编程，它具有良好的通用性，同一种机器人语言可用于不同类型的机器人。此外，机器人编程语言可解决多台机器人之间协调工作的问题。既适用于前面讲授的离线编程，也适用于在线编程。</p>
+<p><em>(Image of two robotic arms holding a banner that says “机器人语言编程”.)</em></p>
+</section>
+<section id="id9">
+<h3>1.3 移动命令<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<p>为了使机器人能够进行再现示教的动作，就必须把机器人运动命令编成程序。控制机器人运动的命令就是移动命令。在移动命令中，记录有移动到的位置坐标、插补方式、再现速度等参数。</p>
+<ul class="simple">
+<li><p><strong>位置坐标:</strong> 描述机器人 TCP (工具中心点) 的 6 个自由度。</p></li>
+<li><p><strong>插补方式:</strong> 机器人再现时，决定程序点之间采取何种轨迹移动的方式。常用的 3 种插补方式有：关节插补、直线插补、圆弧插补。</p></li>
+<li><p><strong>再现速度:</strong> 机器人再现时，程序点之间的移动速度。</p></li>
+</ul>
+<p><em>(Diagram with “移动命令” (Movement Command) in the center, with arrows pointing to “位置坐标” (Position Coordinates), “插补方式” (Interpolation Method), and “再现速度” (Reproduction Speed).)</em></p>
+</section>
+<section id="id10">
+<h3>1.4 空走点/作业点<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>机器人再现时，决定从当前程序点到下一个程序点是否实施作业。</p>
+<ul class="simple">
+<li><p><strong>空走点 (Free Point):</strong> 从当前程序点移动到下一个程序点的整个过程不需要实施作业，主要用于示教作业开始点和作业中间点之外的程序点。</p></li>
+<li><p><strong>作业点 (Work Point):</strong> 从当前程序点移动到下一个程序点的整个过程需要实施作业，主要用于作业开始点和作业中间点两种情况。</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="abb">
+<h3>1.5 ABB 工业机器人示教器<a class="headerlink" href="#abb" title="Link to this heading">¶</a></h3>
+<p>ABB 工业机器人示教器分为按键、触摸屏和手动操作遥杆三部分组成，如下图所示。</p>
+<p><em>(Image of the front and back of an ABB teach pendant, with labels for screen, enable button, emergency stop, joystick, and keys.)</em></p>
+<section id="id11">
+<h4>按键与按钮介绍<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>按键/按钮</p></th>
+<th class="head text-left"><p>功能说明</p></th>
+<th class="head text-left"><p>按键/按钮</p></th>
+<th class="head text-left"><p>功能说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>【使能按键】</strong></p></td>
+<td class="text-left"><p>为了保证操作人员的人身安全而设置，按住才能手动移动机器人。</p></td>
+<td class="text-left"><p><strong>【I/O 快捷键】</strong></p></td>
+<td class="text-left"><p>设置 I/O 口</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>【急停按钮】</strong></p></td>
+<td class="text-left"><p>用于使机器人紧急停止。</p></td>
+<td class="text-left"><p><strong>【机器人/外轴切换】</strong></p></td>
+<td class="text-left"><p>切换成外部轴</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>【线型/重复定位运动切换】</strong></p></td>
+<td class="text-left"><p>机器人线性，切换重复定位的模式。</p></td>
+<td class="text-left"><p><strong>【关节运动轴切换】</strong></p></td>
+<td class="text-left"><p>切换运动的轴</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>【启动程序】</strong></p></td>
+<td class="text-left"><p>手动运行程序时，启动程序或继续程序。</p></td>
+<td class="text-left"><p><strong>【单步前进】</strong></p></td>
+<td class="text-left"><p>机器人单步前进，按住则连续执行。</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>【单步后退】</strong></p></td>
+<td class="text-left"><p>机器人单步后退。</p></td>
+<td class="text-left"><p><strong>【停止】</strong></p></td>
+<td class="text-left"><p>在机器人执行程序时使机器人停止。</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>【增量开/关】</strong></p></td>
+<td class="text-left"><p>增量调节，控制手动移动机器人时的速度。</p></td>
+<td class="text-left"><p><strong>【手动操作摇杆】</strong></p></td>
+<td class="text-left"><p>用于机器人六个轴的运动，每次最多可以使三个轴运动，摇杆的摆动幅度越大，轴移动的速度越快。</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id12">
+<h4>1.5.1 示教器显示屏的界面介绍<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
+<p><strong>(1) 操作界面及说明:</strong></p>
+<p><em>(Image of the ABB teach pendant’s graphical user interface, showing menus like HotEdit, Input/Output, Manual Operation, Automatic Production Window, Program Editor, Program Data, etc.)</em></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>选项名称</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>HotEdit</strong></p></td>
+<td class="text-left"><p>程序模块下轨迹点位置的补偿设置窗口</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>输入输出</strong></p></td>
+<td class="text-left"><p>设备及查看 I/O 视图窗口</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>手动操纵</strong></p></td>
+<td class="text-left"><p>动作模式设置、坐标系选择、操纵杆锁定及载荷属性的更改窗口，也可显示实际位置</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>自动生产窗口</strong></p></td>
+<td class="text-left"><p>在自动模式下，可直接调试程序并运行</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>程序编辑器</strong></p></td>
+<td class="text-left"><p>建立程序模块及例行程序的窗口</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>程序数据</strong></p></td>
+<td class="text-left"><p>选择编程时所需程序数据的窗口</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>备份与恢复</strong></p></td>
+<td class="text-left"><p>可备份和恢复系统</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>校准</strong></p></td>
+<td class="text-left"><p>进行转数计数器和电机校准的窗口</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>控制面板</strong></p></td>
+<td class="text-left"><p>进行示教器的相关设定</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>事件日志</strong></p></td>
+<td class="text-left"><p>查看系统出现的各种提示信息</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>资源管理器</strong></p></td>
+<td class="text-left"><p>查看系统的系统文件</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>系统信息</strong></p></td>
+<td class="text-left"><p>查看控制器及当前系统的相关信息</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>(2) 控制面板及说明:</strong></p>
+<p>ABB 机器人的控制面板包含了对机器人和示教器进行设定的相关功能，如图所示。</p>
+<p><em>(Image of the ABB control panel interface, showing options like Appearance, Monitoring, FlexPendant, I/O, Language, etc.)</em></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>选项名称</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>外观</strong></p></td>
+<td class="text-left"><p>可自定义显示器的亮度和设置左手或右手的操作习惯</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>监控</strong></p></td>
+<td class="text-left"><p>动作触碰监控设置和执行设置</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>FlexPendant</strong></p></td>
+<td class="text-left"><p>示教器操作特性的设置</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>I/O</strong></p></td>
+<td class="text-left"><p>配置常用 I/O 列表，在输入输出选项中显示</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>语言</strong></p></td>
+<td class="text-left"><p>控制器当前语言的设置</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>ProgKeys</strong></p></td>
+<td class="text-left"><p>为指定输入输出信号配置快捷键</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>日期和时间</strong></p></td>
+<td class="text-left"><p>控制器的日期和时间配置</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>诊断</strong></p></td>
+<td class="text-left"><p>创建诊断文件</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>配置</strong></p></td>
+<td class="text-left"><p>系统参数设置</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>触摸屏</strong></p></td>
+<td class="text-left"><p>触摸屏重新校准</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="id13">
+<h3>1.6 机器人基本指令<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<p><strong>(1) MoveJ 运动指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 点到点运动。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">MoveJ</span> <span class="pre">[\Conc]</span> <span class="pre">ToPoint</span> <span class="pre">[\ID]</span> <span class="pre">Speed</span> <span class="pre">[\V]</span> <span class="pre">|</span> <span class="pre">[\T]</span> <span class="pre">Zone</span> <span class="pre">[\Z]</span> <span class="pre">[\Inpos]</span> <span class="pre">Tool</span> <span class="pre">[\WObj]</span></code></p></li>
+<li><p><strong>示例:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">MoveJ</span> <span class="pre">p1,</span> <span class="pre">vmax,</span> <span class="pre">z30,</span> <span class="pre">tool2</span></code> //工具tool2的TCP沿着一个非线性路径到位置p1，速度数据是vmax，zone数据是z30</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MoveJ*,</span> <span class="pre">vmax</span> <span class="pre">\T:=5,</span> <span class="pre">fine,</span> <span class="pre">grip3</span></code> //工具grip3的TCP沿着一个非线性路径运动到存储在指令中的停止点（用*标记），整个运动需要5秒钟</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>(2) MoveL 运动指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 直线运动。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">MoveL</span> <span class="pre">[\Conc]</span> <span class="pre">ToPoint</span> <span class="pre">[\ID]</span> <span class="pre">Speed</span> <span class="pre">[\V]</span> <span class="pre">|</span> <span class="pre">[</span> <span class="pre">\T]</span> <span class="pre">Zone</span> <span class="pre">[\Z]</span> <span class="pre">[\Inpos]</span> <span class="pre">Tool</span> <span class="pre">[\WObj]</span> <span class="pre">[\Corr]</span></code></p></li>
+<li><p><strong>示例:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">MoveL*,</span> <span class="pre">v2000\V:=2200,</span> <span class="pre">z40</span> <span class="pre">\Z:=45,</span> <span class="pre">grip3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MoveL</span> <span class="pre">start,</span> <span class="pre">v2000,</span> <span class="pre">z40,</span> <span class="pre">grip3</span> <span class="pre">\WObj:=fixture</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p><strong>(3) MoveC 运动指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 圆弧运动。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">MoveC</span> <span class="pre">[\Conc]</span> <span class="pre">CirPoint</span> <span class="pre">ToPoint</span> <span class="pre">[\ID]</span> <span class="pre">Speed</span> <span class="pre">[\V]</span> <span class="pre">|</span> <span class="pre">[\T]</span> <span class="pre">Zone</span> <span class="pre">[\z]</span> <span class="pre">[\Inpos]</span> <span class="pre">Tool</span> <span class="pre">[\Wobj]</span> <span class="pre">[\Corr]</span></code></p></li>
+<li><p><strong>示例:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">MoveLp1,</span> <span class="pre">v500,</span> <span class="pre">fine,</span> <span class="pre">tool1</span></code> //移动到圆弧的第一个点</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MoveC</span> <span class="pre">p2,</span> <span class="pre">p3,</span> <span class="pre">v500,</span> <span class="pre">z20,</span> <span class="pre">tool1</span></code> //画第一个半圆</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MoveCp4,</span> <span class="pre">p1,</span> <span class="pre">v500,</span> <span class="pre">fine,</span> <span class="pre">tool1</span></code> //画第二个半圆和第一个圆弧组成一个圆</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MoveCp5,</span> <span class="pre">p6,</span> <span class="pre">v2000,</span> <span class="pre">fine\Inpos:=inpos50,</span> <span class="pre">grip3</span></code> //Grip3的TCP圆周运动到停止点p6,当停止点fine的50%的位置条件和50%的速度条件满足的时候,机器人认为它到达该点,它等待条件满足最多等两秒</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>(4) Compact IF 运动指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 当前指令是指令 IF 的简化，判断条件后只允许跟一名指令，如果有多句指令需要执行，必须采用指令 IF。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">Condition...</span></code></p></li>
+<li><p><strong>Condition:</strong> 判断条件 (bool)</p></li>
+</ul>
+<p><strong>(5) IF 指令:</strong></p>
+<ul>
+<li><p><strong>功能:</strong> 当前指令通过判断相应条件, 控制需要执行的相应指令, 是机器人程序流程基本指令。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">IF</span> <span class="pre">Condition</span> <span class="pre">THEN...</span> <span class="pre">{ELSEIF</span> <span class="pre">Condition</span> <span class="pre">THEN...}</span> <span class="pre">[ELST...]</span> <span class="pre">ENDIF</span></code></p></li>
+<li><p><strong>Condition:</strong> 判断条件 (bool)</p></li>
+<li><p><strong>示例:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>IF reg1&gt;5 THEN
+  set do1
+  set do2
+ELSE
+  Reset do1
+  Reset do2
+ENDIF
+</pre></div>
+</div>
+</li>
+</ul>
+<p><strong>(6) WHILE 指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 当前指令通过判断相应条件, 如果符合判断条件执行循环内指令, 直至判断条件不满足才跳出循环, 继续执行循环以后指令, 需要注意, 当前指令存在死循环。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">WHILE</span> <span class="pre">Condition</span> <span class="pre">DO</span> <span class="pre">...</span> <span class="pre">ENDWHILE</span></code></p></li>
+<li><p><strong>Condition:</strong> 判断条件 (bool)</p></li>
+</ul>
+<p><strong>(7) FOR 指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 当前指令通过循环判断标识从初始值逐渐更改最终值, 从而控制程序相应循环次数。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">FOR</span> <span class="pre">Loop</span> <span class="pre">counter</span> <span class="pre">FROM</span> <span class="pre">Start</span> <span class="pre">value</span> <span class="pre">TO</span> <span class="pre">End</span> <span class="pre">value</span> <span class="pre">[STEP</span> <span class="pre">Step</span> <span class="pre">value]</span> <span class="pre">DO</span> <span class="pre">...</span> <span class="pre">ENDFOR</span></code></p></li>
+<li><p><strong>Loop counter:</strong> 循环计数标识 (identifier)</p></li>
+<li><p><strong>Start value:</strong> 标识初始值 (num)</p></li>
+<li><p><strong>End value:</strong> 标识最终值 (num)</p></li>
+<li><p><strong>[STEP Step value]:</strong> 计数更改值 (num)</p>
+<ul>
+<li><p>如果不使用参变量 <code class="docutils literal notranslate"><span class="pre">[STEP]</span></code>, 循环标识每次更改值为 1。</p></li>
+<li><p>如果使用参变量 <code class="docutils literal notranslate"><span class="pre">[STEP]</span></code>, 循环标识每次更改值为参变量相应设置。</p></li>
+<li><p>通常情况下, 初始值、最终值与更改值为整数, 循环判断标识使用 i, j, k 等小写字母。</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>(8) Reset 指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 将机器人相应数字输出信号值置为 0, 与指令 Set 相对应, 是自动化重要组成部分。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">Reset</span> <span class="pre">signal</span></code></p></li>
+<li><p><strong>signal:</strong> 输出信号名称 (signaldo)</p></li>
+<li><p><strong>示例:</strong> <code class="docutils literal notranslate"><span class="pre">Reset</span> <span class="pre">do12</span></code></p></li>
+</ul>
+<p><strong>(9) Set 指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 将机器人相应数字输出信号值置为 1, 与指令 Reset 相对应, 是自动化重要组成部分。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">signal</span></code></p></li>
+<li><p><strong>signal:</strong> 机器人输出信号名称 (signaldo)</p></li>
+</ul>
+<p><strong>(10) WaitDI 指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 等待数字输入信号满足相应值, 达到通信目的, 是自动化生产的重要组成部分。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">WaitDI</span> <span class="pre">Signal,</span> <span class="pre">Value</span> <span class="pre">[\MaxTime][\TimeFlag]</span></code></p></li>
+<li><p><strong>signal:</strong> 输出信号名称 (signaldo)</p></li>
+<li><p><strong>Value:</strong> 输出信号值 (dionum)</p></li>
+<li><p><strong>[\MaxTime]:</strong> 最长等待时间 (num)</p></li>
+<li><p><strong>[\TimeFlag]:</strong> 超出逻辑量 (bool)</p></li>
+<li><p><strong>示例:</strong> <code class="docutils literal notranslate"><span class="pre">WaitDI</span> <span class="pre">di_Ready,</span> <span class="pre">1</span></code> //机器人等待输入信号, 直到信号 di_Ready 值为 1, 才执行随后指令</p></li>
+</ul>
+<p><strong>(11) WaitDO 指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 等待数字输出信号满足相应值, 达到通信目的, 因为输出信号一般情况下受程序控制, 此指令很少使用。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">WaitDO</span> <span class="pre">Signal,Value</span> <span class="pre">[\MaxTime][\TimeFlag]</span></code></p></li>
+</ul>
+<p><strong>(12) Accset 指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 当机器人运行速度改变时, 对所产生的相应加速度进行限制, 使机器人高速运行时更平缓, 但会延长循环时间, 系统默认值为 <code class="docutils literal notranslate"><span class="pre">AccSet100,100</span></code>。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">AccSet</span> <span class="pre">Acc,</span> <span class="pre">Ramp</span></code></p></li>
+<li><p><strong>Acc:</strong> 机器人加速度百分比 (num)</p></li>
+<li><p><strong>Ramp:</strong> 机器人加速度坡度 (num)</p>
+<ul>
+<li><p>机器人加速度百分率值最小为 20, 小于 20 以 20 计。</p></li>
+<li><p>机器人加速度坡度值最小为 10, 小于 10 以 10 计。</p></li>
+</ul>
+</li>
+<li><p><strong>示例:</strong> <code class="docutils literal notranslate"><span class="pre">AccSet</span> <span class="pre">80,100</span></code></p></li>
+</ul>
+<p><strong>(13) Add 指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 在一个数字数据上增加相应的值, 可以用赋值指令替代。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">Name,</span> <span class="pre">AddValue</span></code></p></li>
+<li><p><strong>Name:</strong> 数据名称 (num)</p></li>
+<li><p><strong>AddValue:</strong> 增加的值 (num)</p></li>
+<li><p><strong>示例:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">reg1,3</span></code> // 等同于 <code class="docutils literal notranslate"><span class="pre">reg1:=reg1+3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">reg1,-reg2</span></code> // 等同于 <code class="docutils literal notranslate"><span class="pre">reg1:=reg1-reg2</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p><strong>(14) Clear 指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 将一个数字数据的值归零, 可以用赋值指令替代。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">Clear</span> <span class="pre">Name</span></code></p></li>
+<li><p><strong>Name:</strong> 数据名称 (num)</p></li>
+</ul>
+<p><strong>(15) Incr 指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 将一个数字数据值上增加 1, 可以用赋值指令替代, 一般用于产量计数。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">Incr</span> <span class="pre">Name</span></code></p></li>
+<li><p><strong>Name:</strong> 数据名称 (num)</p></li>
+</ul>
+<p><strong>(16) Decr 指令:</strong></p>
+<ul class="simple">
+<li><p><strong>功能:</strong> 在数字数据值上增加 1, 可以用赋值指令替代, 一般用于产量计数。</p></li>
+<li><p><strong>格式:</strong> <code class="docutils literal notranslate"><span class="pre">Decr</span> <span class="pre">Name</span></code></p></li>
+<li><p><strong>示例:</strong> <code class="docutils literal notranslate"><span class="pre">Decr</span> <span class="pre">Name</span></code></p></li>
+<li><p><strong>Name:</strong> 数据名称 (num)</p></li>
+</ul>
+</section>
+<section id="id14">
+<h3>示例：轨迹运动<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<p><strong>要求:</strong> 按如图所示要求, 编程使机器人按照图中所示的轨迹: 起点 - P1 - P2 - P3 进行运动。</p>
+<p><em>(Diagram showing a robot arm’s trajectory with points P1, P2, and P3. Speeds of 200mm/s and 100mm/s are indicated.)</em></p>
+<p><strong>参考程序一:</strong></p>
+<ul class="simple">
+<li><p><strong>指令:</strong> <code class="docutils literal notranslate"><span class="pre">MoveL</span> <span class="pre">p1,</span> <span class="pre">v200,</span> <span class="pre">z10,</span> <span class="pre">tool1\Wobj:=wobj1;</span></code> // 机器人的 TCP 从当前位置向 p1 点以线性运动方式前进, 速度是 200mm/s, 转弯区数据是 10mm, 距离 p1 点还有 10mm 的时候开始转弯, 使用的工具数据是 tool1, 工件坐标数据是 wobj1。</p></li>
+<li><p><strong>指令:</strong> <code class="docutils literal notranslate"><span class="pre">MoveL</span> <span class="pre">p2,</span> <span class="pre">v100,</span> <span class="pre">fine,</span> <span class="pre">tool1\Wobj:=wobj1;</span></code> // 机器人的 TCP 从 p1 向 p2 点 (图 6-11) 以线性运动方式前进, 速度是 100mm/s, 转弯区数据是 fine, 机器人在 p2 点稍作停顿, 使用的工具数据是 tool1, 工件坐标数据是 wobj1。</p></li>
+<li><p><strong>指令:</strong> <code class="docutils literal notranslate"><span class="pre">MoveJ</span> <span class="pre">p3,</span> <span class="pre">v500,</span> <span class="pre">fine,</span> <span class="pre">tool1\Wobj:=wobj1;</span></code> // 机器人的 TCP 从 p2 向 p3 点 (图 6-11) 以关节运动方式前进, 速度是 100mm/s, 转弯区数据是 fine, 机器人在 p3 点停止, 使用的工具数据是 tool1, 工件坐标数据是 wobj1。</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id15">
+<h2>工业机器人在线控制与编程<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<section id="id16">
+<h3>1. 建立连接<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<p>工业机器人在线编程与控制式通过运行仿真软件的计算机与真实工业机器人控制系统的通讯实现的。</p>
+<p><strong>建立连接的步骤:</strong> 标准网线的一端连接到计算机的网卡网络端口，可以选择为连接至控制器的 PC 指定固定的 IP 地址，参见下表。网线的另一端连接到控制柜面板的网线端口，连接后图中的“X2”的“Service”端口，见下表。</p>
+<p><strong>PC机 I/O 地址表:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>属性</p></th>
+<th class="head text-left"><p>值</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>IP 地址</p></td>
+<td class="text-left"><p>192.168.125.2 ~255</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>默认网关</p></td>
+<td class="text-left"><p>192.168.125.1</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>子网掩码</p></td>
+<td class="text-left"><p>255.255.255.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>机器人控制器端口说明表:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>端口</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>X1</p></td>
+<td class="text-left"><p>电源</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>X2 (黄)</p></td>
+<td class="text-left"><p>Service (PC 连接)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>X3 (绿)</p></td>
+<td class="text-left"><p>LAN1 (连接 FlexPendant)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>X4</p></td>
+<td class="text-left"><p>LAN2 (连接基于以太网的选件)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>X5</p></td>
+<td class="text-left"><p>LAN3 (连接基于以太网的选件)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>X6</p></td>
+<td class="text-left"><p>WAN (连接基于以太网的选件)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>X7 (蓝)</p></td>
+<td class="text-left"><p>面板</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>X9 (红)</p></td>
+<td class="text-left"><p>轴计算机</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>X10, X11</p></td>
+<td class="text-left"><p>USB 端口 (4 端口)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><em>(Diagram showing the ports on a robot controller and screenshots of RobotStudio interface for connecting to a controller.)</em></p>
+</section>
+<section id="id17">
+<h3>2. 获取权限<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<p>RobotStudio仿真软件可在线对机器人进行监控与查看，防止在RobotStudio中错误修改数据，造成不必要的损失，保证操作安全性。首先将机器人状态钥匙开关切换到“手动”。在【控制器】功能选项卡中，单击【请求写权限】。</p>
+<p><em>(Screenshot showing the RobotStudio interface with the “Request write permission” button highlighted.)</em></p>
+<p>然后接着在示教器界面弹出确认请求写权限菜单，单击【同意】进行确认。</p>
+<p><em>(Screenshot of the teach pendant showing a “Request write permission” dialog box with “Agree” and “Reject” buttons.)</em></p>
+</section>
+<section id="id18">
+<h3>3. 备份与恢复<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<p>单击【控制器】功能选项卡下单击【备份】，选择【创建备份…】或者【从备份中恢复…】。备份时候，选择相应的文件夹的名称，不能有中文。在【位置】下指定备份文件夹的存放位置。选择可用备份，单击【确定】。恢复时候，找到前面备份的文件夹即可，选择可用备份，单击恢复。</p>
+<p><em>(Screenshot showing the RobotStudio interface with the “Backup” and “Restore from backup” options.)</em></p>
+</section>
+<section id="id19">
+<h3>4. 在线编程<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<p>在工业机器人的实际使用过程中, 专业工程师经常会使用仿真软件对机器人程序进行在线编辑或修改, 编辑完成后, 再使用示教器对具体点位的位置进行调节校准即可, 这样可以大大提高编程效率。</p>
+<p>ABB 机器人获取写权限后, 在“RAPID”窗口双击要修改的程序模块, 在程序编辑窗口对程序进行需要的修改, 修改完成后, 单击【应用】, 收回写权限, 控制器中的指令已被修改完成, 对 RAPID 程序进行备注处理并应用。</p>
+<p><em>(Screenshot showing the RAPID editor in RobotStudio with program code and options for editing and applying changes.)</em></p>
+<p>RAPID 选项卡中的程序编辑器, 里的所有的指令和语句都可以通过键盘输入, 同时也可以像通过示教器编辑程序一样, 通过【指令】工具按钮群, 选择需要输入的指令。</p>
+<p><em>(Screenshot of the RAPID editor showing the “Instructions” menu with various commands like MoveAbsJ, MoveC, MoveJ, MoveL, Reset, Set, etc.)</em></p>
+</section>
+<section id="id20">
+<h3>5. 配置信号<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<p>可以使用仿真软件, 通过在线方式对机器人控制系统的 I/O 信号进行配置, 创建两个 DSQC652 型号的 I/O 单元, DSQC652 参数设定见下表。</p>
+<p>首先要建立起 RobotStudio 与机器人的连接。获取写权限后, 单击【控制器】功能选项卡下【配置编辑器】中的【I/O System】, 右击【DeviceNet Device】, 创建 I/O 单元, 设置好名称和地址。</p>
+<p><strong>I/O 单元需求表:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>名称 (Name)</p></th>
+<th class="head text-left"><p>参数 (Parameter)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>板卡型号</strong></p></td>
+<td class="text-left"><p>DSQC 652</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Name (I/O 单元名称)</strong></p></td>
+<td class="text-left"><p>Board10</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>DeviceNet Address (I/O 单元所占用总线地址)</strong></p></td>
+<td class="text-left"><p>10 和 11</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><em>(Screenshot showing the RobotStudio interface for configuring I/O System and DeviceNet Device.)</em></p>
+<p>数字输入信号的参数设定见下表: 单击【I/O System】, 右击【Signal】, 新建 I/O 信号, 设置好相应的名称, 信号性质, 通讯板卡, 地址等参数, 在设置之前一定要了解板卡信号开始数值是“0” 地址为起始地址。</p>
+<p><strong>I/O 信号需求表:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>名称 (Name (I/O 信号名称))</p></th>
+<th class="head text-left"><p>参数 (Parameter)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>Type of Signal (I/O 信号类型)</strong></p></td>
+<td class="text-left"><p>Digital Input</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Assigned to Unit (I/O 信号所在 I/O 单元)</strong></p></td>
+<td class="text-left"><p>Board10</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Unit Mapping (I/O 信号所占用单元地址)</strong></p></td>
+<td class="text-left"><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><em>(Screenshot of the teach pendant interface showing input/output signals and a dialog for creating a new I/O signal.)</em></p>
+</section>
+<section id="id21">
+<h3>6. 文件传送<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<p>使用仿真软件获取机器人的写权限后, 就可以对机器人进行文件传送操作, 即将文件从计算机发送到机器人控制硬盘上。单击【控制器】功能选项卡中的【文件传送】, 通过选择计算机中的文件进行传输, 文件传输不支持虚拟示教器。</p>
+<p><em>(Screenshot showing the RobotStudio interface with the “File Transfer” option and file explorers for both PC and controller.)</em></p>
+</section>
+<section id="id22">
+<h3>7. 在线监控<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<section id="id23">
+<h4>在线监控机器人<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h4>
+<p>单击【控制器】/【在线监视器】, 窗口显示的就是实时的机器人姿态状态。</p>
+<p><em>(Screenshot showing the RobotStudio interface with the “Online Monitor” option and a 3D view of the robot.)</em></p>
+</section>
+<section id="id24">
+<h4>在线监控示教器<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h4>
+<p>在取得写权限后, 打开【控制器】功能选项卡, 单击【示教器查看器】。可设定画面采样刷新的时间, 同样不支持虚拟示教器。</p>
+<p><em>(Screenshot showing the RobotStudio interface with the “Teach Pendant Viewer” option and a dialog for remote access to the teach pendant.)</em></p>
+</section>
+</section>
+<section id="id25">
+<h3>8. 示教器权限<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
+<section id="id26">
+<h4>1. 添加管理员权限<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h4>
+<p>首先软件需要获取机器人的“写权限”, 单击【控制器】/【用户管理】按钮, 单击【编辑用户组】。</p>
+<p><em>(Screenshot showing the RobotStudio interface with the “User Management” and “Edit User Groups” options.)</em></p>
+<p>实际生产中, 生产线工人的误操作可能导致机器人系统的错乱, 影响机器人的正常运行。因此, 有必要为示教器设置不同等级的用户操作权限。</p>
+<p>用户使用密码登陆后可以控制示教器及机器人, 其权限大小由其所属的“组”来决定, 可以增加或减少“组”的权限, 但必须保证管理员所属的组拥有全部的控制权限。可以创建新用户, 或者编辑、删除用户, 但出于安全考虑, 要始终保留一个管理员权限用户。</p>
+<p>为一台新机器人设置示教器用户操作权限的要点如下:
+(1) 为示教器添加一个管理员操作权限;
+(2) 设定所需的用户操作权限;
+(3) 更改 Default User 的用户组。</p>
+<p><em>(Screenshots showing the UAS Management Tool for adding users and configuring user group permissions.)</em></p>
+<p>设定非管理员用户权限:
+(1) 创建新组。
+(2) 设定新组的权限。
+(3) 创建新的用户。
+(4) 将组归类到对应新的用户。
+(5) 重启系统, 测试权限。</p>
+<hr class="docutils" />
+<p>同学们下节课见!</p>
+</section>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="10.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">第十章 机器人系统集成典型应用</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="08.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">第八章 工业机器人仿真软件高级应用</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">第九章 工业机器人在线编程与控制</a><ul>
+<li><a class="reference internal" href="#id2">本章学习要点</a><ul>
+<li><a class="reference internal" href="#id3">本章学习提要:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">内容简介</a></li>
+<li><a class="reference internal" href="#id5">1. 示教编程</a><ul>
+<li><a class="reference internal" href="#id6">1.1 示教编程</a></li>
+<li><a class="reference internal" href="#id7">优点与缺点</a></li>
+<li><a class="reference internal" href="#id8">1.2 机器人语言编程</a></li>
+<li><a class="reference internal" href="#id9">1.3 移动命令</a></li>
+<li><a class="reference internal" href="#id10">1.4 空走点/作业点</a></li>
+<li><a class="reference internal" href="#abb">1.5 ABB 工业机器人示教器</a><ul>
+<li><a class="reference internal" href="#id11">按键与按钮介绍</a></li>
+<li><a class="reference internal" href="#id12">1.5.1 示教器显示屏的界面介绍</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id13">1.6 机器人基本指令</a></li>
+<li><a class="reference internal" href="#id14">示例：轨迹运动</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id15">工业机器人在线控制与编程</a><ul>
+<li><a class="reference internal" href="#id16">1. 建立连接</a></li>
+<li><a class="reference internal" href="#id17">2. 获取权限</a></li>
+<li><a class="reference internal" href="#id18">3. 备份与恢复</a></li>
+<li><a class="reference internal" href="#id19">4. 在线编程</a></li>
+<li><a class="reference internal" href="#id20">5. 配置信号</a></li>
+<li><a class="reference internal" href="#id21">6. 文件传送</a></li>
+<li><a class="reference internal" href="#id22">7. 在线监控</a><ul>
+<li><a class="reference internal" href="#id23">在线监控机器人</a></li>
+<li><a class="reference internal" href="#id24">在线监控示教器</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id25">8. 示教器权限</a><ul>
+<li><a class="reference internal" href="#id26">1. 添加管理员权限</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

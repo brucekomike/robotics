@@ -1,0 +1,1459 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="第二章 拉普拉斯变换" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/40-autocon/20-lap.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="2.1 拉普拉斯变换概念: 引言：复变量与复变函数: 复变量: s = \sigma + j\omega, 复变函数: G(s) = U(\sigma, \omega) + jV(\sigma, \omega), 欧拉公式:,\cos \theta = \frac{1}{2}(e^{j\theta} + e^{-j\theta})\sin \theta = \frac{1}{2j}(e^{j..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="2.1 拉普拉斯变换概念: 引言：复变量与复变函数: 复变量: s = \sigma + j\omega, 复变函数: G(s) = U(\sigma, \omega) + jV(\sigma, \omega), 欧拉公式:,\cos \theta = \frac{1}{2}(e^{j\theta} + e^{-j\theta})\sin \theta = \frac{1}{2j}(e^{j..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="第三章 控制系统的数学模型" href="30-model.html"><link rel="prev" title="第一章 绪论" href="10-intro.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>第二章 拉普拉斯变换 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-interg/index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../80-interg/reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/40-autocon/20-lap.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/40-autocon/20-lap.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>第二章 拉普拉斯变换<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2>2.1 拉普拉斯变换概念<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>引言：复变量与复变函数<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p><strong>复变量</strong>: <span class="math notranslate nohighlight">\(s = \sigma + j\omega\)</span></p></li>
+<li><p><strong>复变函数</strong>: <span class="math notranslate nohighlight">\(G(s) = U(\sigma, \omega) + jV(\sigma, \omega)\)</span></p></li>
+<li><p><strong>欧拉公式</strong>:</p></li>
+<li><div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \cos \theta = \frac{1}{2}(e^{j\theta} + e^{-j\theta}) \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \sin \theta = \frac{1}{2j}(e^{j\theta} - e^{-j\theta}) \]</div>
+</div>
+</li>
+</ul>
+</section>
+<section id="id4">
+<h3>提出问题<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>将时域中的微分方程变换成复数域中的代数方程。</p></li>
+<li><p><strong>傅里叶变换</strong>：
+要求函数在区域内连续，有有限个第一类间断点，有限个极大极小值，且绝对可积。</p></li>
+<li><p><strong>拉普拉斯变换</strong>: <span class="math notranslate nohighlight">\(\varphi(t) \rightarrow \varphi(t)u(t)e^{-\beta t} (\beta &gt; 0)\)</span></p></li>
+<li><div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \int_{-\infty}^{+\infty} \varphi(t)u(t)e^{-\beta t} e^{-j\omega t} dt \]</div>
+</div>
+</li>
+</ul>
+</section>
+<section id="laplace">
+<h3>拉普拉斯（Laplace）变换 — 拉氏变换<a class="headerlink" href="#laplace" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(f(t) = \varphi(t)u(t)\)</span> 为时间的函数，并且当 <span class="math notranslate nohighlight">\(t &lt; 0\)</span> 时 <span class="math notranslate nohighlight">\(f(t) = 0\)</span>。</p></li>
+<li><p><span class="math notranslate nohighlight">\(s = \beta + j\omega\)</span> 为复变量。</p></li>
+<li><p><span class="math notranslate nohighlight">\(L\)</span> 为运算符号，放在某个时间函数之前，表示该时间函数用拉氏积分进行变换。</p></li>
+<li><p><span class="math notranslate nohighlight">\(F(s)\)</span> 为时间函数 <span class="math notranslate nohighlight">\(f(t)\)</span> 的拉氏变换。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ F(s) = L[f(t)] = \int_{0}^{\infty} e^{-st} dt [f(t)] = \int_{0}^{\infty} f(t)e^{-st} dt \]</div>
+</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(F(s)\)</span> 称为 <strong>象函数</strong>。</p></li>
+<li><p><span class="math notranslate nohighlight">\(f(t)\)</span> 称为 <strong>原函数</strong>。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id5">
+<h3>拉氏逆变换<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>从拉氏变换 <span class="math notranslate nohighlight">\(F(s)\)</span> 求时间函数 <span class="math notranslate nohighlight">\(f(t)\)</span> 的过程。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L^{-1}[F(s)] = f(t) = \frac{1}{2\pi j}\int_{\beta - j\infty}^{\beta + j\infty} F(s)e^{st} ds \]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(t \ge 0\)</span></p>
+</section>
+<section id="id6">
+<h3>存在定理<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>当 <span class="math notranslate nohighlight">\(t \ge 0\)</span> 时，<span class="math notranslate nohighlight">\(f(t)\)</span> 在任一有限区间上是分段连续的。</p></li>
+<li><p>当 <span class="math notranslate nohighlight">\(t \rightarrow \infty\)</span> 时，<span class="math notranslate nohighlight">\(f(t)\)</span> 的增长速度不超过某一指数函数，即存在常数 <span class="math notranslate nohighlight">\(M&gt;0\)</span> 及 <span class="math notranslate nohighlight">\(c \ge 0\)</span>，使得</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ |f(t)| \le Me^{ct}, \quad 0 \le t &lt; \infty \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \int_{0}^{+\infty} f(t)e^{-st} dt &lt; \infty \quad f(t) = \varphi(t)u(t) \]</div>
+</div>
+</li>
+</ol>
+</section>
+<section id="id7">
+<h3>常用函数的拉氏变换<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<section id="id8">
+<h4>(1) 指数函数<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} f(t) = \begin{cases} 0 &amp; t &lt; 0 \\ Ae^{-\alpha t} &amp; t \ge 0 \end{cases} \end{split}\]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(A\)</span> 和 <span class="math notranslate nohighlight">\(\alpha\)</span> 为常数。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[f(t)] = L[Ae^{-\alpha t}] = \int_{0}^{\infty} Ae^{-\alpha t} e^{-st} dt = A \int_{0}^{\infty} e^{-(a+s)t} dt = \frac{A}{s+\alpha} \]</div>
+</div>
+<p>其中，<span class="math notranslate nohighlight">\(\text{Re}(s+\alpha) &gt; 0\)</span>，即 <span class="math notranslate nohighlight">\(\text{Re}(s) &gt; -\alpha\)</span>。
+指数函数在复平面内将产生一个极点。</p>
+</section>
+<section id="id9">
+<h4>(2) 阶跃函数<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h4>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} f(t) = \begin{cases} 0 &amp; t &lt; 0 \\ A &amp; t \ge 0 \end{cases} \end{split}\]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(A\)</span> 为常数。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[f(t)] = L[A] = \int_{0}^{\infty} Ae^{-st} dt = \frac{A}{s} \]</div>
+</div>
+<p>当 <span class="math notranslate nohighlight">\(A=1\)</span> 时，单位阶跃信号 <span class="math notranslate nohighlight">\(u(t)\)</span>：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} u(t) = \begin{cases} 0 &amp; t &lt; 0 \\ 1 &amp; t \ge 0 \end{cases} \end{split}\]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[u(t)] = \frac{1}{s} \]</div>
+</div>
+</section>
+<section id="id10">
+<h4>(3) 斜坡函数<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} f(t) = \begin{cases} 0 &amp; t &lt; 0 \\ At &amp; t \ge 0 \end{cases} \end{split}\]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(A\)</span> 为常数。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[At] = \int_{0}^{\infty} Ate^{-st} dt = A \int_{0}^{\infty} te^{-st} dt = A \left[ -\frac{te^{-st}}{s} \right]_0^{\infty} - A \int_{0}^{\infty} (-\frac{e^{-st}}{s}) dt = \frac{A}{s} \int_{0}^{\infty} e^{-st} dt = \frac{A}{s^2} \]</div>
+</div>
+<p>当 <span class="math notranslate nohighlight">\(A=1\)</span> 时，单位斜坡信号 <span class="math notranslate nohighlight">\(r(t)\)</span>：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} f(t) = \begin{cases} 0 &amp; t &lt; 0 \\ t &amp; t \ge 0 \end{cases} \end{split}\]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[r(t)] = \frac{1}{s^2} \]</div>
+</div>
+</section>
+<section id="id11">
+<h4>(4) 正弦函数<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} f(t) = \begin{cases} 0 &amp; t &lt; 0 \\ A \sin \omega t &amp; t \ge 0 \end{cases} \end{split}\]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(A\)</span> 和 <span class="math notranslate nohighlight">\(\omega\)</span> 为常数。</p>
+<p>欧拉公式： <span class="math notranslate nohighlight">\(\sin \omega t = \frac{1}{2j}(e^{j\omega t} - e^{-j\omega t})\)</span></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[A \sin \omega t] = \frac{A}{2j} \int_{0}^{\infty} (e^{j\omega t} - e^{-j\omega t})e^{-st} dt = \frac{A}{2j} \left[ \frac{1}{s-j\omega} - \frac{1}{s+j\omega} \right] = \frac{A}{2j} \frac{s+j\omega - (s-j\omega)}{s^2 + \omega^2} = \frac{A\omega}{s^2 + \omega^2} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[A \cos \omega t] = \frac{As}{s^2 + \omega^2} \]</div>
+</div>
+<p>其中，<span class="math notranslate nohighlight">\(\text{Re}(s) &gt; 0\)</span>。</p>
+</section>
+<section id="id12">
+<h4>(5) 脉动函数<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} f(t) = \begin{cases} \frac{A}{t_0} &amp; 0 &lt; t &lt; t_0 \\ 0 &amp; t &lt; 0, t_0 &lt; t \end{cases} \end{split}\]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(A\)</span> 和 <span class="math notranslate nohighlight">\(t_0\)</span> 为常数。</p>
+</section>
+<section id="id13">
+<h4>(6) 脉冲函数<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
+<p>脉冲函数是脉动函数的一种特殊极限情况。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} g(t) = \begin{cases} \lim_{\Delta \to 0} \frac{A}{\Delta} &amp; 0 &lt; t &lt; \Delta \\ 0 &amp; t &lt; 0, \Delta &lt; t \end{cases} \end{split}\]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[g(t)] = \lim_{\Delta \to 0} L\left[\frac{A}{\Delta}(1 - e^{-s\Delta})\right] = \lim_{\Delta \to 0} \frac{d}{d\Delta}\left[\frac{A(1-e^{-s\Delta})}{\Delta s}\right] = \lim_{\Delta \to 0} \frac{A}{s} = \frac{A}{s} \]</div>
+</div>
+<p>当 <span class="math notranslate nohighlight">\(A=1, \epsilon \to 0\)</span> 时，称为单位脉冲信号或狄拉克（Dirac）函数 <span class="math notranslate nohighlight">\(\delta(t)\)</span>。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[\delta(t)] = 1 \]</div>
+</div>
+</section>
+<section id="id14">
+<h4>(7) 加速度函数<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} f(t) = \begin{cases} At^2 &amp; t \ge 0 \\ 0 &amp; t &lt; 0 \end{cases} \end{split}\]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(A\)</span> 为常数。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[At^2] = \int_{0}^{\infty} At^2 e^{-st} dt = \frac{A}{s} \left[ t^2 e^{-st} \right]_0^{\infty} - 2 \int_{0}^{\infty} te^{-st} dt = 2A \frac{1}{s^3} \]</div>
+</div>
+<p>当 <span class="math notranslate nohighlight">\(A=1/2\)</span> 时，单位加速度信号 <span class="math notranslate nohighlight">\(a(t)\)</span>：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} a(t) = \begin{cases} 0 &amp; t &lt; 0 \\ \frac{1}{2} t^2 &amp; t \ge 0 \end{cases} \end{split}\]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\frac{1}{2}t^2\right] = \frac{1}{s^3} \]</div>
+</div>
+</section>
+</section>
+</section>
+<section id="id15">
+<h2>2.2 拉普拉斯变换的性质<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<section id="id16">
+<h3>1. 线性性质<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<p>线性性质也称叠加性质，即各函数之和的拉氏变换等于各函数拉氏变换之和。当函数乘以 <span class="math notranslate nohighlight">\(K\)</span> 时，其变换式也乘以相同的常数 <span class="math notranslate nohighlight">\(K\)</span>。</p>
+<p>若 <span class="math notranslate nohighlight">\(L[f_1(t)] = F_1(s)\)</span> 且 <span class="math notranslate nohighlight">\(L[f_2(t)] = F_2(s)\)</span>，<span class="math notranslate nohighlight">\(K_1, K_2\)</span> 为常数，
+则 <span class="math notranslate nohighlight">\(L[K_1 f_1(t) \pm K_2 f_2(t)] = K_1 F_1(s) \pm K_2 F_2(s)\)</span>。</p>
+<p><strong>证明</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[K_1 f_1(t) \pm K_2 f_2(t)] = \int_{0}^{\infty} [K_1 f_1(t) \pm K_2 f_2(t)] e^{-st} dt \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = K_1 \int_{0}^{\infty} f_1(t)e^{-st} dt \pm K_2 \int_{0}^{\infty} f_2(t)e^{-st} dt \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = K_1 F_1(s) \pm K_2 F_2(s) \]</div>
+</div>
+<p>这个性质表明了各函数线性组合的拉氏变换等于各函数拉氏变换的线性组合。</p>
+<p><strong>例 2.1</strong> 求 <span class="math notranslate nohighlight">\(f(t) = \sin \omega t\)</span> 的拉氏变换。
+<strong>解</strong>: 根据欧拉公式</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f(t) = \sin \omega t = \frac{1}{2j}(e^{j\omega t} - e^{-j\omega t}) \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[e^{j\omega t}] = \frac{1}{s-j\omega}, \quad L[e^{-j\omega t}] = \frac{1}{s+j\omega} \]</div>
+</div>
+<p>由拉氏变换的线性性质可知</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[\sin \omega t] = \frac{1}{2j} \left[ \frac{1}{s-j\omega} - \frac{1}{s+j\omega} \right] = \frac{1}{2j} \frac{s+j\omega - (s-j\omega)}{s^2 + \omega^2} = \frac{\omega}{s^2 + \omega^2} \]</div>
+</div>
+<p>用同样的方法可求得</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[\cos \omega t] = \frac{s}{s^2 + \omega^2} \]</div>
+</div>
+</section>
+<section id="id17">
+<h3>2. 微分性质<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<p>若 <span class="math notranslate nohighlight">\(L[f(t)] = F(s)\)</span>，则 <span class="math notranslate nohighlight">\(L\left[\frac{df(t)}{dt}\right] = sF(s) - f(0)\)</span>。
+<span class="math notranslate nohighlight">\(f(0)\)</span> 是 <span class="math notranslate nohighlight">\(f(t)\)</span> 在 <span class="math notranslate nohighlight">\(t=0\)</span> 时的初始值。
+对于给定的时间函数，<span class="math notranslate nohighlight">\(f(0_+)\)</span> 和 <span class="math notranslate nohighlight">\(f(0_-)\)</span> 的值可能相同，也可能不同。
+当 <span class="math notranslate nohighlight">\(f(t)\)</span> 在 <span class="math notranslate nohighlight">\(t=0\)</span> 处具有间断点时，<span class="math notranslate nohighlight">\(f(0_+)\)</span> 和 <span class="math notranslate nohighlight">\(f(0_-)\)</span> 之间的差别很重要，因为此时 <span class="math notranslate nohighlight">\(df(t)/dt\)</span> 在 <span class="math notranslate nohighlight">\(t=0\)</span> 处将包含一个脉冲函数 <span class="math notranslate nohighlight">\(\delta(t)\)</span>。即 <span class="math notranslate nohighlight">\(f(0_+) \ne f(0_-)\)</span>。
+则 <span class="math notranslate nohighlight">\(L_+\left[\frac{df(t)}{dt}\right] = sF(s) - f(0_+)\)</span>， <span class="math notranslate nohighlight">\(L_-\left[\frac{df(t)}{dt}\right] = sF(s) - f(0_-)\)</span>。</p>
+<p><strong>证明</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\frac{df(t)}{dt}\right] = \int_{0}^{\infty} \left[\frac{df(t)}{dt}\right]e^{-st} dt \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \left[f(t)e^{-st}\right]_0^{\infty} - \int_{0}^{\infty} f(t)(-s)e^{-st} dt \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = s \int_{0}^{\infty} f(t)e^{-st} dt - f(0) = sL[f(t)] - f(0) = sF(s) - f(0) \]</div>
+</div>
+<p>这个性质表明了一个时间函数 <span class="math notranslate nohighlight">\(f(t)\)</span> 求导后取拉氏变换等于这个函数的拉氏变换乘以 <span class="math notranslate nohighlight">\(s\)</span>，再减去这个函数的初始值 <span class="math notranslate nohighlight">\(f(0)\)</span>。
+一阶导数的微分性质可以推广到高阶导数。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\frac{d^2 f(t)}{dt^2}\right] = s^2F(s) - sf(0) - f'(0) \]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(f'(0)\)</span> 是 <span class="math notranslate nohighlight">\(df(t)/dt\)</span> 在 <span class="math notranslate nohighlight">\(t=0\)</span> 时的值。</p>
+<p><strong>证明</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\frac{d^2 f(t)}{dt^2}\right] = e^{-st} \frac{df(t)}{dt} \Big|_0^{\infty} + s \int_{0}^{\infty} \frac{df(t)}{dt} e^{-st} dt \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = -f'(0) + s[sF(s) - f(0)] \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = s^2F(s) - sf(0) - f'(0) \]</div>
+</div>
+<p>导出时间函数 <span class="math notranslate nohighlight">\(f(t)\)</span> 的 <span class="math notranslate nohighlight">\(n\)</span> 阶导数微分性质</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\frac{d^n f(t)}{dt^n}\right] = s^n F(s) - \sum_{r=0}^{n-1} s^{n-r-1} f^{(r)}(0) \]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(f^{(r)}(0)\)</span> 是 <span class="math notranslate nohighlight">\(r\)</span> 阶导数 <span class="math notranslate nohighlight">\(\frac{d^r f(t)}{dt^r}\)</span> 在 <span class="math notranslate nohighlight">\(t=0\)</span> 时的值。
+为了保证 <span class="math notranslate nohighlight">\(f(t)\)</span> 的各阶导数的拉氏变换存在，<span class="math notranslate nohighlight">\(\frac{d^n f(t)}{dt^n}\)</span> (<span class="math notranslate nohighlight">\(n=1,2,3,\dots\)</span>) 必须能够进行拉氏变换。
+如果 <span class="math notranslate nohighlight">\(f(t)\)</span> 及其各阶导数的所有初始值全都为零，则</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\frac{d^n f(t)}{dt^n}\right] = s^n F(s) \]</div>
+</div>
+<p><strong>例 2.2</strong> 求余弦函数 <span class="math notranslate nohighlight">\(g(t) = \begin{cases} 0 &amp; t &lt; 0 \\ \cos \omega t &amp; t \ge 0 \end{cases}\)</span> 的拉氏变换。
+<strong>解</strong>: 由于正弦函数 <span class="math notranslate nohighlight">\(f(t) = \begin{cases} 0 &amp; t &lt; 0 \\ \sin \omega t &amp; t \ge 0 \end{cases}\)</span> 的拉氏变换 <span class="math notranslate nohighlight">\(F(s) = \frac{\omega}{s^2 + \omega^2}\)</span>。
+根据拉氏变换的微分性质，可以求得</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[\cos \omega t] = L\left[\frac{1}{\omega}\frac{d}{dt}(\sin \omega t)\right] = \frac{1}{\omega}[sF(s) - f(0)] \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \frac{1}{\omega}\left[ s \frac{\omega}{s^2 + \omega^2} - 0 \right] = \frac{s}{s^2 + \omega^2} \]</div>
+</div>
+<p><strong>例 2.3</strong> 求以下微分方程的拉氏变换，已知其各阶导数的初始值为零。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \frac{d^3 x_0(t)}{dt^3} + 2\frac{d^2 x_0(t)}{dt^2} + 3\frac{dx_0(t)}{dt} + x_0(t) = 2\frac{dx_i(t)}{dt} + x_i(t) \]</div>
+</div>
+<p><strong>解</strong>: 对上式两端取拉氏变换，得</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ s^3 X_0(s) + 2s^2 X_0(s) + 3sX_0(s) + X_0(s) = 2sX_i(s) + X_i(s) \]</div>
+</div>
+<p>化简得 <span class="math notranslate nohighlight">\((s^3 + 2s^2 + 3s + 1)X_0(s) = (2s+1)X_i(s)\)</span>
+传递函数：<span class="math notranslate nohighlight">\(G(s) = \frac{X_0(s)}{X_i(s)} = \frac{2s+1}{s^3 + 2s^2 + 3s + 1}\)</span></p>
+</section>
+<section id="id18">
+<h3>3. 积分性质<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<p>若 <span class="math notranslate nohighlight">\(L[f(t)] = F(s)\)</span>，则 <span class="math notranslate nohighlight">\(L\left[\int_{0}^{t} f(\tau) d\tau\right] = \frac{F(s)}{s} + \frac{f^{-1}(0)}{s}\)</span>。
+<span class="math notranslate nohighlight">\(f^{-1}(0)\)</span> 是 <span class="math notranslate nohighlight">\(\int f(t) dt\)</span> 在 <span class="math notranslate nohighlight">\(t=0\)</span> 的值。
+如果 <span class="math notranslate nohighlight">\(f(t)\)</span> 在 <span class="math notranslate nohighlight">\(t=0\)</span> 处包含一个脉冲函数 <span class="math notranslate nohighlight">\(\delta(t)\)</span>，即 <span class="math notranslate nohighlight">\(f^{-1}(0_+) \ne f^{-1}(0_-)\)</span>。
+则 <span class="math notranslate nohighlight">\(L_+ \left[\int_{0}^{t} f(\tau) d\tau\right] = \frac{F(s)}{s} + \frac{f^{-1}(0_+)}{s}\)</span>， <span class="math notranslate nohighlight">\(L_- \left[\int_{0}^{t} f(\tau) d\tau\right] = \frac{F(s)}{s} + \frac{f^{-1}(0_-)}{s}\)</span>。</p>
+<p><strong>证明</strong>: 借助分部积分法进行积分，得</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\int_{0}^{t} f(\tau) d\tau\right] = \int_{0}^{\infty} \left[\int_{0}^{t} f(\tau) d\tau\right] e^{-st} dt \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \left[\int_{0}^{t} f(\tau) d\tau \cdot \frac{e^{-st}}{-s}\right]_0^{\infty} - \int_{0}^{\infty} f(t) \cdot \frac{e^{-st}}{-s} dt \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \frac{1}{s} \left[\int_{0}^{t} f(\tau) d\tau\right]_{t=0} + \frac{1}{s} \int_{0}^{\infty} f(t)e^{-st} dt \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \frac{f^{-1}(0)}{s} + \frac{F(s)}{s} \]</div>
+</div>
+<p>如果积分的初值为零，则 <span class="math notranslate nohighlight">\(L\left[\int_{0}^{t} f(\tau) d\tau\right] = \frac{F(s)}{s}\)</span>。
+对于多重积分的拉氏变换，有</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\int_{0}^{t}\int_{0}^{\tau} f(\sigma) (d\sigma)^2\right] = \frac{F(s)}{s^2} + \frac{f^{-1}(0)}{s} + \frac{f^{-2}(0)}{s} \]</div>
+</div>
+<p>…</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\int_{0}^{t} \dots \int_{0}^{\tau_n} f(t_1) (dt_1)^n\right] = \frac{F(s)}{s^n} + \frac{f^{-1}(0)}{s^n} + \dots + \frac{f^{(-n)}(0)}{s} \]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(f^{-1}(0), f^{-2}(0), \dots, f^{(-n)}(0)\)</span> 为 <span class="math notranslate nohighlight">\(f(t)\)</span> 的各重积分在 <span class="math notranslate nohighlight">\(t=0\)</span> 时的值。
+如果 <span class="math notranslate nohighlight">\(f^{-1}(0) = f^{-2}(0) = \dots = f^{(-n)}(0) = 0\)</span>，则有</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\int_{0}^{t} \dots \int_{0}^{\tau_n} f(t_1) (dt_1)^n\right] = \frac{F(s)}{s^n} \]</div>
+</div>
+</section>
+<section id="id19">
+<h3>4. 位移性质<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<p>若 <span class="math notranslate nohighlight">\(L[f(t)] = F(s)\)</span>，则 <span class="math notranslate nohighlight">\(L[f(t)e^{-at}] = F(s+a)\)</span>。
+此性质表明：时间函数乘以 <span class="math notranslate nohighlight">\(e^{-at}\)</span>，相当于变换式在复频域内平移 <span class="math notranslate nohighlight">\(a\)</span>。</p>
+<p><strong>证明</strong>: 根据拉氏变换的定义，得</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[e^{-at} f(t)] = \int_{0}^{\infty} e^{-at} f(t) e^{-st} dt = \int_{0}^{\infty} f(t) e^{-(s+a)t} dt \]</div>
+</div>
+<p>上式的右方只是在 <span class="math notranslate nohighlight">\(F(s)\)</span> 中把 <span class="math notranslate nohighlight">\(s\)</span> 换成 <span class="math notranslate nohighlight">\(s+a\)</span>，所以</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[f(t)e^{-at}] = F(s+a) \]</div>
+</div>
+<p><strong>例</strong>: 求 <span class="math notranslate nohighlight">\(e^{-\alpha t} \sin \omega t\)</span> 和 <span class="math notranslate nohighlight">\(e^{-\alpha t} \cos \omega t\)</span> 的拉氏变换。
+<strong>解</strong>: 已知 <span class="math notranslate nohighlight">\(L[\sin \omega t] = \frac{\omega}{s^2 + \omega^2}\)</span>。
+由拉氏变换的位移性质：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[e^{-\alpha t} \sin \omega t] = \frac{\omega}{(s+\alpha)^2 + \omega^2} \]</div>
+</div>
+<p>同理，因为 <span class="math notranslate nohighlight">\(L[\cos \omega t] = \frac{s}{s^2 + \omega^2}\)</span>，
+故有</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[e^{-\alpha t} \cos \omega t] = \frac{s+\alpha}{(s+\alpha)^2 + \omega^2} \]</div>
+</div>
+</section>
+<section id="id20">
+<h3>5. 延迟性质<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<p>若 <span class="math notranslate nohighlight">\(L[f(t)] = F(s)\)</span>，则 <span class="math notranslate nohighlight">\(L[f(t-t_0)u(t-t_0)] = e^{-st_0} F(s)\)</span>。
+此性质表明：如下图所示的时间函数 <span class="math notranslate nohighlight">\(f(t)u(t)\)</span>，若在时间轴上延迟 <span class="math notranslate nohighlight">\(t_0\)</span> 得到时间函数 <span class="math notranslate nohighlight">\(f(t-t_0)u(t-t_0)\)</span>，则它的拉氏变换应乘以 <span class="math notranslate nohighlight">\(e^{-st_0}\)</span>。
+[图像展示了原始函数 <span class="math notranslate nohighlight">\(f(t)u(t)\)</span> 和延迟后的函数 <span class="math notranslate nohighlight">\(f(t-t_0)u(t-t_0)\)</span>]</p>
+<p><strong>证明</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[f(t-t_0)u(t-t_0)] = \int_{0}^{\infty} [f(t-t_0)u(t-t_0)] e^{-st} dt = \int_{t_0}^{\infty} f(t-t_0)e^{-st} dt \]</div>
+</div>
+<p>令 <span class="math notranslate nohighlight">\(\tau = t-t_0\)</span>，则 <span class="math notranslate nohighlight">\(t = \tau + t_0\)</span>，代入上式得</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[f(t-t_0)u(t-t_0)] = \int_{0}^{\infty} f(\tau)e^{-s(\tau+t_0)} d\tau = e^{-st_0} \int_{0}^{\infty} f(\tau)e^{-s\tau} d\tau = e^{-st_0} F(s) \]</div>
+</div>
+<p><strong>例</strong>: 求图(a)所示的时间函数的拉氏变换。
+[包含三个图：(a) 梯形波形 <span class="math notranslate nohighlight">\(f(t)\)</span>，(b) <span class="math notranslate nohighlight">\(f'(t)\)</span>，© <span class="math notranslate nohighlight">\(f''(t)\)</span>]
+<strong>解</strong>: 时间函数 <span class="math notranslate nohighlight">\(f(t)\)</span> 的一阶、二阶导数，如图(b)、©所示。
+<span class="math notranslate nohighlight">\(f''(t) = 2\delta(t) - 2\delta(t-1) - 2\delta(t-2) + 2\delta(t-3)\)</span>
+由于 <span class="math notranslate nohighlight">\(L[\delta(t)] = 1\)</span>，
+由延迟和线性性质得
+<span class="math notranslate nohighlight">\(F_2(s) = L[f''(t)] = 2 - 2e^{-s} - 2e^{-2s} + 2e^{-3s}\)</span>
+由积分性质得
+<span class="math notranslate nohighlight">\(F(s) = L[f(t)] = \frac{F_2(s)}{s^2} = \frac{2(1-e^{-s} - e^{-2s} + e^{-3s})}{s^2}\)</span></p>
+<p><strong>例</strong>: 已知 <span class="math notranslate nohighlight">\(f_1(t) = e^{-2(t-1)}u(t-1)\)</span>，<span class="math notranslate nohighlight">\(f_2(t) = e^{-2(t-1)}u(t)\)</span>，求 <span class="math notranslate nohighlight">\(f_1(t) + f_2(t)\)</span> 的拉氏变换。
+<strong>解</strong>: 因为 <span class="math notranslate nohighlight">\(L[e^{-2t}u(t)] = \frac{1}{s+2}\)</span>。
+根据拉氏变换的延迟性质，得
+<span class="math notranslate nohighlight">\(F_1(s) = L[e^{-2(t-1)}u(t-1)] = e^{-s} \cdot \frac{1}{s+2}\)</span>。
+又因为 <span class="math notranslate nohighlight">\(f_2(t) = e^{-2(t-1)}u(t) = e^2 e^{-2t}u(t)\)</span>。
+根据拉氏变换的线性性质，得 <span class="math notranslate nohighlight">\(F_2(s) = e^2 \cdot \frac{1}{s+2}\)</span>。
+<span class="math notranslate nohighlight">\(L[f_1(t) + f_2(t)] = F_1(s) + F_2(s) = \frac{e^{-s} + e^2}{s+2}\)</span>。</p>
+</section>
+<section id="id21">
+<h3>6. 尺度变换<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<p>若 <span class="math notranslate nohighlight">\(L[f(t)] = F(s)\)</span>，则 <span class="math notranslate nohighlight">\(L[f(at)] = \frac{1}{a} F\left(\frac{s}{a}\right)\)</span>，<span class="math notranslate nohighlight">\(a &gt; 0\)</span>。</p>
+<p><strong>证明</strong>:
+$<span class="math notranslate nohighlight">\( L[f(at)] = \int_{0}^{\infty} f(at) e^{-st} dt \)</span><span class="math notranslate nohighlight">\(
+令 \)</span>\tau = at<span class="math notranslate nohighlight">\(，则 \)</span>t = \frac{\tau}{a}<span class="math notranslate nohighlight">\(， \)</span>dt = \frac{1}{a} d\tau<span class="math notranslate nohighlight">\(。
+\)</span><span class="math notranslate nohighlight">\( L[f(at)] = \int_{0}^{\infty} f(\tau) e^{-s(\tau/a)} \frac{1}{a} d\tau = \frac{1}{a} \int_{0}^{\infty} f(\tau) e^{-(s/a)\tau} d\tau = \frac{1}{a} F\left(\frac{s}{a}\right) \)</span>$</p>
+<p><strong>例</strong>: 已知 <span class="math notranslate nohighlight">\(L[f(t)] = F(s)\)</span>，若 <span class="math notranslate nohighlight">\(a&gt;0, b&gt;0\)</span>，求 <span class="math notranslate nohighlight">\(L[f(at-b)u(at-b)]\)</span>。
+<strong>解</strong>: 此题既要用到尺度变换，也要用到延迟性质。</p>
+<p><strong>解法一（不推荐）</strong>:
+由延迟性质得 <span class="math notranslate nohighlight">\(L[f(t-b)u(t-b)] = F(s)e^{-bs}\)</span>。
+再由尺度变换，即可求得结果：
+<span class="math notranslate nohighlight">\(L[f(at-b)u(at-b)] = \frac{1}{a} F\left(\frac{s}{a}\right) e^{-(\frac{s}{a})b} = \frac{1}{a} F\left(\frac{s}{a}\right) e^{-sb/a}\)</span>。</p>
+<p><strong>解法二</strong>:
+先用尺度变换性质：<span class="math notranslate nohighlight">\(L[f(at)u(at)] = \frac{1}{a} F\left(\frac{s}{a}\right)\)</span>。
+然后由延迟性质求出：
+<span class="math notranslate nohighlight">\(L\left[f\left(at - \frac{b}{a}a\right)u\left(at - \frac{b}{a}a\right)\right] = L\left[f\left(a(t-\frac{b}{a})\right)u\left(a(t-\frac{b}{a})\right)\right]\)</span>
+令 <span class="math notranslate nohighlight">\(t' = t - \frac{b}{a}\)</span>，则 <span class="math notranslate nohighlight">\(at' = a(t-\frac{b}{a}) = at - b\)</span>。
+<span class="math notranslate nohighlight">\(L[f(at')u(at')] = \frac{1}{a} F\left(\frac{s}{a}\right)\)</span>。
+将 <span class="math notranslate nohighlight">\(t'\)</span> 延迟 <span class="math notranslate nohighlight">\(\frac{b}{a}\)</span>，即 <span class="math notranslate nohighlight">\(t \rightarrow t - \frac{b}{a}\)</span>，对应的 <span class="math notranslate nohighlight">\(s\)</span> 变为 <span class="math notranslate nohighlight">\(s e^{-s(b/a)}\)</span>。
+<span class="math notranslate nohighlight">\(L[f(a(t-\frac{b}{a}))u(a(t-\frac{b}{a}))] = \frac{1}{a} F\left(\frac{s}{a}\right) e^{-s(b/a)}\)</span>。
+即 <span class="math notranslate nohighlight">\(L[f(at-b)u(at-b)] = \frac{1}{a} F\left(\frac{s}{a}\right) e^{-sb/a}\)</span>。
+两种解法其结果一致。</p>
+</section>
+<section id="id22">
+<h3>7. 初值定理、终值定理<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<section id="id23">
+<h4>(1) 初值定理<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h4>
+<p><strong>证明</strong>: 根据拉氏变换的微分性质，有</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\frac{d}{dt}f(t)\right] = \int_{0}^{\infty} \frac{d}{dt}f(t)e^{-st} dt = sF(s) - f(0) \]</div>
+</div>
+<p>令 <span class="math notranslate nohighlight">\(s \rightarrow \infty\)</span> 取极限得</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \lim_{s\to\infty} \int_{0}^{\infty} \frac{d}{dt}f(t)e^{-st} dt = \lim_{s\to\infty} [sF(s) - f(0)] \]</div>
+</div>
+<p>在时间区间 <span class="math notranslate nohighlight">\([0_+, \infty)\)</span> 内，<span class="math notranslate nohighlight">\(\lim_{s\to\infty} e^{-st} = 0\)</span>。</p>
+<p>因此，</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \lim_{s\to\infty} \int_{0}^{\infty} \frac{d}{dt}f(t)e^{-st} dt = \int_{0+}^{\infty} \frac{d}{dt}f(t) \lim_{s\to\infty} e^{-st} dt = 0 \]</div>
+</div>
+<p>于是</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \lim_{s\to\infty} [sF(s) - f(0_+)] = 0 \]</div>
+</div>
+<p>即</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f(0_+) = \lim_{t\to 0_+} f(t) = \lim_{s\to\infty} sF(s) \]</div>
+</div>
+</section>
+<section id="id24">
+<h4>(2) 终值定理<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h4>
+<p><strong>证明</strong>: 根据拉氏变换的微分性质，有</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L\left[\frac{d}{dt}f(t)\right] = \int_{0}^{\infty} \frac{d}{dt}f(t)e^{-st} dt = sF(s) - f(0) \]</div>
+</div>
+<p>令 <span class="math notranslate nohighlight">\(s \rightarrow 0\)</span> 取极限得</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \lim_{s\to 0} \int_{0}^{\infty} \frac{d}{dt}f(t)e^{-st} dt = \lim_{s\to 0} [sF(s) - f(0)] \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \lim_{s\to 0} \int_{0}^{\infty} \frac{d}{dt}f(t)e^{-st} dt = \int_{0}^{\infty} \frac{d}{dt}f(t) \lim_{s\to 0} e^{-st} dt \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \int_{0}^{\infty} df(t) = \lim_{t\to\infty} \int_0^t df(t) = \lim_{t\to\infty} [f(t) - f(0)] \]</div>
+</div>
+<p>于是</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \lim_{t\to\infty} f(t) = \lim_{s\to 0} sF(s) \]</div>
+</div>
+<p>终值定理表明：时间函数 <span class="math notranslate nohighlight">\(f(t)\)</span> 的稳态值与复频域中 <span class="math notranslate nohighlight">\(s=0\)</span> 附近的 <span class="math notranslate nohighlight">\(sF(s)\)</span> 的值相同。因此，<span class="math notranslate nohighlight">\(f(t)\)</span> 在 <span class="math notranslate nohighlight">\(t \rightarrow \infty\)</span> 时的值可以直接从 <span class="math notranslate nohighlight">\(\lim_{s\to 0} sF(s)\)</span> 得到。
+利用该性质，可在复频域中得到控制系统在时间域中的稳态值，利用该性质还可以求得控制系统的稳态误差。</p>
+<p><strong>例</strong>: 已知 <span class="math notranslate nohighlight">\(f(t) = e^{-t} \cos t \cdot u(t)\)</span>，求 <span class="math notranslate nohighlight">\(f(0_+)\)</span> 和 <span class="math notranslate nohighlight">\(f(\infty)\)</span>。
+<strong>解</strong>: 由于 <span class="math notranslate nohighlight">\(L[\cos t \cdot u(t) e^{-t}] = \frac{s+1}{(s+1)^2 + 1}\)</span>。
+由初值定理，得</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f(0_+) = \lim_{s\to\infty} sF(s) = \lim_{s\to\infty} \frac{s(s+1)}{(s+1)^2 + 1} = 1 \]</div>
+</div>
+<p>由终值定理，得</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f(\infty) = \lim_{s\to 0} sF(s) = \lim_{s\to 0} \frac{s(s+1)}{(s+1)^2 + 1} = 0 \]</div>
+</div>
+</section>
+</section>
+</section>
+<section id="id25">
+<h2>2.3 拉普拉斯逆变换<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h2>
+<p>由象函数 <span class="math notranslate nohighlight">\(F(s)\)</span> 求原函数 <span class="math notranslate nohighlight">\(f(t)\)</span>，可根据公式</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f(t) = \frac{1}{2\pi j}\int_{\beta - j\infty}^{\beta + j\infty} F(s)e^{st} ds \]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(t \ge 0\)</span></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f(t) = L^{-1}[F(s)] \]</div>
+</div>
+<p>对于简单的象函数，可直接应用拉氏变换对照表，查出相应的原函数。
+对于有理分式这类复杂象函数，通常先用 <strong>部分分式展开法</strong>（也称海维赛德展开定理），将复杂函数展开成简单函数的和，再应用拉氏变换对照表，即可写出相应的原函数。</p>
+<p><strong>试求</strong> <span class="math notranslate nohighlight">\(F(s) = \frac{s}{s^2 + 2s + 5}\)</span> <strong>的拉氏逆变换</strong>。
+<strong>解</strong></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[F(s)] = L^{-1}\left[\frac{s}{s^2 + 2s + 5}\right] \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = L^{-1}\left[\frac{(s+1)-1}{(s+1)^2 + 2^2}\right] \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = L^{-1}\left[\frac{s+1}{(s+1)^2 + 2^2}\right] - L^{-1}\left[\frac{1}{2} \cdot \frac{2}{(s+1)^2 + 2^2}\right] \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = (e^{-t} \cos 2t - \frac{1}{2}e^{-t} \sin 2t) \cdot u(t) \]</div>
+</div>
+<p>一般系统，通常有如下形式的有理分式：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ F(s) = \frac{N(s)}{D(s)} = \frac{b_m s^m + b_{m-1}s^{m-1} + \dots + b_1 s + b_0}{a_n s^n + a_{n-1}s^{n-1} + \dots + a_1 s + a_0} \]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(a_1, a_2, \dots, a_n, b_1, b_2, \dots, b_m\)</span> 都是实常数；<span class="math notranslate nohighlight">\(m, n\)</span> 为正整数，通常 <span class="math notranslate nohighlight">\(m &lt; n\)</span>。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ F(s) = \frac{N(s)}{D(s)} = K \frac{(s-z_1)(s-z_2)\dots(s-z_m)}{(s-p_1)(s-p_2)\dots(s-p_n)} \]</div>
+</div>
+<p>当分母 <span class="math notranslate nohighlight">\(D(s)=0\)</span> 时 <span class="math notranslate nohighlight">\(s\)</span> 的根，称为 <span class="math notranslate nohighlight">\(F(s)\)</span> 的 <strong>极点</strong>；
+当分子 <span class="math notranslate nohighlight">\(N(s)=0\)</span> 时 <span class="math notranslate nohighlight">\(s\)</span> 的根，称为 <span class="math notranslate nohighlight">\(F(s)\)</span> 的 <strong>零点</strong>。</p>
+<section id="id26">
+<h3>1. 只含不同极点的情况<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ F(s) = \frac{N(s)}{D(s)} = \frac{a_1}{(s-p_1)} + \dots + \frac{a_k}{(s-p_k)} + \dots + \frac{a_n}{(s-p_n)} \]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(a_1, \dots, a_k, \dots, a_n\)</span> 都是常数，叫做极点 <span class="math notranslate nohighlight">\(s=p_k\)</span> 上的 <strong>留数</strong>。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_k = [(s-p_k)F(s)]_{s=p_k} \]</div>
+</div>
+<p>拉氏逆变换，求得：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f(t) = L^{-1}[F(s)] = (a_1 e^{p_1 t} + \dots + a_k e^{p_k t} + \dots + a_n e^{p_n t}) \cdot u(t) \]</div>
+</div>
+<p><strong>试求</strong> <span class="math notranslate nohighlight">\(F(s) = \frac{s+3}{s^2 + 3s + 2}\)</span> <strong>的拉氏逆变换</strong>。
+<strong>解</strong> <span class="math notranslate nohighlight">\(F(s)\)</span> 的部分分式展开为</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ F(s) = \frac{s+3}{(s+1)(s+2)} = \frac{a_1}{(s+1)} + \frac{a_2}{(s+2)} \]</div>
+</div>
+<p>又</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_1 = \left[(s+1)\frac{s+3}{(s+1)(s+2)}\right]_{s=-1} = \left[\frac{s+3}{s+2}\right]_{s=-1} = \frac{2}{1} = 2 \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_2 = \left[(s+2)\frac{s+3}{(s+1)(s+2)}\right]_{s=-2} = \left[\frac{s+3}{s+1}\right]_{s=-2} = \frac{1}{-1} = -1 \]</div>
+</div>
+<p>则 <span class="math notranslate nohighlight">\(f(t) = L^{-1}[F(s)] = L^{-1}\left[\frac{2}{s+1}\right] + L^{-1}\left[\frac{-1}{s+2}\right] = (2e^{-t} - e^{-2t})u(t)\)</span>。</p>
+<p><strong>试求</strong> <span class="math notranslate nohighlight">\(G(s) = \frac{s^3 + 5s^2 + 9s + 7}{s^2 + 3s + 2}\)</span> <strong>的拉氏逆变换</strong>。
+<strong>解</strong>: 因为分子多项式的阶次比分母多项式的阶次高，所以必须用分母去除分子。于是</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ G(s) = s + 2 + \frac{s+3}{(s+1)(s+2)} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ g(t) = L^{-1}[G(s)] = \left(\frac{d}{dt}\delta(t) + 2\delta(t) + 2e^{-t} - e^{-2t}\right)u(t) \]</div>
+</div>
+</section>
+<section id="id27">
+<h3>2. 含共轭复极点的情况<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ F(s) = \frac{N(s)}{D(s)} = \frac{a_1 s + a_2}{s^2 + cs + d} = \frac{K_1}{s + \delta - j\beta} + \frac{K_2}{s + \delta + j\beta} \]</div>
+</div>
+<p>共轭复极点 <span class="math notranslate nohighlight">\(p_{1,2} = -\delta \pm j\beta\)</span>
+分别求系数 <span class="math notranslate nohighlight">\(K_1, K_2\)</span>。 <span class="math notranslate nohighlight">\(K_1 = A + jB\)</span>， <span class="math notranslate nohighlight">\(K_2 = A - jB\)</span>。不难看出，<span class="math notranslate nohighlight">\(K_1\)</span> 与 <span class="math notranslate nohighlight">\(K_2\)</span> 成共轭关系。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ K_1 = [(s+\delta-j\beta)F(s)]_{s=-\delta+j\beta} = \frac{(a_2 - a_1\delta) + ja_1\beta}{2j\beta} = \frac{a_1\beta + (a_1\delta - a_2)j}{2\beta} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ K_2 = [(s+\delta+j\beta)F(s)]_{s=-\delta-j\beta} = \frac{(a_2 - a_1\delta) - ja_1\beta}{-2j\beta} = \frac{a_1\beta - (a_1\delta - a_2)j}{2\beta} \]</div>
+</div>
+<p>求出 <span class="math notranslate nohighlight">\(A, B\)</span>: <span class="math notranslate nohighlight">\(A = \frac{a_1}{2}\)</span>，<span class="math notranslate nohighlight">\(B = \frac{a_1\delta - a_2}{2\beta}\)</span>。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L^{-1}[F(s)] = f(t) = 2e^{-\delta t} [A \cos(\beta t) - B \sin(\beta t)] \cdot u(t) \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ F(s) = \frac{N(s)}{D(s)} = \frac{a_1 s + a_2}{s^2 + cs + d} + \frac{a_3}{s-p_3} + \dots + \frac{a_n}{s-p_n} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \frac{K_1}{s+\delta-j\beta} + \frac{K_2}{s+\delta+j\beta} + \frac{a_3}{s-p_3} + \dots + \frac{a_n}{s-p_n} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f(t) = L^{-1}[F(s)] \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = 2e^{-\delta t} [A \cos(\beta t) - B \sin(\beta t)] \cdot u(t) + (a_3 e^{p_3 t} + a_4 e^{p_4 t} + \dots + a_n e^{p_n t}) \cdot u(t) \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = 2e^{-\delta t} [A \cos(\beta t) - B \sin(\beta t)] u(t) + \sum_{i=3}^{n} a_i e^{p_i t} u(t) \]</div>
+</div>
+<p><strong>例</strong>: 试求 <span class="math notranslate nohighlight">\(F(s) = \frac{s^2 + 3}{(s^2 + 2s + 5)(s+2)}\)</span> 的拉氏逆变换。
+<strong>解</strong>: 将 <span class="math notranslate nohighlight">\(F(s)\)</span> 分解因式为</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ F(s) = \frac{s^2 + 3}{(s+1+j2)(s+1-j2)(s+2)} = \frac{K_1}{s+1-j2} + \frac{K_2}{s+1+j2} + \frac{a_3}{s+2} \]</div>
+</div>
+<p>则共轭复极点 <span class="math notranslate nohighlight">\(p_{1,2} = -1 \pm j2\)</span>， <span class="math notranslate nohighlight">\(\delta = 1\)</span>, <span class="math notranslate nohighlight">\(\beta = 2\)</span>。
+分别求系数 <span class="math notranslate nohighlight">\(K_1, K_2\)</span> 和 <span class="math notranslate nohighlight">\(a_3\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_3 = [(s+2)F(s)]_{s=-2} = \left[(s+2)\frac{s^2+3}{(s^2+2s+5)(s+2)}\right]_{s=-2} = \left[\frac{s^2+3}{s^2+2s+5}\right]_{s=-2} = \frac{4+3}{4-4+5} = \frac{7}{5} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ K_1 = [(s+1-j2)F(s)]_{s=-1+j2} = \left[\frac{s^2+3}{(s+1+j2)(s+2)}\right]_{s=-1+j2} = \frac{(-1+j2)^2+3}{(-1+j2+1+j2)(-1+j2+2)} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \frac{1-4-2j+3}{(j4)(1+j2)} = \frac{-2j}{4j(1+j2)} = \frac{-1}{2(1+j2)} = \frac{-1}{2+4j} = \frac{-1(2-4j)}{4+16} = \frac{-2+4j}{20} = \frac{-1+2j}{10} \]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(K_2 = K_1^* = \frac{-1-2j}{10}\)</span>。
+<span class="math notranslate nohighlight">\(A = \text{Re}(K_1) = -\frac{1}{10}\)</span>。
+<span class="math notranslate nohighlight">\(B = \text{Im}(K_1) = \frac{2}{10} = \frac{1}{5}\)</span>。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L^{-1}[F(s)] = f(t) = 2e^{-t} [A \cos(\beta t) - B \sin(\beta t)] + a_3 e^{-2t} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = 2e^{-t} \left[-\frac{1}{10} \cos(2t) - \frac{1}{5} \sin(2t)\right] + \frac{7}{5} e^{-2t} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = -\frac{1}{5}e^{-t} \cos(2t) - \frac{2}{5}e^{-t} \sin(2t) + \frac{7}{5} e^{-2t} \]</div>
+</div>
+</section>
+<section id="id28">
+<h3>3. 含多重极点的情况<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
+<p>设 <span class="math notranslate nohighlight">\(A(s)=0\)</span> 有 <span class="math notranslate nohighlight">\(r\)</span> 个重极点 <span class="math notranslate nohighlight">\(p_1\)</span> (即 <span class="math notranslate nohighlight">\(A(s)=0\)</span> 有 <span class="math notranslate nohighlight">\(r\)</span> 个重根 <span class="math notranslate nohighlight">\(s_1 = -p_1\)</span>)，则 <span class="math notranslate nohighlight">\(F(s)\)</span> 可写成</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ F(s) = \frac{B(s)}{A(s)} = \frac{B(s)}{(s+p_1)^r (s+p_{r+1})\cdots(s+p_n)} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \frac{a_r}{(s+p_1)^r} + \frac{a_{r-1}}{(s+p_1)^{r-1}} + \dots + \frac{a_1}{s+p_1} + \frac{a_{r+1}}{s+p_{r+1}} + \dots + \frac{a_n}{s+p_n} \]</div>
+</div>
+<p><span class="math notranslate nohighlight">\(p_1\)</span> 为 <span class="math notranslate nohighlight">\(F(s)\)</span> 的重极点，<span class="math notranslate nohighlight">\(p_{r+1}, \dots, p_n\)</span> 为 <span class="math notranslate nohighlight">\(F(s)\)</span> 的 <span class="math notranslate nohighlight">\((n-r)\)</span> 个非重极点；<span class="math notranslate nohighlight">\(a_r, a_{r-1}, \dots, a_1\)</span> 和 <span class="math notranslate nohighlight">\(a_{r+1}, a_{r+2}, \dots, a_n\)</span> 为待定系数，按不同极点留数的方法求解。</p>
+<p>系数 <span class="math notranslate nohighlight">\(a_r, a_{r-1}, \dots, a_1\)</span> 可通过如下方法来计算：
+令 <span class="math notranslate nohighlight">\(F_1(s) = \frac{a_r}{(s+p_1)^r} + \frac{a_{r-1}}{(s+p_1)^{r-1}} + \dots + \frac{a_1}{s+p_1}\)</span>。
+用 <span class="math notranslate nohighlight">\((s+p_1)^r\)</span> 乘以上式的两边，得
+<span class="math notranslate nohighlight">\((s+p_1)^r F_1(s) = a_r + a_{r-1}(s+p_1) + \dots + a_1(s+p_1)^{r-1}\)</span>。
+令 <span class="math notranslate nohighlight">\(s = -p_1\)</span>， <span class="math notranslate nohighlight">\(a_r = [(s+p_1)^r F_1(s)]_{s=-p_1}\)</span>。
+将上式两边对 <span class="math notranslate nohighlight">\(s\)</span> 进行微分，得
+<span class="math notranslate nohighlight">\(\frac{d}{ds}[(s+p_1)^r F_1(s)] = a_{r-1} + 2a_{r-2}(s+p_1) + \dots + (r-1)a_1(s+p_1)^{r-2}\)</span>。
+令 <span class="math notranslate nohighlight">\(s = -p_1\)</span>， <span class="math notranslate nohighlight">\(a_{r-1} = \frac{d}{ds}[(s+p_1)^r F_1(s)]_{s=-p_1}\)</span>。
+再将上式两边对 <span class="math notranslate nohighlight">\(s\)</span> 进行二阶微分，得
+<span class="math notranslate nohighlight">\(\frac{d^2}{ds^2}[(s+p_1)^r F_1(s)] = 2a_{r-2} + 3 \cdot 2 a_{r-3}(s+p_1) + \dots + (r-1)(r-2)a_1(s+p_1)^{r-3}\)</span>。
+再令 <span class="math notranslate nohighlight">\(s = -p_1\)</span>，得
+<span class="math notranslate nohighlight">\(a_{r-2} = \frac{1}{2!} \frac{d^2}{ds^2}[(s+p_1)^r F_1(s)]_{s=-p_1}\)</span>。
+类似地，对上式两边进行 <span class="math notranslate nohighlight">\(k\)</span> 阶微分，并令 <span class="math notranslate nohighlight">\(s = -p_1\)</span>，
+<span class="math notranslate nohighlight">\(a_{r-k} = \frac{1}{k!} \frac{d^{(k)}}{ds^{(k)}}[(s+p_1)^r F_1(s)]_{s=-p_1}\)</span>。</p>
+<p>因此，得到递推公式：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_r = [(s+p_1)^r F_1(s)]_{s=-p_1} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_{r-1} = \frac{d}{ds}[(s+p_1)^r F_1(s)]_{s=-p_1} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_{r-2} = \frac{1}{2!} \frac{d^2}{ds^2}[(s+p_1)^r F_1(s)]_{s=-p_1} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \dots \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_{r-k} = \frac{1}{k!} \frac{d^{(k)}}{ds^{(k)}}[(s+p_1)^r F_1(s)]_{s=-p_1} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \dots \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_1 = \frac{1}{(r-1)!} \frac{d^{(r-1)}}{ds^{(r-1)}}[(s+p_1)^r F_1(s)]_{s=-p_1} \]</div>
+</div>
+<p>原函数 <span class="math notranslate nohighlight">\(f(t)\)</span> 为</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f(t) = L^{-1}[F(s)] = L^{-1}[F_1(s)] + L^{-1}\left[\frac{a_{r+1}}{s+p_{r+1}} + \dots + \frac{a_n}{s+p_n}\right] \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \left[\frac{a_r}{(r-1)!}t^{r-1} + \frac{a_{r-1}}{(r-2)!}t^{r-2} + \dots + a_2 t + a_1\right]e^{-p_1 t} \cdot u(t) + \sum_{i=r+1}^{n} a_i e^{-p_i t} \cdot u(t) \]</div>
+</div>
+<p><strong>【例 2.13】</strong> 试求 <span class="math notranslate nohighlight">\(F(s) = \frac{s+2}{s(s+1)^2(s+3)}\)</span> 的拉氏逆变换。
+<strong>解</strong>: 当分母 <span class="math notranslate nohighlight">\(A(s)=0\)</span>， <span class="math notranslate nohighlight">\(s\)</span> 有四个极点，即：二重极点 <span class="math notranslate nohighlight">\(p_1 = -1\)</span> 和非重极点 <span class="math notranslate nohighlight">\(p_3 = 0, p_4 = -3\)</span>。
+将 <span class="math notranslate nohighlight">\(F(s)\)</span> 展开成部分分式</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ F(s) = \frac{s+2}{s(s+1)^2(s+3)} = \frac{a_2}{(s+1)^2} + \frac{a_1}{s+1} + \frac{a_3}{s} + \frac{a_4}{s+3} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_1 = \frac{d}{ds}\left[(s+1)^2 \frac{s+2}{s(s+1)^2(s+3)}\right]_{s=-1} = \left[\frac{d}{ds}\frac{s+2}{s(s+3)}\right]_{s=-1} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \left[\frac{1 \cdot s(s+3) - (s+2)(2s+3)}{s^2(s+3)^2}\right]_{s=-1} = \left[\frac{s^2+3s - (2s^2+9s+6)}{s^2(s+3)^2}\right]_{s=-1} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \left[\frac{-s^2-6s-6}{s^2(s+3)^2}\right]_{s=-1} = \frac{-1+6-6}{1(2)^2} = -\frac{1}{4} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_2 = \left[(s+1)^2 \frac{s+2}{s(s+1)^2(s+3)}\right]_{s=-1} = \left[\frac{s+2}{s(s+3)}\right]_{s=-1} = \frac{-1+2}{(-1)(-1+3)} = \frac{1}{(-1)(2)} = -\frac{1}{2} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_3 = \left[s \frac{s+2}{s(s+1)^2(s+3)}\right]_{s=0} = \left[\frac{s+2}{(s+1)^2(s+3)}\right]_{s=0} = \frac{2}{1^2 \cdot 3} = \frac{2}{3} \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ a_4 = \left[(s+3)\frac{s+2}{s(s+1)^2(s+3)}\right]_{s=-3} = \left[\frac{s+2}{s(s+1)^2}\right]_{s=-3} = \frac{-3+2}{(-3)(-3+1)^2} = \frac{-1}{(-3)(4)} = \frac{1}{12} \]</div>
+</div>
+<p>得到 <span class="math notranslate nohighlight">\(F(s)\)</span> 的原函数 <span class="math notranslate nohighlight">\(f(t)\)</span> 为</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f(t) = L^{-1}[F(s)] = -\frac{1}{2} e^{-t} t + (-\frac{1}{4}) e^{-t} + \frac{2}{3} + \frac{1}{12} e^{-3t}, \quad t \ge 0 \]</div>
+</div>
+</section>
+</section>
+<section id="id29">
+<h2>补充：卷积与卷积定理<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h2>
+<section id="id30">
+<h3>1. 概念<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
+<p>由傅氏变换的卷积性质得知：两个函数 <span class="math notranslate nohighlight">\(f_1(t)\)</span> 和 <span class="math notranslate nohighlight">\(f_2(t)\)</span> 的卷积是指</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f_1(t) * f_2(t) = \int_{-\infty}^{\infty} f_1(\tau) f_2(t-\tau) d\tau \]</div>
+</div>
+<p>当 <span class="math notranslate nohighlight">\(t &lt; 0\)</span> 时，<span class="math notranslate nohighlight">\(f_1(t) = f_2(t) = 0\)</span>。</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ f_1(t) * f_2(t) = \int_{-\infty}^{\infty} f_1(\tau) f_2(t-\tau) d\tau + \int_{0}^{t} f_1(\tau) f_2(t-\tau) d\tau + \int_{t}^{\infty} f_1(\tau) f_2(t-\tau) d\tau \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \int_{0}^{t} f_1(\tau) f_2(t-\tau) d\tau \]</div>
+</div>
+<p>卷积定义：
+而 <span class="math notranslate nohighlight">\(f_1(t) * f_2(t) = \int_{0}^{t} f_1(\tau) f_2(t-\tau) d\tau = \int_{0}^{t} f_2(\tau) f_1(t-\tau) d\tau = f_2(t) * f_1(t)\)</span>。
+同时，卷积还满足结合律与对加法的分配律，即
+<span class="math notranslate nohighlight">\(f_1(t) * [f_2(t) * f_3(t)] = [f_1(t) * f_2(t)] * f_3(t)\)</span>
+<span class="math notranslate nohighlight">\(f_1(t) * [f_2(t) + f_3(t)] = f_1(t) * f_2(t) + f_1(t) * f_3(t)\)</span></p>
+</section>
+<section id="id31">
+<h3>2. 卷积定理<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h3>
+<p>若 <span class="math notranslate nohighlight">\(L[f_1(t)] = F_1(s)\)</span>， <span class="math notranslate nohighlight">\(L[f_2(t)] = F_2(s)\)</span>，则</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[f_1(t) * f_2(t)] = F_1(s)F_2(s) \]</div>
+</div>
+<p><strong>证明</strong>: 由拉氏变换和卷积的定义，可以写出</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[f_1(t) * f_2(t)] = \int_{0}^{\infty} [f_1(t) * f_2(t)] e^{-st} dt \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \int_{0}^{\infty} \left[ \int_{0}^{t} f_1(\tau) f_2(t-\tau) d\tau \right] e^{-st} dt \]</div>
+</div>
+<p>当 <span class="math notranslate nohighlight">\(t &gt; \tau\)</span> 时，有 <span class="math notranslate nohighlight">\(f_2(t-\tau)u(t-\tau) = f_2(t-\tau)\)</span>，即</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split} f_2(t - \tau)u(t - \tau) = \begin{cases} 0 &amp; t &lt; \tau \\ f_2(t-\tau) &amp; t &gt; \tau \end{cases} \end{split}\]</div>
+</div>
+<p>因此，</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ \int_{0}^{\infty} \left[ \int_{0}^{t} f_1(\tau) f_2(t-\tau) u(t-\tau) d\tau \right] e^{-st} dt = \int_{0}^{\infty} \int_{0}^{\infty} f_1(\tau) f_2(t-\tau) u(t-\tau) e^{-st} dt d\tau \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \int_{0}^{\infty} f_1(\tau) d\tau \int_{0}^{\infty} f_2(t-\tau) u(t-\tau) e^{-st} dt \]</div>
+</div>
+<p>令 <span class="math notranslate nohighlight">\(t - \tau = \lambda\)</span>， <span class="math notranslate nohighlight">\(L[f_1(t) * f_2(t)] = \int_{0}^{\infty} f_1(\tau) d\tau \int_{0}^{\infty} f_2(\lambda) u(\lambda) e^{-s(\lambda+\tau)} d\lambda\)</span></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = \int_{0}^{\infty} f_1(\tau)e^{-s\tau} d\tau \int_{0}^{\infty} f_2(\lambda)e^{-s\lambda} d\lambda \]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ = F_1(s)F_2(s) \]</div>
+</div>
+<p>同理可得复频域的卷积定理（也称时域相乘定理）</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[ L[f_1(t)f_2(t)] = \frac{1}{2\pi j} [F_1(s) * F_2(s)] = \frac{1}{2\pi j} \int_{\beta-j\infty}^{\beta+j\infty} F_1(p)F_2(s-p)dp \]</div>
+</div>
+</section>
+</section>
+<section id="id32">
+<h2>62. 拉氏变换表<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>教材《自动控制原理》：</p></li>
+</ol>
+<ul class="simple">
+<li><p>变换对照表序号：1-6, 14-15, 20, 22</p></li>
+<li><p>第6版：P589-600</p></li>
+<li><p>第7版：P630-633</p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p>电子版材料：</p></li>
+</ol>
+<ul class="simple">
+<li><p>拉氏变换的性质表2-1：P32</p></li>
+<li><p>常用函数拉氏变换表2-2：P33</p></li>
+</ul>
+</section>
+<section id="id33">
+<h2>63. 本章作业 (请写题目)<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h2>
+<p>《机械控制工程基础》玄兆燕编-第2版
+页码：P36</p>
+<p><strong>所有作业要求</strong>:</p>
+<ul class="simple">
+<li><p>图、公式用尺</p></li>
+<li><p>正规作业纸</p></li>
+<li><p>作业纸单面答题</p></li>
+<li><p>字迹工整</p></li>
+<li><p>包含推导过程</p></li>
+</ul>
+<p><strong>√ 2.1 (奇数编号共4小题)</strong>
+<strong>√ 2.2, 2.3</strong>
+<strong>√ 2.5 (偶数编号共4小题)</strong></p>
+<p><strong>习题 2</strong></p>
+<p>2.1 试求下列函数的拉氏变换。(奇)(偶)
+(1) <span class="math notranslate nohighlight">\(f(t) = (4t+5)\cdot \delta(t)+(t+2)\cdot u(t)\)</span>
+(2) <span class="math notranslate nohighlight">\(f(t) = t^2 e^{at} u(t)\)</span>
+(3) <span class="math notranslate nohighlight">\(f(t) = \begin{cases} \sin t &amp; 0 &lt; t \le \pi \\ 0 &amp; t &lt; 0, t &gt; \pi \end{cases}\)</span></p>
+</section>
+<section id="id34">
+<h2>64. 本章作业<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h2>
+<p><strong>第2章 拉普拉斯变换 37</strong></p>
+<p><strong>所有作业要求</strong>:</p>
+<ul class="simple">
+<li><p>图、公式用尺</p></li>
+<li><p>正规作业纸</p></li>
+<li><p>作业纸单面答题</p></li>
+<li><p>字迹工整</p></li>
+<li><p>包含推导过程</p></li>
+</ul>
+<p>(4) <span class="math notranslate nohighlight">\(f(t) = \sin(5t+\frac{\pi}{3})u(t)\)</span>
+(5) <span class="math notranslate nohighlight">\(f(t) = [4 \cos(2t)]\frac{t}{3} - u(t)\)</span>
+(6) <span class="math notranslate nohighlight">\(f(t) = e^{-6t} (\cos 8t + \sin 8t)u(t)\)</span>
+(7) <span class="math notranslate nohighlight">\(f(t) = (t e^{-3t} + e^{-t} \cos 2t + e^{-t} \sin 4t)u(t)\)</span>
+(8) <span class="math notranslate nohighlight">\(f(t) = 5 - u(t-2) + (t-1)^2 e^{2t} u(t)\)</span></p>
+<p>2.2 已知 <span class="math notranslate nohighlight">\(F(s) = \frac{s}{s(s+1)}\)</span>，试求：
+(1) 利用终值定理，求 <span class="math notranslate nohighlight">\(t \rightarrow \infty\)</span> 时 <span class="math notranslate nohighlight">\(f(t)\)</span> 的值。
+(2) 通过 <span class="math notranslate nohighlight">\(F(s)\)</span> 的拉氏逆变换，求 <span class="math notranslate nohighlight">\(t \rightarrow \infty\)</span> 时 <span class="math notranslate nohighlight">\(f(t)\)</span> 的值。</p>
+<p>2.3 已知 <span class="math notranslate nohighlight">\(F(s) = \frac{1}{(s+2)^2}\)</span>，试求：
+(1) 利用初值定理，求 <span class="math notranslate nohighlight">\(f(0_+)\)</span> 和 <span class="math notranslate nohighlight">\(f'(0)\)</span> 的值。
+(2) 通过 <span class="math notranslate nohighlight">\(F(s)\)</span> 的拉氏逆变换，求 <span class="math notranslate nohighlight">\(f(t)\)</span> 和 <span class="math notranslate nohighlight">\(f'(t)\)</span>，然后求 <span class="math notranslate nohighlight">\(f(0_+)\)</span> 和 <span class="math notranslate nohighlight">\(f'(0_+)\)</span>。</p>
+<p>2.4 求如题 2.4 图所示的各种波形的拉氏变换。</p>
+<p>2.5 试求下列函数的拉氏逆变换。(偶数)(奇)
+(1) <span class="math notranslate nohighlight">\(F(s) = \frac{1}{s^2+4}\)</span>
+(2) <span class="math notranslate nohighlight">\(F(s) = \frac{s}{s^2-2s+5} + \frac{s+1}{s^2+9}\)</span>
+(3) <span class="math notranslate nohighlight">\(F(s) = e^{-t} u(t-1)\)</span>
+(4) <span class="math notranslate nohighlight">\(F(s) = \frac{e^{-s}}{s-1}\)</span>
+(5) <span class="math notranslate nohighlight">\(F(s) = \frac{4}{s^2+8s+4}\)</span>
+(6) <span class="math notranslate nohighlight">\(F(s) = \frac{s}{s^2+9}\)</span>
+(7) <span class="math notranslate nohighlight">\(F(s) = \frac{3}{(s+1)^2}\)</span>
+(8) <span class="math notranslate nohighlight">\(F(s) = \frac{1}{(s+2)(s^2+2s+2)}\)</span></p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="30-model.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">第三章 控制系统的数学模型</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="10-intro.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">第一章 绪论</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">第二章 拉普拉斯变换</a><ul>
+<li><a class="reference internal" href="#id2">2.1 拉普拉斯变换概念</a><ul>
+<li><a class="reference internal" href="#id3">引言：复变量与复变函数</a></li>
+<li><a class="reference internal" href="#id4">提出问题</a></li>
+<li><a class="reference internal" href="#laplace">拉普拉斯（Laplace）变换 — 拉氏变换</a></li>
+<li><a class="reference internal" href="#id5">拉氏逆变换</a></li>
+<li><a class="reference internal" href="#id6">存在定理</a></li>
+<li><a class="reference internal" href="#id7">常用函数的拉氏变换</a><ul>
+<li><a class="reference internal" href="#id8">(1) 指数函数</a></li>
+<li><a class="reference internal" href="#id9">(2) 阶跃函数</a></li>
+<li><a class="reference internal" href="#id10">(3) 斜坡函数</a></li>
+<li><a class="reference internal" href="#id11">(4) 正弦函数</a></li>
+<li><a class="reference internal" href="#id12">(5) 脉动函数</a></li>
+<li><a class="reference internal" href="#id13">(6) 脉冲函数</a></li>
+<li><a class="reference internal" href="#id14">(7) 加速度函数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id15">2.2 拉普拉斯变换的性质</a><ul>
+<li><a class="reference internal" href="#id16">1. 线性性质</a></li>
+<li><a class="reference internal" href="#id17">2. 微分性质</a></li>
+<li><a class="reference internal" href="#id18">3. 积分性质</a></li>
+<li><a class="reference internal" href="#id19">4. 位移性质</a></li>
+<li><a class="reference internal" href="#id20">5. 延迟性质</a></li>
+<li><a class="reference internal" href="#id21">6. 尺度变换</a></li>
+<li><a class="reference internal" href="#id22">7. 初值定理、终值定理</a><ul>
+<li><a class="reference internal" href="#id23">(1) 初值定理</a></li>
+<li><a class="reference internal" href="#id24">(2) 终值定理</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id25">2.3 拉普拉斯逆变换</a><ul>
+<li><a class="reference internal" href="#id26">1. 只含不同极点的情况</a></li>
+<li><a class="reference internal" href="#id27">2. 含共轭复极点的情况</a></li>
+<li><a class="reference internal" href="#id28">3. 含多重极点的情况</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id29">补充：卷积与卷积定理</a><ul>
+<li><a class="reference internal" href="#id30">1. 概念</a></li>
+<li><a class="reference internal" href="#id31">2. 卷积定理</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id32">62. 拉氏变换表</a></li>
+<li><a class="reference internal" href="#id33">63. 本章作业 (请写题目)</a></li>
+<li><a class="reference internal" href="#id34">64. 本章作业</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="../_static/tex-svg-full.js?v=fe9f5dce"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

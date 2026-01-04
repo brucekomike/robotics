@@ -1,0 +1,929 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="第四章 线性系统的时域分析法" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/40-autocon/40-resp.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="4.1 概述及典型输入信号: 引言: 对于线性定常系统，常用的工程方法有： 时域分析方法, 频域分析法, 根轨迹法. 时域分析法: 根据系统的微分方程，对一个特定的输入信号，通过拉氏变换，直接解出系统的时间响应，再根据响应的表达式及对应曲线来分析系统的性能，如稳定性、准确性、快速性等。 时间响应: 在输入信号作用下，系统输出随时间的变化过程。 瞬态响应: 系统在某一输入信号作用下，其输出量从..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="4.1 概述及典型输入信号: 引言: 对于线性定常系统，常用的工程方法有： 时域分析方法, 频域分析法, 根轨迹法. 时域分析法: 根据系统的微分方程，对一个特定的输入信号，通过拉氏变换，直接解出系统的时间响应，再根据响应的表达式及对应曲线来分析系统的性能，如稳定性、准确性、快速性等。 时间响应: 在输入信号作用下，系统输出随时间的变化过程。 瞬态响应: 系统在某一输入信号作用下，其输出量从..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="第五章 线性系统的频域分析法" href="50-freq.html"><link rel="prev" title="第三章 控制系统的数学模型" href="30-model.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>第四章 线性系统的时域分析法 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-interg/index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-interg/z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../80-interg/reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../80-interg/reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/40-autocon/40-resp.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/40-autocon/40-resp.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>第四章 线性系统的时域分析法<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2>4.1 概述及典型输入信号<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p><strong>引言</strong>:
+对于线性定常系统，常用的工程方法有：</p>
+<ul class="simple">
+<li><p>时域分析方法</p></li>
+<li><p>频域分析法</p></li>
+<li><p>根轨迹法</p></li>
+</ul>
+<p><strong>时域分析法</strong>:
+根据系统的微分方程，对一个特定的输入信号，通过拉氏变换，直接解出系统的时间响应，再根据响应的表达式及对应曲线来分析系统的性能，如稳定性、准确性、快速性等。</p>
+<p><strong>时间响应</strong>: 在输入信号作用下，系统输出随时间的变化过程。</p>
+<ul class="simple">
+<li><p><strong>瞬态响应</strong>: 系统在某一输入信号作用下，其输出量从初始状态到稳定状态的响应过程，也称动态响应，反映了控制系统的稳定性和快速性。</p></li>
+<li><p><strong>稳态响应</strong>: 当某一信号输入时，系统在时间 <span class="math notranslate nohighlight">\(t\)</span> 趋于无穷时的输出状态，也称静态响应，反映了系统的准确性。</p></li>
+</ul>
+<p>时间响应不仅取决于系统本身的特性，而且还与输入信号的形式有关。</p>
+<p><strong>典型输入信号 (一般应具备两个条件)</strong>:</p>
+<ol class="arabic">
+<li><p>信号的数学表达式简单，便于数学上的分析和处理；</p></li>
+<li><p>信号易于在实验室中获得。</p></li>
+<li><p><strong>脉冲信号</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    x_i(t) =
+    \begin{cases}
+    0 &amp; t &lt; 0, t &gt; \epsilon \\
+    A/\epsilon &amp; 0 &lt; t &lt; \epsilon
+    \end{cases}
+    \end{split}\]</div>
+</div>
+<p>当 <span class="math notranslate nohighlight">\(A=1, \epsilon \to 0\)</span> 时，单位脉冲信号 <span class="math notranslate nohighlight">\(\delta(t)\)</span>。 <span class="math notranslate nohighlight">\(L[\delta(t)] = 1\)</span></p>
+</li>
+<li><p><strong>阶跃信号</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    x_i(t) =
+    \begin{cases}
+    0 &amp; t &lt; 0 \\
+    A &amp; t \ge 0
+    \end{cases}
+    \end{split}\]</div>
+</div>
+<p>当 <span class="math notranslate nohighlight">\(A=1\)</span>，单位阶跃信号 <span class="math notranslate nohighlight">\(u(t)\)</span>。 <span class="math notranslate nohighlight">\(L[u(t)] = \frac{1}{s}\)</span></p>
+</li>
+<li><p><strong>斜坡信号</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    x_i(t) =
+    \begin{cases}
+    0 &amp; t &lt; 0 \\
+    At &amp; t \ge 0
+    \end{cases}
+    \end{split}\]</div>
+</div>
+<p>当 <span class="math notranslate nohighlight">\(A=1\)</span>，单位斜坡信号 <span class="math notranslate nohighlight">\(r(t)\)</span>。 <span class="math notranslate nohighlight">\(L[r(t)] = \frac{1}{s^2}\)</span></p>
+</li>
+<li><p><strong>正弦信号</strong>: <span class="math notranslate nohighlight">\(x_i(t) = \sin \omega t\)</span>
+<span class="math notranslate nohighlight">\(L[x_i(t)] = \frac{\omega}{s^2 + \omega^2}\)</span>
+正弦信号主要用于求取系统的频率响应，以此分析和设计控制系统。</p></li>
+<li><p><strong>余弦信号</strong>: <span class="math notranslate nohighlight">\(x_i(t) = \cos \omega t\)</span>
+<span class="math notranslate nohighlight">\(L[x_i(t)] = \frac{s}{s^2 + \omega^2}\)</span></p></li>
+</ol>
+</section>
+<section id="id3">
+<h2>4.2 一阶系统的时域分析<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p><strong>一阶系统</strong>: 能够用一阶微分方程描述的系统。它的典型形式是一阶惯性环节。</p>
+<ul class="simple">
+<li><p><strong>微分方程</strong>: <span class="math notranslate nohighlight">\(T\frac{dx_o(t)}{dt} + x_o(t) = x_i(t)\)</span></p></li>
+<li><p><strong>传递函数</strong>: <span class="math notranslate nohighlight">\(G(s) = \frac{X_o(s)}{X_i(s)} = \frac{1}{Ts+1}\)</span>
+<span class="math notranslate nohighlight">\(T\)</span>: 一阶系统的时间常数。反映了系统的固有特性，称为一阶系统的特征参数。</p></li>
+</ul>
+<p><strong>一阶系统的单位脉冲响应</strong>:
+对于一阶系统 <span class="math notranslate nohighlight">\(G(s) = \frac{1}{Ts+1}\)</span>，输入信号 <span class="math notranslate nohighlight">\(x_i(t) = \delta(t)\)</span>，则 <span class="math notranslate nohighlight">\(X_i(s) = L[\delta(t)] = 1\)</span>。
+输出响应为:
+<span class="math notranslate nohighlight">\(x_o(t) = L^{-1}[X_o(s)] = L^{-1}[\frac{1}{Ts+1}]\)</span>
+<span class="math notranslate nohighlight">\(x_o(t) = \frac{1}{T}e^{-t/T}\)</span> <span class="math notranslate nohighlight">\((t \ge 0)\)</span></p>
+<p><strong>特性</strong>:</p>
+<ol class="arabic simple">
+<li><p>单调下降，指数曲线，初值 <span class="math notranslate nohighlight">\(1/T\)</span>，稳态值 <span class="math notranslate nohighlight">\(0\)</span>。</p></li>
+<li><p>过渡时间 <span class="math notranslate nohighlight">\(t_s = 4T\)</span>: 衰减到初值的 <span class="math notranslate nohighlight">\(2\%\)</span> 需要的时间。</p></li>
+<li><p><span class="math notranslate nohighlight">\(T\)</span> 越小，调整时间越短，说明系统惯性小，快速性好。</p></li>
+</ol>
+<p><strong>一阶系统的单位阶跃响应</strong>:
+对于一阶系统 <span class="math notranslate nohighlight">\(G(s) = \frac{1}{Ts+1}\)</span>，输入信号 <span class="math notranslate nohighlight">\(x_i(t) = u(t)\)</span>，则 <span class="math notranslate nohighlight">\(X_i(s) = 1/s\)</span>。
+输出响应为:
+<span class="math notranslate nohighlight">\(X_o(s) = G(s)X_i(s) = \frac{1}{Ts+1} \cdot \frac{1}{s}\)</span>
+<span class="math notranslate nohighlight">\(x_o(t) = L^{-1}[X_o(s)] = 1 - e^{-t/T}\)</span> <span class="math notranslate nohighlight">\((t \ge 0)\)</span></p>
+<p><strong>特性</strong>:</p>
+<ol class="arabic simple">
+<li><p>单调上升，指数曲线，初值 <span class="math notranslate nohighlight">\(0\)</span>，稳态值 <span class="math notranslate nohighlight">\(1\)</span>，瞬态响应过程平稳，无振荡。</p></li>
+<li><p>当时间由 <span class="math notranslate nohighlight">\(t=0\)</span> 过了 <span class="math notranslate nohighlight">\(\frac{1}{T}\)</span> 个时间常数 <span class="math notranslate nohighlight">\(T\)</span> 后，系统输出已达到响应过程总变化量的 <span class="math notranslate nohighlight">\(63.2\%\)</span>。一阶系统单位阶跃响应的这一特性用实验方法测定一阶系统的时间常数 <span class="math notranslate nohighlight">\(T\)</span> 提供了理论依据。</p></li>
+<li><p>一阶系统单位阶跃响应在 <span class="math notranslate nohighlight">\(t=0\)</span> 处其切线的斜率等于 <span class="math notranslate nohighlight">\(1\)</span>，这说明，一阶系统如能保持 <span class="math notranslate nohighlight">\(t=0\)</span> 时刻的初始响应速度不变，则在 <span class="math notranslate nohighlight">\(t=0 \sim T\)</span> 时间里响应过程便可以完成其总变化量。</p></li>
+</ol>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(t\)</span></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(0\)</span></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(T\)</span></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(2T\)</span></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(3T\)</span></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(4T\)</span></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(5T\)</span></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(\dots\)</span></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(\infty\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(x_o(t)\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(0.632\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(0.865\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(0.95\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(0.982\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(0.993\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\dots\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>特性④</strong>:</p>
+<ul class="simple">
+<li><p>调整时间: <span class="math notranslate nohighlight">\(t_s = 4T\)</span></p></li>
+<li><p>与单位脉冲响应的过渡过程时间相同。</p></li>
+<li><p><span class="math notranslate nohighlight">\(T\)</span> 越小，惯性越小，响应过程越快，快速性越好。</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>4.3 二阶系统的时域分析<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<section id="id5">
+<h3>4.3.1 二阶系统的数学模型 (标准形式)<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>能够用二阶微分方程描述的系统为二阶系统。</p>
+<ul class="simple">
+<li><p><strong>微分方程</strong>: <span class="math notranslate nohighlight">\(\frac{d^2x_o(t)}{dt^2} + 2\xi\omega_n\frac{dx_o(t)}{dt} + \omega_n^2x_o(t) = \omega_n^2x_i(t)\)</span></p></li>
+<li><p><strong>拉氏变换</strong>: <span class="math notranslate nohighlight">\(s^2X_o(s) + 2\xi\omega_nsX_o(s) + \omega_n^2X_o(s) = \omega_n^2X_i(s)\)</span></p></li>
+<li><p><strong>传递函数</strong>: <span class="math notranslate nohighlight">\(G(s) = \frac{X_o(s)}{X_i(s)} = \frac{\omega_n^2}{s^2 + 2\xi\omega_n s + \omega_n^2}\)</span></p></li>
+<li><p><strong>特征参数</strong>: <span class="math notranslate nohighlight">\(\omega_n\)</span>: 无阻尼固有频率; <span class="math notranslate nohighlight">\(\xi\)</span>: 阻尼比</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>4.3.2 二阶系统特征方程的根与阻尼比的关系<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>系统传递函数分母等于 <span class="math notranslate nohighlight">\(0\)</span> <span class="math notranslate nohighlight">\(\implies\)</span> 二阶系统特征方程: <span class="math notranslate nohighlight">\(s^2 + 2\xi\omega_n s + \omega_n^2 = 0\)</span>
+对于一元二次方程 <span class="math notranslate nohighlight">\(as^2 + bs + c = 0\)</span>，其根与系数的关系为 <span class="math notranslate nohighlight">\(s_{1,2} = \frac{-b \pm \sqrt{b^2-4ac}}{2a}\)</span>。
+求得特征方程的两个特征根为: <span class="math notranslate nohighlight">\(s_{1,2} = -\xi\omega_n \pm \omega_n\sqrt{\xi^2 - 1}\)</span>
+随着阻尼比 <span class="math notranslate nohighlight">\(\xi\)</span> 取值的不同，特征根也不同。</p>
+<p><strong>根据阻尼比 <span class="math notranslate nohighlight">\(\xi\)</span> 的值，二阶系统可以分为四种情况</strong>:</p>
+<ul class="simple">
+<li><p><strong>(a) 无阻尼系统 (<span class="math notranslate nohighlight">\(\xi = 0\)</span>)</strong>: 特征根为一对共轭虚数 <span class="math notranslate nohighlight">\(s_{1,2} = \pm j\omega_n\)</span>。</p></li>
+<li><p><strong>(b) 欠阻尼系统 (<span class="math notranslate nohighlight">\(0 &lt; \xi &lt; 1\)</span>)</strong>: 特征根为一对共轭复数 <span class="math notranslate nohighlight">\(s_{1,2} = -\xi\omega_n \pm j\omega_d\)</span>，其中 <span class="math notranslate nohighlight">\(\omega_d = \omega_n\sqrt{1-\xi^2}\)</span>。</p></li>
+<li><p><strong>© 临界阻尼系统 (<span class="math notranslate nohighlight">\(\xi = 1\)</span>)</strong>: 特征根为两个相等的负实数 <span class="math notranslate nohighlight">\(s_{1,2} = -\omega_n\)</span>。</p></li>
+<li><p><strong>(d) 过阻尼系统 (<span class="math notranslate nohighlight">\(\xi &gt; 1\)</span>)</strong>: 特征根为两个不相等的实数 <span class="math notranslate nohighlight">\(s_{1,2} = -\xi\omega_n \pm \omega_n\sqrt{\xi^2 - 1}\)</span>。</p></li>
+</ul>
+<p><strong>阻尼比与特征方程根的关系</strong>:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>判断</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\xi\)</span> 的范围</p></th>
+<th class="head text-left"><p>特征方程的根</p></th>
+<th class="head text-left"><p>系统形式</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(b^2 &lt; 4ac\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0 &lt; \xi &lt; 1\)</span></p></td>
+<td class="text-left"><p>一对共轭复根</p></td>
+<td class="text-left"><p>欠阻尼系统</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\xi = 0\)</span></p></td>
+<td class="text-left"><p>一对共轭虚根</p></td>
+<td class="text-left"><p>无阻尼系统</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(b^2 = 4ac\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\xi = 1\)</span></p></td>
+<td class="text-left"><p>两个相等的实根</p></td>
+<td class="text-left"><p>临界阻尼系统</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(b^2 &gt; 4ac\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\xi &gt; 1\)</span></p></td>
+<td class="text-left"><p>两个不等的实根</p></td>
+<td class="text-left"><p>过阻尼系统</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol class="arabic simple">
+<li><p>当 <span class="math notranslate nohighlight">\(0 &lt; \xi &lt; 1\)</span> 时，为欠阻尼系统，特征根为一对共轭复数，即系统具有一对共轭复数极点。 <span class="math notranslate nohighlight">\(s_{1,2} = -\xi\omega_n \pm j\omega_d\)</span>，其中 <span class="math notranslate nohighlight">\(\omega_d = \omega_n\sqrt{1-\xi^2}\)</span> 是二阶系统的有阻尼固有频率。</p></li>
+<li><p>当 <span class="math notranslate nohighlight">\(\xi = 1\)</span> 时，为临界阻尼系统，特征根为两个相等负实数，即系统有两个相等的负实数极点 <span class="math notranslate nohighlight">\(s_{1,2} = -\omega_n\)</span>。</p></li>
+<li><p>当 <span class="math notranslate nohighlight">\(\xi &gt; 1\)</span> 时，为过阻尼系统，特征根为两个不相等实数，即系统有两个不相等的负实数极点 <span class="math notranslate nohighlight">\(s_{1,2} = -\xi\omega_n \pm \omega_n\sqrt{\xi^2 - 1}\)</span>。</p></li>
+<li><p>当 <span class="math notranslate nohighlight">\(\xi = 0\)</span> 时，为无阻尼系统，特征根为一对共轭纯虚数，即系统具有一对共轭虚数极点 <span class="math notranslate nohighlight">\(s_{1,2} = \pm j\omega_n\)</span>。</p></li>
+</ol>
+</section>
+<section id="id7">
+<h3>4.3.3 二阶系统的单位脉冲响应<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>单位脉冲响应：二阶系统在单位脉冲信号作用下的输出。
+<span class="math notranslate nohighlight">\(G(s) = \frac{\omega_n^2}{s^2 + 2\xi\omega_n s + \omega_n^2}\)</span>， <span class="math notranslate nohighlight">\(x_i(t) = \delta(t)\)</span>，<span class="math notranslate nohighlight">\(X_i(s)=1\)</span>。
+<span class="math notranslate nohighlight">\(X_o(s) = G(s)X_i(s) = \frac{\omega_n^2}{s^2 + 2\xi\omega_n s + \omega_n^2}\)</span>。</p>
+<ol class="arabic simple">
+<li><p><strong>欠阻尼 (<span class="math notranslate nohighlight">\(0 &lt; \xi &lt; 1\)</span>)</strong>:
+<span class="math notranslate nohighlight">\(x_o(t) = \frac{\omega_n}{\sqrt{1-\xi^2}}e^{-\xi\omega_n t}\sin(\omega_d t)\)</span> <span class="math notranslate nohighlight">\((t \ge 0)\)</span></p>
+<ul class="simple">
+<li><p>减幅的正弦振荡曲线。</p></li>
+<li><p><span class="math notranslate nohighlight">\(\xi\)</span> 越小，衰减越慢，振荡频率 <span class="math notranslate nohighlight">\(\omega_d\)</span> 越大 (其他参数不变)。</p></li>
+</ul>
+</li>
+<li><p><strong>临界阻尼 (<span class="math notranslate nohighlight">\(\xi = 1\)</span>)</strong>:
+<span class="math notranslate nohighlight">\(x_o(t) = \omega_n^2 t e^{-\omega_n t}\)</span> <span class="math notranslate nohighlight">\((t \ge 0)\)</span></p>
+<ul class="simple">
+<li><p>单调上升指数曲线，两个惯性叠加。</p></li>
+</ul>
+</li>
+<li><p><strong>过阻尼 (<span class="math notranslate nohighlight">\(\xi &gt; 1\)</span>)</strong>:
+<span class="math notranslate nohighlight">\(x_o(t) = 1 + A_2e^{-(\xi+\sqrt{\xi^2-1})\omega_n t} - A_1e^{-(\xi-\sqrt{\xi^2-1})\omega_n t}\)</span> <span class="math notranslate nohighlight">\((t \ge 0)\)</span></p>
+<ul class="simple">
+<li><p>单调上升的指数曲线，但响应速度比临界阻尼时缓慢，没有超调，调整时间较长。</p></li>
+</ul>
+</li>
+<li><p><strong>无阻尼 (<span class="math notranslate nohighlight">\(\xi = 0\)</span>)</strong>:
+<span class="math notranslate nohighlight">\(x_o(t) = \omega_n \sin \omega_n t\)</span> <span class="math notranslate nohighlight">\((t \ge 0)\)</span></p>
+<ul class="simple">
+<li><p>等幅振荡。</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="id8">
+<h3>4.3.4 二阶系统的单位阶跃响应<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<p>输入信号 <span class="math notranslate nohighlight">\(x_i(t) = u(t)\)</span> <span class="math notranslate nohighlight">\(\implies\)</span> <span class="math notranslate nohighlight">\(X_i(s) = 1/s\)</span>。
+<span class="math notranslate nohighlight">\(X_o(s) = G(s)X_i(s) = \frac{\omega_n^2}{s^2 + 2\xi\omega_n s + \omega_n^2} \cdot \frac{1}{s}\)</span></p>
+<ol class="arabic simple">
+<li><p><strong>无阻尼 (<span class="math notranslate nohighlight">\(\xi = 0\)</span>)</strong>:
+<span class="math notranslate nohighlight">\(x_o(t) = 1 - \cos \omega_n t\)</span> <span class="math notranslate nohighlight">\((t \ge 0)\)</span></p>
+<ul class="simple">
+<li><p>等幅振荡。</p></li>
+</ul>
+</li>
+<li><p><strong>欠阻尼 (<span class="math notranslate nohighlight">\(0 &lt; \xi &lt; 1\)</span>)</strong>:
+<span class="math notranslate nohighlight">\(x_o(t) = 1 - e^{-\xi\omega_n t} \left( \cos \omega_d t + \frac{\xi}{\sqrt{1-\xi^2}}\sin \omega_d t \right)\)</span> <span class="math notranslate nohighlight">\((t \ge 0)\)</span></p>
+<ul class="simple">
+<li><p>稳态分量为 <span class="math notranslate nohighlight">\(1\)</span>; 瞬态分量以 <span class="math notranslate nohighlight">\(\omega_d\)</span> 为频率的衰减正弦振荡，<span class="math notranslate nohighlight">\(\xi\)</span> 减小，振荡加强，衰减加快慢取决于衰减指数 <span class="math notranslate nohighlight">\(\xi\omega_n\)</span>。</p></li>
+</ul>
+</li>
+<li><p><strong>临界阻尼 (<span class="math notranslate nohighlight">\(\xi = 1\)</span>)</strong>:
+<span class="math notranslate nohighlight">\(x_o(t) = 1 - (1 + \omega_n t)e^{-\omega_n t}\)</span> <span class="math notranslate nohighlight">\((t \ge 0)\)</span></p>
+<ul class="simple">
+<li><p>单调上升指数曲线，两个惯性叠加。</p></li>
+</ul>
+</li>
+<li><p><strong>过阻尼 (<span class="math notranslate nohighlight">\(\xi &gt; 1\)</span>)</strong>:
+<span class="math notranslate nohighlight">\(x_o(t) = 1 + A_2e^{-(\xi+\sqrt{\xi^2-1})\omega_n t} - A_1e^{-(\xi-\sqrt{\xi^2-1})\omega_n t}\)</span> <span class="math notranslate nohighlight">\((t \ge 0)\)</span></p>
+<ul class="simple">
+<li><p>单调上升的指数曲线，但响应速度比临界阻尼时缓慢，没有超调，调整时间较长。</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="id9">
+<h3>4.3.5 二阶系统响应的性能指标<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>上升时间 <span class="math notranslate nohighlight">\(t_r\)</span></strong>: 响应曲线从原始工作状态出发，第一次达到稳态值所需的时间。</p>
+<ul>
+<li><p>对于过阻尼系统，上升时间定义为响应曲线从稳态值的 <span class="math notranslate nohighlight">\(10\%\)</span> 上升到 <span class="math notranslate nohighlight">\(90\%\)</span> 所需的时间。</p></li>
+<li><p><span class="math notranslate nohighlight">\(t_r = \frac{\pi - \beta}{\omega_d}\)</span>，其中 <span class="math notranslate nohighlight">\(\beta = \arctan(\frac{\sqrt{1-\xi^2}}{\xi})\)</span>。</p></li>
+</ul>
+</li>
+<li><p><strong>峰值时间 <span class="math notranslate nohighlight">\(t_p\)</span></strong>: 响应曲线达到第一个峰值所需的时间。</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(t_p = \frac{\pi}{\omega_d}\)</span>。</p></li>
+</ul>
+</li>
+<li><p><strong>最大超调量 <span class="math notranslate nohighlight">\(M_p\)</span></strong>:
+<span class="math notranslate nohighlight">\(M_p = \frac{x_o(t_p) - x_o(\infty)}{x_o(\infty)} \times 100\%\)</span>
+<span class="math notranslate nohighlight">\(M_p = e^{-\xi\pi/\sqrt{1-\xi^2}} \times 100\%\)</span></p>
+<ul>
+<li><p>超调量 <span class="math notranslate nohighlight">\(M_p\)</span> 仅与阻尼比 <span class="math notranslate nohighlight">\(\xi\)</span> 有关，与无阻尼固有频率 <span class="math notranslate nohighlight">\(\omega_n\)</span> 无关。</p></li>
+</ul>
+</li>
+<li><p><strong>调整时间 <span class="math notranslate nohighlight">\(t_s\)</span></strong>: 响应曲线开始进入偏离稳态值 <span class="math notranslate nohighlight">\(\pm \Delta\)</span> 的误差范围（一般 <span class="math notranslate nohighlight">\(\Delta\)</span> 取 <span class="math notranslate nohighlight">\(5\%\)</span> 或 <span class="math notranslate nohighlight">\(2\%\)</span>），并一直保持在这一误差范围内所需的时间。</p>
+<ul>
+<li><p>当 <span class="math notranslate nohighlight">\(0 &lt; \xi &lt; 0.7\)</span> 时，<span class="math notranslate nohighlight">\(t_s \approx \frac{4}{\xi\omega_n}\)</span> ( <span class="math notranslate nohighlight">\(\Delta = 2\%\)</span>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(t_s \approx \frac{3}{\xi\omega_n}\)</span> ( <span class="math notranslate nohighlight">\(\Delta = 5\%\)</span>)</p></li>
+<li><p>当阻尼比 <span class="math notranslate nohighlight">\(\xi\)</span> 一定时，<span class="math notranslate nohighlight">\(\omega_n\)</span> 增大，调整时间 <span class="math notranslate nohighlight">\(t_s\)</span> 减小，系统的响应速度变快。</p></li>
+<li><p>在设计二阶系统时，取 <span class="math notranslate nohighlight">\(\xi = 0.707\)</span> 作为最佳阻尼比。</p></li>
+</ul>
+</li>
+<li><p><strong>振荡次数 <span class="math notranslate nohighlight">\(N\)</span></strong>: 在调整时间 <span class="math notranslate nohighlight">\(t_s\)</span> 内，<span class="math notranslate nohighlight">\(x_o(t)\)</span> 穿越其稳态值 <span class="math notranslate nohighlight">\(x_o(\infty)\)</span> 次数的一半。</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(N = \frac{t_s}{T} = \frac{t_s}{2\pi / \omega_d}\)</span></p></li>
+<li><p>振荡次数 <span class="math notranslate nohighlight">\(N\)</span> 仅与阻尼比 <span class="math notranslate nohighlight">\(\xi\)</span> 有关，与无阻尼固有频率 <span class="math notranslate nohighlight">\(\omega_n\)</span> 无关。</p></li>
+<li><p><span class="math notranslate nohighlight">\(\xi\)</span> 越大，振荡次数 <span class="math notranslate nohighlight">\(N\)</span> 越小，系统的平稳性越好。振荡次数 <span class="math notranslate nohighlight">\(N\)</span> 直接反映了系统的阻尼特性。</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>结论</strong>:</p>
+<ol class="arabic simple">
+<li><p><strong>二阶系统时间响应</strong>:</p>
+<ul class="simple">
+<li><p>快速性：上升时间、峰值时间、调整时间反映。</p></li>
+<li><p>平稳性：最大超调量和振荡次数反映。</p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\(\omega_n\)</span> 和 <span class="math notranslate nohighlight">\(\xi\)</span> 的作用:</p>
+<ul class="simple">
+<li><p>提高 <span class="math notranslate nohighlight">\(\omega_n\)</span>: 上升时间、峰值时间、调整时间 <span class="math notranslate nohighlight">\(\downarrow\)</span>，系统响应速度 <span class="math notranslate nohighlight">\(\uparrow\)</span>。</p></li>
+<li><p>增大 <span class="math notranslate nohighlight">\(\xi\)</span>，减小系统的振荡性能，即降低超调量，减少振荡次数，但增大系统上升时间和峰值时间。</p></li>
+</ul>
+</li>
+<li><p>系统的响应速度与振荡性能之间存在矛盾。在具体设计中，根据最大超调量要求确定阻尼比，而调整时间根据系统的固有频率来确定。</p></li>
+</ol>
+</section>
+</section>
+<section id="id10">
+<h2>4.4 系统的稳态误差分析<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>系统的误差：瞬态误差和稳态误差两部分组成。</p></li>
+<li><p>在过渡过程中，瞬态误差是误差的主要部分，但它随时间的增加而逐渐衰减，稳态误差将逐渐成为误差的主要部分。</p></li>
+<li><p>稳态性能指标即准确性用系统的稳态误差来衡量。</p></li>
+</ul>
+<section id="id11">
+<h3>4.4.1 系统误差与偏差的关系<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>系统的误差 <span class="math notranslate nohighlight">\(e(t)\)</span> 以系统的输出端为基准来定义：系统所希望的输出 <span class="math notranslate nohighlight">\(x_{or}(t)\)</span> 与实际输出 <span class="math notranslate nohighlight">\(x_o(t)\)</span> 之差。
+<span class="math notranslate nohighlight">\(e(t) = x_{or}(t) - x_o(t)\)</span>
+<span class="math notranslate nohighlight">\(E_1(s) = X_{or}(s) - X_o(s)\)</span></p></li>
+<li><p>系统的偏差 <span class="math notranslate nohighlight">\(\epsilon(t)\)</span> 以系统的输入端为基准来定义：系统的输入量 <span class="math notranslate nohighlight">\(x_i(t)\)</span> 与反馈量 <span class="math notranslate nohighlight">\(b(t)\)</span> 之差。
+<span class="math notranslate nohighlight">\(\epsilon(t) = x_i(t) - b(t)\)</span>
+<span class="math notranslate nohighlight">\(E(s) = X_i(s) - B(s) = X_i(s) - H(s)X_o(s)\)</span></p></li>
+</ul>
+<p><strong>系统误差与偏差的关系</strong>:
+当偏差信号 <span class="math notranslate nohighlight">\(E(s)=0\)</span> 时，控制系统无控制作用，此时系统的实际输出与希望的输出相等。
+<span class="math notranslate nohighlight">\(X_o(s) = X_{or}(s)\)</span>
+<span class="math notranslate nohighlight">\(E(s) = X_i(s) - H(s)X_o(s) = X_i(s) - H(s)X_{or}(s) = 0\)</span>
+<span class="math notranslate nohighlight">\(\implies X_{or}(s) = \frac{X_i(s)}{H(s)}\)</span>
+<span class="math notranslate nohighlight">\(E_1(s) = X_o(s) - X_o(s) = \frac{X_i(s)}{H(s)} - X_o(s) = \frac{X_i(s) - H(s)X_o(s)}{H(s)} = \frac{E(s)}{H(s)}\)</span></p>
+<section id="id12">
+<h4>4.4.2 系统的稳态误差<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
+<p>实际控制系统中，不仅存在给定的输入信号 <span class="math notranslate nohighlight">\(x_i(t)\)</span>，还存在干扰信号作用 <span class="math notranslate nohighlight">\(n(t)\)</span>，要求出系统的稳态误差，可以根据线性系统的叠加原理，分别求出输入和干扰单独作用时，系统所引起的稳态误差，然后求其代数和。</p>
+<p><strong>1. 输入作用下的稳态误差</strong>:
+<span class="math notranslate nohighlight">\(E(s) = \frac{1}{1+G(s)H(s)}X_i(s)\)</span>
+稳态偏差 <span class="math notranslate nohighlight">\(\epsilon_{ssi} = \lim_{t\to\infty} \epsilon(t) = \lim_{s\to 0} sE(s) = \lim_{s\to 0} s \frac{1}{1+G(s)H(s)}X_i(s)\)</span>
+稳态误差与稳态偏差的关系: <span class="math notranslate nohighlight">\(e_{ssi} = \frac{\epsilon_{ssi}}{H(0)}\)</span>
+单位反馈系统 <span class="math notranslate nohighlight">\(H(s)=1\)</span>: <span class="math notranslate nohighlight">\(e_{ssi} = \epsilon_{ssi} = \lim_{s\to 0} \frac{1}{1+G(s)} \cdot X_i(s)\)</span></p>
+<p><strong>2. 干扰作用下的稳态偏差</strong>:
+<span class="math notranslate nohighlight">\(E(s) = -\frac{G_2(s)H(s)}{1+G_2(s)G_1(s)H(s)}N(s)\)</span>
+稳态偏差 <span class="math notranslate nohighlight">\(\epsilon_{ssn} = \lim_{t\to\infty} \epsilon(t) = \lim_{s\to 0} sE(s) = -\lim_{s\to 0} s \frac{G_2(s)H(s)}{1+G_2(s)G_1(s)H(s)}N(s)\)</span>
+稳态误差与稳态偏差的关系: <span class="math notranslate nohighlight">\(e_{ssn} = \frac{\epsilon_{ssn}}{H(0)}\)</span>
+单位反馈系统 <span class="math notranslate nohighlight">\(H(s)=1\)</span>: <span class="math notranslate nohighlight">\(e_{ssn} = \epsilon_{ssn} = -\lim_{s\to 0} s \frac{G_2(s)}{1+G_1(s)G_2(s)}N(s)\)</span></p>
+<p><strong>结论</strong>:
+输入信号和干扰信号同时作用于系统，根据线性系统的叠加原理，系统总的稳态误差等于输入信号和干扰信号单独作用于系统所引起的稳态误差的线性叠加: <span class="math notranslate nohighlight">\(e_{ss} = e_{ssi} + e_{ssn}\)</span>。</p>
+</section>
+</section>
+<section id="id13">
+<h3>4.4.3 静态误差系数<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<p>工程上，通常根据 <span class="math notranslate nohighlight">\(\nu\)</span> 来划分系统的类型。</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\nu=0\)</span> 的系统称为 <span class="math notranslate nohighlight">\(0\)</span> 型系统。</p></li>
+<li><p><span class="math notranslate nohighlight">\(\nu=1\)</span> 的系统称为 <span class="math notranslate nohighlight">\(I\)</span> 型系统。</p></li>
+<li><p><span class="math notranslate nohighlight">\(\nu=2\)</span> 的系统称为 <span class="math notranslate nohighlight">\(II\)</span> 型系统，依次类推。</p></li>
+</ul>
+<ol class="arabic">
+<li><p><strong>系统的结构特征</strong>:
+开环传递函数 <span class="math notranslate nohighlight">\(G(s)H(s) = \frac{K(\tau_1 s + 1)(\tau_2 s + 1)\dots(\tau_m s + 1)}{s^\nu (T_1 s + 1)(T_2 s + 1)\dots(T_n s + 1)}\)</span>
+<span class="math notranslate nohighlight">\(\nu\)</span>: 开环传递函数中包含积分环节的个数。</p></li>
+<li><p><strong>稳态误差系数</strong>:
+<strong>(1) 静态位置误差系数</strong>:
+系统输入为单位阶跃信号 <span class="math notranslate nohighlight">\(X_i(s) = 1/s\)</span>。
+<span class="math notranslate nohighlight">\(e_{ss} = \lim_{s\to 0} s \frac{1}{H(s)} \frac{1}{1+G(s)H(s)} \cdot \frac{1}{s} = \frac{1}{H(0)} \lim_{s\to 0} \frac{1}{1+G(s)H(s)} = \frac{1}{H(0)} \frac{1}{1+K_p}\)</span>
+<span class="math notranslate nohighlight">\(K_p = \lim_{s\to 0} G(s)H(s)\)</span> 定义为静态位置误差系数。
+当系统为单位反馈控制系统时 <span class="math notranslate nohighlight">\(e_{ss} = \frac{1}{1+K_p}\)</span>。</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(0\)</span> 型系统: <span class="math notranslate nohighlight">\(K_p = \lim_{s\to 0} G(s)H(s) = \lim_{s\to 0} \frac{K}{s^\nu} = K\)</span> (当 <span class="math notranslate nohighlight">\(\nu=0\)</span>) <span class="math notranslate nohighlight">\(\implies e_{ss} = \frac{1}{1+K}\)</span> (有差系统)。</p></li>
+<li><p><span class="math notranslate nohighlight">\(I\)</span> 型和 <span class="math notranslate nohighlight">\(II\)</span> 型系统: <span class="math notranslate nohighlight">\(K_p = \lim_{s\to 0} G(s)H(s) = \lim_{s\to 0} \frac{K}{s^\nu} = \infty\)</span> (当 <span class="math notranslate nohighlight">\(\nu \ge 1\)</span>) <span class="math notranslate nohighlight">\(\implies e_{ss} = 0\)</span> (位置无差系统)。</p></li>
+</ul>
+<p><strong>(2) 静态速度误差系数</strong>:
+系统输入为单位斜坡信号 <span class="math notranslate nohighlight">\(X_i(s) = 1/s^2\)</span>。
+<span class="math notranslate nohighlight">\(e_{ss} = \lim_{s\to 0} s \frac{1}{H(s)} \frac{1}{1+G(s)H(s)} \cdot \frac{1}{s^2} = \frac{1}{H(0)} \lim_{s\to 0} \frac{1}{s(1+G(s)H(s))}\)</span>
+<span class="math notranslate nohighlight">\(e_{ss} = \frac{1}{H(0)} \lim_{s\to 0} \frac{1}{s+sG(s)H(s)} = \frac{1}{H(0)} \frac{1}{K_v}\)</span>
+<span class="math notranslate nohighlight">\(K_v = \lim_{s\to 0} sG(s)H(s)\)</span> 定义为静态速度误差系数。
+当系统为单位反馈控制系统时 <span class="math notranslate nohighlight">\(e_{ss} = \frac{1}{K_v}\)</span>。</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(0\)</span> 型系统: <span class="math notranslate nohighlight">\(K_v = \lim_{s\to 0} sG(s)H(s) = \lim_{s\to 0} s \frac{K}{s^\nu} = 0\)</span> (当 <span class="math notranslate nohighlight">\(\nu=0\)</span>) <span class="math notranslate nohighlight">\(\implies e_{ss} = \infty\)</span> (不能跟随)。</p></li>
+<li><p><span class="math notranslate nohighlight">\(I\)</span> 型系统: <span class="math notranslate nohighlight">\(K_v = \lim_{s\to 0} s \frac{K}{s^\nu} = K\)</span> (当 <span class="math notranslate nohighlight">\(\nu=1\)</span>) <span class="math notranslate nohighlight">\(\implies e_{ss} = \frac{1}{K}\)</span> (有差系统)。</p></li>
+<li><p><span class="math notranslate nohighlight">\(II\)</span> 型系统: <span class="math notranslate nohighlight">\(K_v = \lim_{s\to 0} s \frac{K}{s^\nu} = \infty\)</span> (当 <span class="math notranslate nohighlight">\(\nu \ge 2\)</span>) <span class="math notranslate nohighlight">\(\implies e_{ss} = 0\)</span> (无差系统)。</p></li>
+</ul>
+<p><strong>(3) 静态加速度误差系数</strong>:
+系统输入为单位加速度信号 <span class="math notranslate nohighlight">\(X_i(s) = 1/s^3\)</span>。
+<span class="math notranslate nohighlight">\(e_{ss} = \lim_{s\to 0} s \frac{1}{H(s)} \frac{1}{1+G(s)H(s)} \cdot \frac{1}{s^3} = \frac{1}{H(0)} \lim_{s\to 0} \frac{1}{s^2(1+G(s)H(s))}\)</span>
+<span class="math notranslate nohighlight">\(e_{ss} = \frac{1}{H(0)} \lim_{s\to 0} \frac{1}{s^2+s^2G(s)H(s)} = \frac{1}{H(0)} \frac{1}{K_a}\)</span>
+<span class="math notranslate nohighlight">\(K_a = \lim_{s\to 0} s^2G(s)H(s)\)</span> 定义为静态加速度误差系数。
+当系统为单位反馈控制系统时 <span class="math notranslate nohighlight">\(e_{ss} = \frac{1}{K_a}\)</span>。</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(0\)</span> 型和 <span class="math notranslate nohighlight">\(I\)</span> 型系统: <span class="math notranslate nohighlight">\(K_a = \lim_{s\to 0} s^2G(s)H(s) = \lim_{s\to 0} s^2 \frac{K}{s^\nu} = 0\)</span> (当 <span class="math notranslate nohighlight">\(\nu \le 2\)</span>) <span class="math notranslate nohighlight">\(\implies e_{ss} = \infty\)</span> (不能跟随)。</p></li>
+<li><p><span class="math notranslate nohighlight">\(II\)</span> 型系统: <span class="math notranslate nohighlight">\(K_a = \lim_{s\to 0} s^2 \frac{K}{s^\nu} = K\)</span> (当 <span class="math notranslate nohighlight">\(\nu=2\)</span>) <span class="math notranslate nohighlight">\(\implies e_{ss} = \frac{1}{K}\)</span> (有差系统)。</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="id14">
+<h2>3. 小结<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>系统型号的增高，系统本身消除稳态误差的能力增强；增大系统的开环增益，稳态误差减小，准确度提高。但系统型号的增高或开环增益的增大，均会导
+致系统的稳定性下降。</p></li>
+<li><p>对于单位反馈系统，稳态误差 <span class="math notranslate nohighlight">\(e_{ss}\)</span> 等于稳态偏差 <span class="math notranslate nohighlight">\(\epsilon_{ss}\)</span>；对于非单位反馈系统，稳态误差 <span class="math notranslate nohighlight">\(e_{ss}\)</span> 和稳态偏差 <span class="math notranslate nohighlight">\(\epsilon_{ss}\)</span> 的关系为 <span class="math notranslate nohighlight">\(e_{ss} = \frac{\epsilon_{ss}}{H(0)}\)</span>。</p></li>
+<li><p>根据线性系统的叠加原理，当输入信号是由上述典型信号的线性组合时，系统的稳态误差应为它们分别作用时的稳态误差之和。</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="id15">
+<h2>本章小结<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<p>(1) 时域分析法是通过直接求解系统在典型输入信号作用下的时域响应来分析系统性能的。通常以系统阶跃响应的超调量、调整时间和稳态误差等性能指标来评价系统性能的优劣。</p>
+<p>(2) 二阶系统在欠阻尼时，只要阻尼比适当，则系统既有响应的快速性，又有过渡过程的平稳性，因而在控制工程中把二阶系统设计为欠阻尼。</p>
+<p>(3) 系统的稳态误差是系统的稳态性能指标，它标志着系统的控制精度。稳态误差既与系统的结构和参数有关，又与控制信号的形式、大小和作用点有关。</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="50-freq.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">第五章 线性系统的频域分析法</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="30-model.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">第三章 控制系统的数学模型</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">第四章 线性系统的时域分析法</a><ul>
+<li><a class="reference internal" href="#id2">4.1 概述及典型输入信号</a></li>
+<li><a class="reference internal" href="#id3">4.2 一阶系统的时域分析</a></li>
+<li><a class="reference internal" href="#id4">4.3 二阶系统的时域分析</a><ul>
+<li><a class="reference internal" href="#id5">4.3.1 二阶系统的数学模型 (标准形式)</a></li>
+<li><a class="reference internal" href="#id6">4.3.2 二阶系统特征方程的根与阻尼比的关系</a></li>
+<li><a class="reference internal" href="#id7">4.3.3 二阶系统的单位脉冲响应</a></li>
+<li><a class="reference internal" href="#id8">4.3.4 二阶系统的单位阶跃响应</a></li>
+<li><a class="reference internal" href="#id9">4.3.5 二阶系统响应的性能指标</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id10">4.4 系统的稳态误差分析</a><ul>
+<li><a class="reference internal" href="#id11">4.4.1 系统误差与偏差的关系</a><ul>
+<li><a class="reference internal" href="#id12">4.4.2 系统的稳态误差</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id13">4.4.3 静态误差系数</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id14">3. 小结</a></li>
+<li><a class="reference internal" href="#id15">本章小结</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="../_static/tex-svg-full.js?v=fe9f5dce"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

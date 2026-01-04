@@ -1,0 +1,774 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="第三章：基于机器人控制器的系统集成" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/80-interg/03.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="2022年10月6日 本章学习要点: 本章学习提要：: 机器人控制器是机器人的控制中枢。通过本章学习，您将能够： 熟悉工业机器人控制器的结构与组成。, 掌握工业机器人控制器主要I/O接口信号功能。, 掌握工业机器人控制器I/O接口信号的电路连接方式。. 这将为整个机器人工作站系统的集成化构建奠定基础。 内容简介: 工业机器人通信概述, ABB机器人的标准I/O通信, ABB机器人与西门子PL..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="2022年10月6日 本章学习要点: 本章学习提要：: 机器人控制器是机器人的控制中枢。通过本章学习，您将能够： 熟悉工业机器人控制器的结构与组成。, 掌握工业机器人控制器主要I/O接口信号功能。, 掌握工业机器人控制器I/O接口信号的电路连接方式。. 这将为整个机器人工作站系统的集成化构建奠定基础。 内容简介: 工业机器人通信概述, ABB机器人的标准I/O通信, ABB机器人与西门子PL..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="第四章 基于PLC的机器人系统集成" href="04.html"><link rel="prev" title="第二章 机器人工作站系统组织结构与设计选型" href="02.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>第三章：基于机器人控制器的系统集成 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/80-interg/03.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/80-interg/03.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>第三章：基于机器人控制器的系统集成<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p><strong>2022年10月6日</strong></p>
+<hr class="docutils" />
+<section id="id2">
+<h2>本章学习要点<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>本章学习提要：<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>机器人控制器是机器人的控制中枢。通过本章学习，您将能够：</p>
+<ul class="simple">
+<li><p>熟悉工业机器人控制器的结构与组成。</p></li>
+<li><p>掌握工业机器人控制器主要I/O接口信号功能。</p></li>
+<li><p>掌握工业机器人控制器I/O接口信号的电路连接方式。</p></li>
+</ul>
+<p>这将为整个机器人工作站系统的集成化构建奠定基础。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h2>内容简介<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>工业机器人通信概述</p></li>
+<li><p>ABB机器人的标准I/O通信</p></li>
+<li><p>ABB机器人与西门子PLC通信</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>1. 工业机器人通信概述<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<section id="id6">
+<h3>工业机器人典型控制系统硬件工作分工<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>（此处展示了一个示意图，展示了主计算机、运动控制器、驱动器、伺服电机和传感器之间的交互。）</p>
+<ul class="simple">
+<li><p><strong>主计算机</strong>：内含系统板卡，负责系统和数据的存储。它提供与外围设备的连接接口，如网络接口、I/O接口等。</p></li>
+<li><p><strong>运动控制器</strong>：内含运动学板卡和动力学板卡，负责执行运动学和动力学计算。在集中式控制中，它可能集成在主计算机中。</p></li>
+<li><p><strong>伺服控制系统</strong>：编码器是内部传感器，外部传感器（如视觉传感器、力传感器）可通过I/O单元与运动控制器通信。</p></li>
+<li><p><strong>人机交互工具</strong>：如示教器，用于直接操纵执行机构，并进行编程。安全机制可用于在危险情况下立即停止执行机构。</p></li>
+</ul>
+</section>
+<section id="id7">
+<h3>典型的控制系统硬件工作流程：<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>主计算机负责系统的管理和任务处理，并将命令发送给运动控制器。运动控制器控制驱动器、伺服电机和传感器组成的闭环伺服驱动系统，执行机构执行动作，传感器反馈信息给运动控制器。</p>
+<p><strong>总之，硬件设备之间需要通过数据线路按照规定的通信协议标准来进行信息的交互。通信协议规定了硬件接口的标准、通信的模式以及速率，设备之间必须采用相同的通信协议才能正确地进行信息交互。</strong></p>
+</section>
+<section id="i-o-input-output">
+<h3>知识储备：I/O（Input/Output）<a class="headerlink" href="#i-o-input-output" title="Link to this heading">¶</a></h3>
+<p>I/O是输入/输出的缩写，即输入输出端口，机器人可通过I/O与外部设备进行交互。</p>
+<ul class="simple">
+<li><p><strong>数字量输入</strong>：用于接收开关信号（如按钮、接近开关）、传感器信号（如光电传感器）、接触器、继电器触点信号以及触摸屏信号。</p></li>
+<li><p><strong>数字量输出</strong>：用于控制继电器线圈（如接触器、继电器）、电磁阀以及指示类信号（如指示灯、蜂鸣器）。</p></li>
+</ul>
+</section>
+<section id="abbi-o">
+<h3>ABB机器人I/O通信的种类<a class="headerlink" href="#abbi-o" title="Link to this heading">¶</a></h3>
+<p>（此处展示了一个树状图，列出了ABB机器人的通信类型，包括总线通信和数据通信，以及各种通信协议如DeviceNet、Profibus、Profinet、EtherNet/IP等。）</p>
+</section>
+<section id="i-o">
+<h3>I/O信号类型：<a class="headerlink" href="#i-o" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>数字量信号 (digital signal)</strong>：离散的信号，只有0和1两种状态，通常用于表示物理触点的断开与闭合。</p></li>
+<li><p><strong>模拟量信号 (analog signal)</strong>：连续的信号，通常用于表示压力、流量、速度等连续变化的物理量。</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id8">
+<h2>2. ABB机器人的标准I/O通信<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<section id="abb">
+<h3>ABB机器人支持的通讯方式与协议<a class="headerlink" href="#abb" title="Link to this heading">¶</a></h3>
+<p>（此处展示了一个表格，列出了ABB机器人支持的通讯功能、协议和连接方式，包括主站功能、从站功能、串口通信和数据通信。）</p>
+<p><strong>ABB工业机器人默认配置是基于DeviceNet通信总线协议的I/O通信板卡，通过此板卡实现主机控制系统与外围工业设备之间的通信。</strong></p>
+</section>
+<section id="devicenet">
+<h3>DeviceNet通信：<a class="headerlink" href="#devicenet" title="Link to this heading">¶</a></h3>
+<p>DeviceNet是一种基于CAN总线的现场总线，采用5线制通信模式。机器人控制柜的Device NET接口属于系统选配功能。</p>
+<p>（此处展示了DeviceNet通信硬件配置图和说明表。）</p>
+</section>
+<section id="id9">
+<h3>ABB标准I/O通信板介绍：<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>DSQC 651</strong>：分布式I/O模块，提供8个数字输入、8个数字输出和2个模拟输出信号的处理。</p></li>
+<li><p><strong>DSQC 652</strong>：分布式I/O模块，提供16个数字输入和16个数字输出。</p></li>
+<li><p><strong>DSQC 653</strong>：分布式I/O模块，提供8个数字输入、8个数字输出，并带有继电器。</p></li>
+<li><p><strong>DSQC 355A</strong>：分布式I/O模块，提供4个模拟输入和4个模拟输出。</p></li>
+<li><p><strong>DSQC 377A</strong>：输送链跟踪单元。</p></li>
+</ul>
+</section>
+<section id="dsqc651">
+<h3>DSQC651板的接口说明：<a class="headerlink" href="#dsqc651" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>A</strong>：数字输出信号指示灯</p></li>
+<li><p><strong>B</strong>：X1数字输出接口</p></li>
+<li><p><strong>C</strong>：X6模拟输出接口</p></li>
+<li><p><strong>D</strong>：X5是DeviceNet接口</p></li>
+<li><p><strong>E</strong>：模块状态指示灯</p></li>
+<li><p><strong>F</strong>：X3数字输入接口</p></li>
+<li><p><strong>G</strong>：数字输入信号指示灯</p></li>
+</ul>
+</section>
+<section id="x1-x3-x6">
+<h3>X1-数字输出接口、X3-数字输入接口、X6-模拟输出接口的定义：<a class="headerlink" href="#x1-x3-x6" title="Link to this heading">¶</a></h3>
+<p>（此处展示了三个表格，分别列出了X1、X3和X6接口的子编号、使用定义和地址分配。）</p>
+<ul class="simple">
+<li><p><strong>X1-数字输出接口</strong>：提供8个数字输出通道（OUTPUT CH1-CH8），以及0V和24V电源。</p></li>
+<li><p><strong>X3-数字输入接口</strong>：提供8个数字输入通道（INPUT CH1-CH8），以及0V和未使用选项。</p></li>
+<li><p><strong>X6-模拟输出接口</strong>：提供2个模拟输出通道（ao1, ao2），以及未使用和0V选项。模拟输出范围为0~+10V。</p></li>
+</ul>
+</section>
+<section id="x5-devicenet">
+<h3>X5-DeviceNet接口：<a class="headerlink" href="#x5-devicenet" title="Link to this heading">¶</a></h3>
+<p>ABB标准I/O板DSQC651挂在DeviceNet网络上，通过端子X5的7~12的跳线来决定模块在网络中的地址，地址范围为10~63。</p>
+</section>
+<section id="id10">
+<h3>定义DSQC651板的总线连接<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>（此处展示了一个表格，说明了DSQC651板的总线连接参数，包括Name、Type of Unit、Connected to Bus和DeviceNet Address。）</p>
+</section>
+<section id="id11">
+<h3>DSQC651板的总线连接操作步骤：<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>在“控制面板”-“配置”画面中，双击“Unit(或Devicenet device)”。</p></li>
+<li><p>单击“添加”。</p></li>
+<li><p>按照表格中的参数填写，完成后点击“确定”，重启后完成定义。</p></li>
+</ol>
+</section>
+<section id="id12">
+<h3>定义数字输入/输出信号：<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>在“控制面板”-“配置”画面中，双击“Signal”。</p></li>
+<li><p>单击“添加”。</p></li>
+<li><p>根据不同类型的信号，填写参数，完成后点击“确定”，重启后完成设置。</p></li>
+</ol>
+</section>
+<section id="di1">
+<h3>数字输入信号di1的相关参数：<a class="headerlink" href="#di1" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Name</strong>：di1</p></li>
+<li><p><strong>Type of Signal</strong>：Digital Input</p></li>
+<li><p><strong>Assigned to Unit</strong>：board10</p></li>
+<li><p><strong>Unit Mapping</strong>：0</p></li>
+</ul>
+</section>
+<section id="do1">
+<h3>数字输出信号do1的相关参数：<a class="headerlink" href="#do1" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Name</strong>：do1</p></li>
+<li><p><strong>Type of Signal</strong>：Digital Output</p></li>
+<li><p><strong>Assigned to Unit</strong>：board10</p></li>
+<li><p><strong>Unit Mapping</strong>：32</p></li>
+</ul>
+</section>
+<section id="id13">
+<h3>定义组输入/输出信号：<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>组输入信号gi1</strong>：</p>
+<ul>
+<li><p><strong>Name</strong>：gi1</p></li>
+<li><p><strong>Type of Signal</strong>：Group Input</p></li>
+<li><p><strong>Assigned to Unit</strong>：board10</p></li>
+<li><p><strong>Unit Mapping</strong>：1~4</p></li>
+</ul>
+</li>
+<li><p><strong>组输出信号go1</strong>：</p>
+<ul>
+<li><p><strong>Name</strong>：go1</p></li>
+<li><p><strong>Type of Signal</strong>：Group Output</p></li>
+<li><p><strong>Assigned to Unit</strong>：board10</p></li>
+<li><p><strong>Unit Mapping</strong>：33~36</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>示例：</strong> 组信号占用地址1~4共4位，可以代表十进制数0~15。</p>
+</section>
+<section id="id14">
+<h3>定义模拟输出信号：<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>模拟输出信号ao1</strong>：</p>
+<ul>
+<li><p><strong>Name</strong>：ao1</p></li>
+<li><p><strong>Type of Signal</strong>：Analog Output</p></li>
+<li><p><strong>Assigned to Unit</strong>：board10</p></li>
+<li><p><strong>Unit Mapping</strong>：0~15</p></li>
+<li><p><strong>Analog Encoding Type</strong>：Unsigned</p></li>
+<li><p><strong>Maximum Logical Value</strong>：10</p></li>
+<li><p><strong>Maximum Physical Value</strong>：10</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id15">
+<h3>I/O信号监控和操作：<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>仿真操作</strong>：用于输入信号，模拟外部设备信号场景。</p></li>
+<li><p><strong>强制赋值操作</strong>：用于输出信号，直接修改输出值。</p></li>
+</ul>
+<p>（此处展示了ABB菜单中的“输入输出”界面，以及如何进行信号监控、仿真和强制操作的步骤。）</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="abbplc">
+<h2>3. ABB机器人与西门子PLC通信<a class="headerlink" href="#abbplc" title="Link to this heading">¶</a></h2>
+<p>ABB机器人可以通过DSQC667模块通过Profibus与其它厂商PLC（如西门子PLC）进行通信。</p>
+<section id="id16">
+<h3>通信前提：<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>提供设备的GSD文件。</p></li>
+<li><p>在西门子PLC组态软件中加载GSD文件。</p></li>
+<li><p>进行相关的通信配置。</p></li>
+</ul>
+</section>
+<section id="id17">
+<h3>硬件连接：<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<p>将西门子300系列PLC通过PROFIBUS-op-v1电缆连接到工业机器人主计算机单元的PROFIBUS接口。</p>
+</section>
+<section id="gsd">
+<h3>获取机器人GSD组态文件：<a class="headerlink" href="#gsd" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>将U盘插入示教器U盘插孔。</p></li>
+<li><p>点选资源管理器，找到HMS_1811.gsd文件。</p></li>
+<li><p>复制并粘贴到U盘目录，然后导入电脑。
+<strong>注意：</strong> 路径不能包含中文字符，且文件夹名称应为英文。</p></li>
+</ol>
+</section>
+<section id="profibus">
+<h3>配置PROFIBUS：<a class="headerlink" href="#profibus" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>打开SIMATIC Manager软件，新建项目。</p></li>
+<li><p>在左侧导航栏中找到“SIMATI300”，然后双击“硬件”。</p></li>
+<li><p>在新的配置窗口的菜单栏点击“选项”目录下的“安装GSD文件”。</p></li>
+<li><p>点击浏览，选择HMS_1811.gsd文件所在的目录，然后点击确定。</p></li>
+<li><p>确认加载了HMS_1811.gsd文件，点击安装。</p></li>
+<li><p>在出现的通知小窗口点击确定。</p></li>
+<li><p>右击PLC的CPU型号，选择“替换对象”，选择一款有PROFIBUS-DP通讯功能的CPU（如西门子S7300系列的315-2dp）。</p></li>
+<li><p>在右侧导航栏中找到“Anybus-cc PROFIBUS-DP-v1”。</p></li>
+<li><p>拖动“Anybus-cc profibus-dp-v1”到主站图并设置地址。</p></li>
+<li><p>在PLC中，1 word = 2 bytes，1 byte = 8 bits。添加相应的输入输出模块（如两个2个byte输入模块和一个word输出模块）。</p></li>
+<li><p>双击添加的模块，设置模块的地址。</p></li>
+<li><p>使用下载数据线连接到PLC的硬件端口，然后点击“保存编译”与“下载到模块”来保存配置并下载到PLC。</p></li>
+</ol>
+</section>
+<section id="id18">
+<h3>机器人端通信配置：<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>打开示教器控制面板中的“配置”，找到并选择“IndustrialNetwork”。</p></li>
+<li><p>编辑PROFIBUS地址为“4”（确保与PLC端配置的PROFIBUS地址一致）。</p></li>
+<li><p>配置I/O，选择“PROFIBUS Internal Anybus Device”，然后编辑“PB_Internal_Anybus”。</p></li>
+<li><p>修改“Input Size”和“Output Size”为2，使机器人端的输入输出信号数量与PLC端一致。</p></li>
+</ol>
+<hr class="docutils" />
+<p><strong>同学们下节课见！</strong></p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="04.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">第四章 基于PLC的机器人系统集成</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="02.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">第二章 机器人工作站系统组织结构与设计选型</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">第三章：基于机器人控制器的系统集成</a><ul>
+<li><a class="reference internal" href="#id2">本章学习要点</a><ul>
+<li><a class="reference internal" href="#id3">本章学习提要：</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">内容简介</a></li>
+<li><a class="reference internal" href="#id5">1. 工业机器人通信概述</a><ul>
+<li><a class="reference internal" href="#id6">工业机器人典型控制系统硬件工作分工</a></li>
+<li><a class="reference internal" href="#id7">典型的控制系统硬件工作流程：</a></li>
+<li><a class="reference internal" href="#i-o-input-output">知识储备：I/O（Input/Output）</a></li>
+<li><a class="reference internal" href="#abbi-o">ABB机器人I/O通信的种类</a></li>
+<li><a class="reference internal" href="#i-o">I/O信号类型：</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8">2. ABB机器人的标准I/O通信</a><ul>
+<li><a class="reference internal" href="#abb">ABB机器人支持的通讯方式与协议</a></li>
+<li><a class="reference internal" href="#devicenet">DeviceNet通信：</a></li>
+<li><a class="reference internal" href="#id9">ABB标准I/O通信板介绍：</a></li>
+<li><a class="reference internal" href="#dsqc651">DSQC651板的接口说明：</a></li>
+<li><a class="reference internal" href="#x1-x3-x6">X1-数字输出接口、X3-数字输入接口、X6-模拟输出接口的定义：</a></li>
+<li><a class="reference internal" href="#x5-devicenet">X5-DeviceNet接口：</a></li>
+<li><a class="reference internal" href="#id10">定义DSQC651板的总线连接</a></li>
+<li><a class="reference internal" href="#id11">DSQC651板的总线连接操作步骤：</a></li>
+<li><a class="reference internal" href="#id12">定义数字输入/输出信号：</a></li>
+<li><a class="reference internal" href="#di1">数字输入信号di1的相关参数：</a></li>
+<li><a class="reference internal" href="#do1">数字输出信号do1的相关参数：</a></li>
+<li><a class="reference internal" href="#id13">定义组输入/输出信号：</a></li>
+<li><a class="reference internal" href="#id14">定义模拟输出信号：</a></li>
+<li><a class="reference internal" href="#id15">I/O信号监控和操作：</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#abbplc">3. ABB机器人与西门子PLC通信</a><ul>
+<li><a class="reference internal" href="#id16">通信前提：</a></li>
+<li><a class="reference internal" href="#id17">硬件连接：</a></li>
+<li><a class="reference internal" href="#gsd">获取机器人GSD组态文件：</a></li>
+<li><a class="reference internal" href="#profibus">配置PROFIBUS：</a></li>
+<li><a class="reference internal" href="#id18">机器人端通信配置：</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

@@ -1,0 +1,856 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="第八章 工业机器人仿真软件高级应用" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/80-interg/08.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="本章学习要点: 本章学习提要:: 第五、六、七章介绍了RAPID语言的数据结构、编程基础以及高级编程，但主要针对基于示教器的在线编程。本章将介绍仿真软件RobotStudio的高级应用，这是离线编程的基础。主要包括工业机器人离线编程基础知识、虚拟工作站搭建与编程，以及工业机器人的在线编程与控制。 本章目标: 熟悉掌握仿真软件离线编程方法, 熟悉掌握虚拟工业机器人工具的创建与设定, 了解事件管..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="本章学习要点: 本章学习提要:: 第五、六、七章介绍了RAPID语言的数据结构、编程基础以及高级编程，但主要针对基于示教器的在线编程。本章将介绍仿真软件RobotStudio的高级应用，这是离线编程的基础。主要包括工业机器人离线编程基础知识、虚拟工作站搭建与编程，以及工业机器人的在线编程与控制。 本章目标: 熟悉掌握仿真软件离线编程方法, 熟悉掌握虚拟工业机器人工具的创建与设定, 了解事件管..." />
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="第九章 工业机器人在线编程与控制" href="09.html"><link rel="prev" title="第七章 工业机器人高级编程" href="07.html">
+        <link rel="prefetch" href="../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>第八章 工业机器人仿真软件高级应用 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../60-programming/index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../60-programming/05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../60-programming/99-homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/99.html">实验课</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/988.html">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../60-programming/99-homeworks/999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/80-interg/08.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/80-interg/08.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>第八章 工业机器人仿真软件高级应用<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2>本章学习要点<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>本章学习提要:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>第五、六、七章介绍了RAPID语言的数据结构、编程基础以及高级编程，但主要针对基于示教器的在线编程。本章将介绍仿真软件RobotStudio的高级应用，这是离线编程的基础。主要包括工业机器人离线编程基础知识、虚拟工作站搭建与编程，以及工业机器人的在线编程与控制。</p>
+</section>
+</section>
+<section id="id4">
+<h2>本章目标<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>熟悉掌握仿真软件离线编程方法</p></li>
+<li><p>熟悉掌握虚拟工业机器人工具的创建与设定</p></li>
+<li><p>了解事件管理器的用法</p></li>
+<li><p>掌握事件管理器控制工具姿态改变的知识</p></li>
+<li><p>熟悉Smart组件的用法</p></li>
+<li><p>掌握Smart组件输送机和动态工具的创建知识</p></li>
+<li><p>掌握导轨和变位机的应用及编程方法</p></li>
+<li><p>掌握工业机器人在线控制与编程的知识</p></li>
+</ul>
+</section>
+<section id="id5">
+<h2>内容简介<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>离线轨迹编程</p></li>
+<li><p>自定义机器人工具</p></li>
+<li><p>事件管理器</p></li>
+<li><p>Smart组件技术</p></li>
+<li><p>导轨与变位机应用</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="smart">
+<h2>Smart组件技术<a class="headerlink" href="#smart" title="Link to this heading">¶</a></h2>
+<section id="id6">
+<h3>Smart 组件<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>使用事件管理器制作装备的仿真动画比较容易，但是可设置的动画相对单一，逻辑也相对简单。Smart组件相对于事件管理器具有更强大的动画仿真功能，除了能够仿真机械运动效果外，还能够具备关联复杂的工作站逻辑、添加传感器、编辑物料属性等功能。</p>
+<p><strong>事件管理器与smart组件对比表</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-left"><p>事件管理器</p></th>
+<th class="head text-left"><p>Smart组件</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>使用难度</p></td>
+<td class="text-left"><p>简单，易掌握</p></td>
+<td class="text-left"><p>需要系统学习</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>适用范围</p></td>
+<td class="text-left"><p>简单动作改变的动画</p></td>
+<td class="text-left"><p>复杂，需要逻辑控制的动画仿真</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>特点</p></td>
+<td class="text-left"><p>适合制作简单的动画</p></td>
+<td class="text-left"><p>适合制作复杂的动画</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id7">
+<h3>1. 创建设备的Smart组件<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>在仿真软件中，上方选择【建模】功能选项卡中单击的【Smart组件】，创建一个Smart组件。名字默认名为“SmartComponent_1”。</p>
+</section>
+<section id="id8">
+<h3>2. 设置输送产品源<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<p>(1) smart组件中的子对象组件Source用于设定产品源，每当触发一次Source执行，都会自动生成一个产品源的复制品。此处将要物料输送产品“大工件”设为产品源，则每次触发后都会产生一个“大工件”的复制品。单击【添加组件】/【动作】/【Source】，创建一个&quot;Source1”。
+(2) 鼠标右击【Source】组件，单击【属性】，在左侧属性中的【Source】下拉选项单击选择“大工件”，单击【应用】。</p>
+</section>
+<section id="id9">
+<h3>3. 设置运动属性<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<p>(1) 设定输送机的运动属性步骤为：单击【添加组件】，选择【其他】列表中的【Queue】，默认命名为“Queue”。
+(2) 先不设置“Queue”属性；继续单击【添加组件】选择【本体】列表的【LinearMover】。
+(3) 通过查看，大工件所处于工作站世界坐标系的位置就是0,0,0，右击选择“LinearMover”属性，输送机要移动工件的方向在图中右侧方框处，是世界坐标系“Global”的“Y”方向，距离为470.84mm。
+(4) 【LinearMover】参数设置。右击【LinearMover】组件，单击【属性】，【Object】移动对象选择“SmartComponent_1/ Queue1&quot;; 世界坐标系Y的正方向是移动方向，在Y坐标处填写470.84; 速度设定位150, Reference(参考坐标系)鼠标下拉单击选择世界坐标系【Global】; 单击【Execute】设定为1被点亮为高电平开始移动对象; 单击【应用】。</p>
+</section>
+<section id="id10">
+<h3>4. 设置传感器<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>在实际生产中，输送机将物料输送到定位装置末端后会触发到位传感器，使系统得到物料到位的反馈信息，停止物料输送；而当物料被取走时，传感器信号会被重叠，系统就会控制输送机再次开启物料输送。
+(1) 单击【添加组件】/【传感器】/【PlaneSensor】。
+(2) 右击建立好的子组件【PlaneSensor】，单击属性，选择捕捉工具【捕捉端点】后，单击【Origin】下面的空白处，单击图中方框处的输送机物料定位机构的平面角点，然后输入图中【Axis1】和【Axis1】中的数据，单击【关闭】。
+(3) 将可能与该传感器接触的周边设备的属性设为“不可由传感器检测”，右击组件，将【可由传感器检测】前面的“勾选”单击去掉，而工件“大工件”要设置为“可由传感器检测”。
+<strong>原因在于</strong>，虚拟传感器一次智能检测一个物体，因此需保证所创建的传感器不能与周边设备接触，否则会无法检测运动到输送机末端的产品。出了在创建时尽量避开周边设备以外，通常的做法是将可能与该传感器接触的周边设备的属性设置为不可由传感器检测。
+(1) 单击【添加组件】/【信号和属性】依次单击【LogicSRLatch】和【LogicGate】；单击【添加组件】/【其他】中单击【SimulationEvents】。LogicGate 进行两个信号的关联逻辑运算； LogicSRLatch是为了锁定信号；添加SimulationEvents是将开始仿真信号作为激活开始信号来用。
+(2) 右击“LogicGate”组件，单击属性，编辑【属性:LogicGate】，【Operator】下拉选择“NOT”，单击【关闭】。</p>
+</section>
+<section id="id11">
+<h3>5. 设置属性连结<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>属性连接指各Smart子组件的某项属性之间的连接。例如：组件A中的某项属性a1与组件B中某项属性b1建立了属性连接。则当a1变化时，b1也会随着一起变化。属性连接在Smart组件视图中是【属性与连接】选项卡中设置。
+(1) 单击【属性与连结】选项卡下单击【添加链接】；属性与连结里面【添加动态属性】用于创建动态属性以及编辑现有动态属性。
+(2) 单击【添加连接】，在【编辑】界面，【源对象】选择“Source”，【源属性】选择“Copy”，【目标对象】选择前面创建的“Queue”，【目标属性】选择“back”，这里编辑方式所有地选择都是单击下拉菜单点选。
+(上述属性连接中，源对象Source的属性Copy指的是源的复制品，目标对象Queue的属性back指的是下一个将要加入队列的物体。通过该属性连接，当产品源产生一个复制品执行加入队列动作后，该复制品就会自动加入到Queue中，由于Queue队列一直执行线性运动，因此该复制品也会随着队列进行线性运动，而当执行退出队列操作时，复制品退出队列后也会停止线性运动。)</p>
+</section>
+<section id="id12">
+<h3>6. 设置信号与连接<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>信号与连接包含I/O信号和I/O连接两部分,I/O信号指的是本工作站中自行创建的数字信号,用于和各个Smart子组件进行信号交互,I/O连接指的是创建的I/O信号与Smart子组件信号的连接关系,以及各Smart子组件之间的信号连接关系。信号与连接是在Smart组件窗口中的【信号与连接】选项卡中进行设置的。
+物料输送设备Smart组件需要两个I/O信号,单击【添加I/O Signal】添加。</p>
+</section>
+<section id="id13">
+<h3>7. 验证仿真效果<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<p>(1) 首先单击【仿真】/【仿真设定】，在【仿真设定】页面去
+掉控制器下面选项的勾选,保证Smart组件下选项被勾选。
+(2) 在【仿真】功能选项卡中单击【I/O仿真器】,【选择系统】
+/下拉单击选择【SmartComponent_1】。
+(3) 单击“start”信号后,复制品运动到输送机末端,当大工
+件触发末端传感器,“arrive”信号置1,输送机前端会再次产生一个
+复制品,进入下一个循环。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id14">
+<h2>1. 创建动态工具—Smart组件<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
+<p>在RobotStudio中创建仿真工作站,工具拾取与释放产品的动态效果最
+为重要。除使用事件管理器设置以外,也可以使用Smart组件来创建动态工具。</p>
+<p>(1) 首先将夹爪“bigtool-good”在从机器人上拆除,方便组件编辑,
+编辑完成后在再安装上,。右击【bigtool-good】工具,单击【拆除】,
+在弹出的【更新位置】菜单单击【否】。
+(2) 【建模】功能选项卡中单击【Smart组件】,默认命名为
+&quot;SmartComponent_2”。
+(3) 在【布局】窗口中,选中【bigtool-good】,拖放到
+【SmartComponent_2】上面后松开,将【bigtool-good】添加到了
+Smart组件中。在Smart【编辑组件】编辑窗口的【组成】选项卡中,右击
+【bigtool-good】,勾选【设定为Role】。让Smart组件获得Role属性,
+从而继承了机器人工具的坐标系等属性。</p>
+<section id="id15">
+<h3>2. 设置工具传感器<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<p>(1) 添加组件,在Smart组件编辑窗口的单击【添加组件】/
+【传感器】在列表中单击选择【LineSensor】,创建一个
+LineSensor类型的传感器子组件。
+(2) 在子组件线传感器“LineSensor”上右击,单击【属性】,设
+定线传感器,需要指定起点Start和终点End。选取捕捉工具【捕捉中
+心】,在【Start】下面空白处单击。
+(3) 然后单击工具夹指底部中心点,线传感器用于检测工具是否抓到
+物料,所以另个一点【End】为夹指的中间处,两个点连线如下图所示。
+重新安装机器人工具时,工具坐标会发生偏移。虽然偏移不会影响工具的
+安装,但传感器的Start点与End点的位置可能会产生偏差,又或者工具形状不
+规则,无法通过鼠标捕捉确定End点。可以通过一下两种方法确定End点:</p>
+<ol class="arabic simple">
+<li><p>分别排
+结合St</p></li>
+<li><p>若难以
+或两个坐标值,
+高的位置,在
+此基础
+卡的/ End(mm)
+EZEIN 【基本】选项
+卡
+传感器。
+(4) 要避免在接触物体时LineSensor传感器全部浸入物体内部,以便
+准确地检测到物体。可通过改变【Start】和【End】坐标来调整。
+【Radius】设定线传感器半径,加粗便于观察,此处设为“3.00mm”。
+【Active】置为“0”,暂时关闭传感器检测。
+(5) 设置传感器后,仍需将工具设为“不可由传感器检测”,以免
+传感器与工具发生干涉。bigtool-good单击右键,将【可由传感器检
+测】,一项取消勾选。</p></li>
+</ol>
+</section>
+<section id="id16">
+<h3>3. 安装工具<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<p>鼠标选中【SmartComponent 2】Smart 组件拖放到机器人
+[IRB1200_7_70_STD_01】上松开,将Smart工具安装到机器人末端,
+接着在弹出的菜单中相继:单击【否】不更新组件位置;单击【是】替换
+掉原先存在的工具数据。</p>
+</section>
+<section id="id17">
+<h3>4. 创建工具动作<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<p>(1) 首先使用子组件“Attacher”来设定拾取动作效果,然后添加
+“Detacher”来设定拆除动作效果,步骤为:单击【添加组件】/【动作】,
+分别单击添加【Attacher】和【Detacher】。
+(2) 通过右击对应子组件
+编辑属性,首先编辑新添加的
+“Attacher” 子组件属性,安
+装父对象和机械装置分别选工具
+&quot; SmartComponent_2/bigt
+ool-good”和工具的坐标系
+“bigtooljia”。安装对象不是
+特定物体,则【Child】暂时不
+作选择。
+(3) 设定拆除的子对象,同样由于子对象不是特定的一个物体,暂不
+设定。单击【KeepPosition】勾选,勾选后使释放的工件保持在当前释放
+的空间位置。
+(4) 添加信号与属性相关子组件,先创建一个非门信号组件
+“LogicGate”和信号置位/复位组件“LogicSRLatch”。
+(5) 子组件“LogicSRLatch”用于置位、复位信号,并且自带锁定
+功能,执行默认设置,此处用于置位、复位的“抓取成功”的反馈信号;
+组件“LogicGate”的【Operator】栏选为“Not”。</p>
+</section>
+<section id="id18">
+<h3>5. 设置属性连结<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<p>(1) 在【属性与连结】选项卡中单击【添加连结】,编辑下拉菜单选
+择“LineSensor“作为源对象,“SensedPart“作为原属性,指的是线
+传感器所检测到的与其发生的接触的物体。此连接将传感器检测到的物体作
+为拾取目标对象【Attacher】。
+(2) 同样操作添加“Attacher”作为源对象,原属性为:“Child”,
+目标对象为:“Deteater”,目标属性为:“Child”。</p>
+</section>
+<section id="id19">
+<h3>6. 设置信号与连接<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<p>(1) 创建信号与连接分为两个方面:【I/O信号】通过【添加I/O
+Signals】创建;【I/O连接】通过【添加I/O Connection】创建。
+(2) 创建数字输入信号DIG1,
+用于控制夹具拾取、释放动作,置
+1为拾取工件,置0为释放工件;
+创建数字输出信号DOG1,用于拾
+取反馈信号,置1为拾取已成功,
+置0为释放成功、拾取失败或者表
+示未拾取状态。
+(3) 激活传感器DIG1被置为1后,线传感器开始检测,如果检测到产
+品,则执行拾取动作,夹具将产品拾取,并将抓取完成反馈信号DOG1置
+为1,关闭抓取信号(DIG1被置为0)后,执行释放动作,产品被夹具释
+放,执行放手动作,同时将抓取完成反馈信号DOG1置为0,机器人工具再
+次运动到拾取位置去拾取下一个产品,循环运行。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id20">
+<h2>导轨与变位机应用<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h2>
+<section id="id21">
+<h3>1. 导轨应用<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<p>由于使用到机器人导轨,所以要安装与导轨相关的附加选项,在
+ABB机器人有对应的ABB品牌导轨,在仿真软件设备库中可以调用仿真
+并进行编程,下表是ABB机器人与导轨的匹配表。</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>导轨型号</strong></p></th>
+<th class="head"><p><strong>用于机器人型号</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>IRBT 4004</p></td>
+<td><p>IRB 4400</p></td>
+</tr>
+<tr class="row-odd"><td><p>IRBT 4004</p></td>
+<td><p>IRB 4400</p></td>
+</tr>
+<tr class="row-even"><td><p>IRBT 6004/7004</p></td>
+<td><p>IRB 6600/6620/6640/6700/7600</p></td>
+</tr>
+<tr class="row-odd"><td><p>IRBT 2005</p></td>
+<td><p>IRB 1520, IRB 1600, IRB 2600, IRB 4600</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id22">
+<h3>1. 创建工作站<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<p>创建一个空的工作站,并导入机器人模型以及导轨模型,单击【基本】/
+【ABB模型库】选择【IRB 6600】,导入机器人;单击【ABB模型库】,下
+拉选择在【导轨】栏目单击中的【IRBT 6004】,导入导轨,行程选择
+【5m】,其余默认,然后单击【确定】,导入导轨。
+在【基本】功能选项卡的【布局】窗口将机器人安装到导轨上面,。
+鼠标选中【机器人IRB6620】,其拖放到导轨【IRBT6004】上面,在
+【更新位置】菜单中,单击【是】,将机器人位置更新到导轨基座上面,
+在弹出的“机器人与导轨进行同步运动”菜单,单击【是】将机器人与导
+轨进行同步运动,即机器人基坐标系随着导轨同步运动。
+安装完成后,创建机器人系统。在创建带外轴的机器人系统时,建议使用
+从布局创建系统,这样在创建的过程中,其系统会自动添加相应的控制选项以
+及驱动选项,无需自己配置。在选项中添加机器人需要的选配功能,在系统相
+关勾选时候,不要忘记勾选导轨。</p>
+</section>
+<section id="id23">
+<h3>2. 编程及仿真<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
+<p>将机器人原位置作为运动
+的起始位置,通过示教目标点
+将此位置记录下来,利用【手
+动关节】控制机器人运动到另
+一个位置,并记录该目标点,
+然后通过【手动关节】拖动导
+轨基座,正向移动至另外一点,
+示教目标点,将此位置作为第
+二个目标点。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id24">
+<h2>2. 变位机应用<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h2>
+<p>变位机可以改变工件的姿态。与导轨相比,变位机在另一个维度上拓
+展了机器人工作站的工作范围,在工业机器人焊接、切割、涂胶等领域有
+着广泛的应用。同导轨一样,变位机也必须与机器人相兼容。同一品牌的
+机器人与变位机匹配较好,编程更容易;而若采用非标准或者不同品牌的
+变位机与机器人组成工作站,就需要考虑编程同步的问题。</p>
+<p>本节讲解ABB品牌机器人与ABB变位机虚拟工作站搭建控制的应用。
+工作站配置:</p>
+<ul class="simple">
+<li><p>机器人:ABB-IRB4600。</p></li>
+<li><p>变位机:ABB-IRBP A250。</p></li>
+<li><p>工件与治具:加载对应教学资源。
+工作目标需求为工业机器人的焊接焊枪对两个弧形接触位置进行焊接。</p></li>
+</ul>
+<section id="id25">
+<h3>1. 创建工作站<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
+<p>首先,创建机器人工作站,添加机器人“IRB4600”;然后添加变
+位机,添加变位机操作同添加导轨相同。单击【ABB模型库】,下拉在
+【变位机】类别中的单击选择【IRBP A250】,选择填选相应相应参数,
+设定合适位置。
+保证工件装配好,单击【基本】/【导入模型库】下拉菜单,在
+【设备】中的【工具】里面选择【AW Gun_PSF_25】,并将工具安
+装到机器人上。
+单击【基本】/【导入几何体】浏览对应的自主资源,导入焊接工件和
+工装组件,在左侧【布局】窗口中,左键选中拖到变位机上松开,安装到
+变位机上,通过【基本】/【移动】功能按钮调节焊接工件组件在变位机
+的位置。
+为布局添加控制系统,统一控制机器人本体和变位机,方法参考给带
+导轨的机器人添加控制系统方法。调节完成的变位机与机器人的工作位置。</p>
+</section>
+<section id="id26">
+<h3>2. 编程与仿真<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
+<p>首先有两条焊接轨迹也就是焊缝,焊接每一条焊缝需要示教点的位置:</p>
+<ul class="simple">
+<li><p>home点:机器人安全点;</p></li>
+<li><p>焊接进入点:焊接起始点上方位置;</p></li>
+<li><p>焊接轨迹:弧线,通过圆弧运动执行焊接,需要示教起止位置和中间
+位置;下图为焊接轨迹起始位置。</p></li>
+<li><p>逃离点:焊接停止位置上方点;
+在带变位机的机器人系统中示教目标点时,需要保证变位机是激活状
+态,才可同时将变位机的数据记录下来。单击【仿真】/【激活机械装置单
+元】,勾选【STN1】,这样,在示教目标点时才可记录变位机关节数据。
+通过右击变位机执行【机械装置手动关节】来调整变位机姿态,同时
+机器人应移动工具,防止变位机及工件与机器人发生干涉碰撞。
+对生成的焊接路径进行完善后,需要编写机器人的运动程序,并在其
+中添加外轴控制指令ActUnit和DeactUnit,对变位机的激活和失效进行
+控制。简单来说,就是在程序首行加入控制指令ActUnitSTN1,在程序
+最后一行插入逻辑指令DeactUnitSTN1,代码入课本所示,最后运行仿
+真工作站,观看仿真动画。</p></li>
+</ul>
+<hr class="docutils" />
+<p>同学们下节课见!</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="09.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">第九章 工业机器人在线编程与控制</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="07.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">第七章 工业机器人高级编程</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">第八章 工业机器人仿真软件高级应用</a><ul>
+<li><a class="reference internal" href="#id2">本章学习要点</a><ul>
+<li><a class="reference internal" href="#id3">本章学习提要:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">本章目标</a></li>
+<li><a class="reference internal" href="#id5">内容简介</a></li>
+<li><a class="reference internal" href="#smart">Smart组件技术</a><ul>
+<li><a class="reference internal" href="#id6">Smart 组件</a></li>
+<li><a class="reference internal" href="#id7">1. 创建设备的Smart组件</a></li>
+<li><a class="reference internal" href="#id8">2. 设置输送产品源</a></li>
+<li><a class="reference internal" href="#id9">3. 设置运动属性</a></li>
+<li><a class="reference internal" href="#id10">4. 设置传感器</a></li>
+<li><a class="reference internal" href="#id11">5. 设置属性连结</a></li>
+<li><a class="reference internal" href="#id12">6. 设置信号与连接</a></li>
+<li><a class="reference internal" href="#id13">7. 验证仿真效果</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id14">1. 创建动态工具—Smart组件</a><ul>
+<li><a class="reference internal" href="#id15">2. 设置工具传感器</a></li>
+<li><a class="reference internal" href="#id16">3. 安装工具</a></li>
+<li><a class="reference internal" href="#id17">4. 创建工具动作</a></li>
+<li><a class="reference internal" href="#id18">5. 设置属性连结</a></li>
+<li><a class="reference internal" href="#id19">6. 设置信号与连接</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id20">导轨与变位机应用</a><ul>
+<li><a class="reference internal" href="#id21">1. 导轨应用</a></li>
+<li><a class="reference internal" href="#id22">1. 创建工作站</a></li>
+<li><a class="reference internal" href="#id23">2. 编程及仿真</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id24">2. 变位机应用</a><ul>
+<li><a class="reference internal" href="#id25">1. 创建工作站</a></li>
+<li><a class="reference internal" href="#id26">2. 编程与仿真</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>

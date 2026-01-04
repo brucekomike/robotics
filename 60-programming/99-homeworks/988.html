@@ -1,0 +1,716 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Python 机器人运动学与轨迹规划代码解释" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://brucekomike.github.io/robotics/60-programming/99-homeworks/988.html" />
+<meta property="og:site_name" content="机器人工程" />
+<meta property="og:description" content="1. 概述: 该 Python 脚本旨在实现一个特定类型并联机器人（基于提供的运动学公式推测）的正向和逆向运动学计算，并根据给定的 MATLAB 代码逻辑，生成一个圆形轨迹，并规划沿该轨迹的 S 曲线速度轮廓。最终，它会计算轨迹上每个点的关节变量，并提供可视化结果，包括运动曲线图和机器人姿态动画。 该脚本的主要目的是将一个 MATLAB 实现的轨迹规划任务转换为 Python 代码。 2. ..." />
+<meta property="og:image" content="https://brucekomike.github.io/robotics/_static/logo.svg" />
+<meta property="og:image:alt" content="site logo" />
+<meta name="description" content="1. 概述: 该 Python 脚本旨在实现一个特定类型并联机器人（基于提供的运动学公式推测）的正向和逆向运动学计算，并根据给定的 MATLAB 代码逻辑，生成一个圆形轨迹，并规划沿该轨迹的 S 曲线速度轮廓。最终，它会计算轨迹上每个点的关节变量，并提供可视化结果，包括运动曲线图和机器人姿态动画。 该脚本的主要目的是将一个 MATLAB 实现的轨迹规划任务转换为 Python 代码。 2. ..." />
+<link rel="index" title="索引" href="../../genindex.html"><link rel="search" title="搜索" href="../../search.html"><link rel="next" title="实验课2" href="999.html"><link rel="prev" title="实验课" href="99.html">
+        <link rel="prefetch" href="../../_static/logo.svg" as="image">
+
+    <link rel="shortcut icon" href="../../_static/logo.svg"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>Python 机器人运动学与轨迹规划代码解释 - 机器人工程</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/footer.css?v=a09c6268" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">机器人工程</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../_static/logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">机器人工程</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">基础内容</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../01-math/index.html">高等数学</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02-linar/index.html">线形代数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">机器人学</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../40-autocon/index.html">自动控制原理</a><input aria-label="Toggle navigation of 自动控制原理" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../40-autocon/00-works/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../40-autocon/00-works/99-final.html">大作业要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../40-autocon/00-works/99-z1.html">连续系统的时域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../40-autocon/00-works/99-z2.html">连续系统的频域分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../40-autocon/00-works/99-z3.html">连续系统的串联校正设计</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/10-intro.html">第一章 绪论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/20-lap.html">第二章 拉普拉斯变换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/30-model.html">第三章 控制系统的数学模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/40-resp.html">第四章 线性系统的时域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/50-freq.html">第五章 线性系统的频域分析法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/60-stab.html">第六章 系统稳定性分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/70-fix.html">自动控制原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../40-autocon/80-space.html">第八章 线性系统的状态空间表示法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../50-mechanic/index.html">机械系统设计</a><input aria-label="Toggle navigation of 机械系统设计" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../50-mechanic/50-sims/index.html">仿真</a><input aria-label="Toggle navigation of 仿真" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../50-mechanic/50-sims/04-3dof.html">三轴机器人仿真</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../50-mechanic/50-sims/05-2dof.html">Two-Link Planar Manipulator Kinematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../50-mechanic/60-errors.html">常用配合公差与粗糙度</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../55-multibody/index.html">多体动力学</a><input aria-label="Toggle navigation of 多体动力学" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../55-multibody/50-sim/index.html">程序仿真</a><input aria-label="Toggle navigation of 程序仿真" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../55-multibody/50-sim/20-slider.html">曲柄滑块</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../55-multibody/50-sim/21-jacobian.html">雅可比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../55-multibody/50-sim/30-mrdm.html">移动机器人运动学建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../55-multibody/50-sim/40-matrix.html">质量矩阵</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../55-multibody/50-sim/50-general.html">广义力</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../55-multibody/50-sim/59-dynamics.html">四连杆机构运动学分析 Python 代码详解</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../55-multibody/51-exp/index.html">实验</a><input aria-label="Toggle navigation of 实验" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../55-multibody/51-exp/01.html">实验一 2dof（五连杆）建模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../55-multibody/51-exp/02.html">实验二 2dof（五连杆）仿真</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../55-multibody/59-dynamics.html">拉格朗日动力学方程（含约束）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../55-multibody/97-appendix.html">附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../55-multibody/98-speedmatrix.html">速度矩阵法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../55-multibody/99-matlab.html">matlab/octave 建模</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">离线编程</a><input aria-label="Toggle navigation of 离线编程" checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../01-intro.html">概论</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02-direct.html">正运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03-reverse.html">逆运动学</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04-controls.html">机器人控制系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05-route-plan/index.html">轨迹规划</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">作业</a><input aria-label="Toggle navigation of 作业" checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02.html">第二次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03.html">第三次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04.html">第四次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05.html">第五次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="98.html">解析：Delta 类并联机器人运动学代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="99.html">实验课</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Python 机器人运动学与轨迹规划代码解释</a></li>
+<li class="toctree-l3"><a class="reference internal" href="999.html">实验课2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../65-manufacture/index.html">机械加工基础</a><input aria-label="Toggle navigation of 机械加工基础" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../65-manufacture/homeworks/index.html">作业</a><input aria-label="Toggle navigation of 作业" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../65-manufacture/homeworks/01.html">第一次作业</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../65-manufacture/homeworks/02.html">作业二</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../65-manufacture/homeworks/03.html">第二-2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../70-ai/index.html">人工智能</a><input aria-label="Toggle navigation of 人工智能" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../70-ai/01-exp.html">实验一 支持向量机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../70-ai/02-exp.html">实验二 决策树</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../70-ai/03-exp1.html">第三次试验 BP神经网络</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../70-ai/04-exp2.html">第四次试验 手写数字识别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../70-ai/prompt.html">如何使用AI水AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../80-interg/index.html">机器人系统集成</a><input aria-label="Toggle navigation of 机器人系统集成" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/01.html">机器人系统集成概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/02.html">第二章 机器人工作站系统组织结构与设计选型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/03.html">第三章：基于机器人控制器的系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/04.html">第四章 基于PLC的机器人系统集成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/05.html">第五章 机器人操作基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/06.html">第六章 工业机器人数据与编程基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/07.html">第七章 工业机器人高级编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/08.html">第八章 工业机器人仿真软件高级应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/09.html">第九章 工业机器人在线编程与控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/10.html">第十章 机器人系统集成典型应用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/z1.html">总复习1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-interg/z2.html">总复习2</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../80-interg/reports/index.html">大作业</a><input aria-label="Toggle navigation of 大作业" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../80-interg/reports/scara.html">scara 分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../80-interg/reports/scara2.html">scara2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">相关软件</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../75-coding/index.html">代码编写</a><input aria-label="Toggle navigation of 代码编写" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../75-coding/01-python.html">python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../80-model/index.html">绘图/建模软件</a><input aria-label="Toggle navigation of 绘图/建模软件" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../80-model/01-freecad/index.html">FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-model/02-blender/index.html">Blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../80-model/03-inkscape/index.html">inkscape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../90-sim/index.html">仿真软件</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">文档编写</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../92-markdown/index.html">Markdown 与 MyST 入门指南</a><input aria-label="Toggle navigation of Markdown 与 MyST 入门指南" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../92-markdown/00-overview.html">00-overview.md</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../92-markdown/01-syntax.html">Markdown 基础语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../92-markdown/01-syntax.html#h1">H1 标题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../92-markdown/02-myst.html">MyST 深度扩展</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../92-markdown/03-examples.html">例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../95-latex/index.html">latex</a><input aria-label="Toggle navigation of latex" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../95-latex/20-math.html">数学标注</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../97-wikitext/index.html">wikitext</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/blob/main/docs/source/60-programming/99-homeworks/988.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/brucekomike/robotics/edit/main/docs/source/60-programming/99-homeworks/988.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="python">
+<h1>Python 机器人运动学与轨迹规划代码解释<a class="headerlink" href="#python" title="Link to this heading">¶</a></h1>
+<section id="id1">
+<h2>1. 概述<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>该 Python 脚本旨在实现一个特定类型并联机器人（基于提供的运动学公式推测）的正向和逆向运动学计算，并根据给定的 MATLAB 代码逻辑，生成一个圆形轨迹，并规划沿该轨迹的 S 曲线速度轮廓。最终，它会计算轨迹上每个点的关节变量，并提供可视化结果，包括运动曲线图和机器人姿态动画。</p>
+<p>该脚本的主要目的是将一个 MATLAB 实现的轨迹规划任务转换为 Python 代码。</p>
+</section>
+<section id="id2">
+<h2>2. 导入库<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>脚本首先导入了必要的 Python 库：</p>
+<ul class="simple">
+<li><p><strong>NumPy (<code class="docutils literal notranslate"><span class="pre">np</span></code>)</strong>: 用于高效的数值计算，特别是数组和矩阵操作。</p></li>
+<li><p><strong>SymPy (<code class="docutils literal notranslate"><span class="pre">sp</span></code>)</strong>: 用于符号数学计算，主要在正向运动学中定义和求解方程组。</p></li>
+<li><p><strong>math</strong>: 提供基本的数学函数。</p></li>
+<li><p><strong>Matplotlib (<code class="docutils literal notranslate"><span class="pre">plt</span></code>)</strong>: 用于数据可视化，包括绘制 2D 曲线图和 3D 机器人模型及轨迹。</p></li>
+<li><p><strong>time</strong>: 用于在动画中添加暂停。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">init_printing</span><span class="p">(</span><span class="n">use_unicode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># 启用 SymPy 的美观打印</span>
+</pre></div>
+</div>
+</section>
+<section id="get-robot-params">
+<h2>3. 机器人参数 (<code class="docutils literal notranslate"><span class="pre">get_robot_params</span></code>)<a class="headerlink" href="#get-robot-params" title="Link to this heading">¶</a></h2>
+<p>这个函数定义并返回一个包含机器人几何尺寸参数的字典。这些参数是运动学计算的基础。</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(a_{11}, a_{22}, a_{33}\)</span>: 移动平台上连接点到平台中心的距离。</p></li>
+<li><p><span class="math notranslate nohighlight">\(b_{11}, b_{22}, b_{33}\)</span>: 固定平台上连接点到平台中心的距离。</p></li>
+<li><p><span class="math notranslate nohighlight">\(e\)</span>: 中心柱的固定（不可伸缩）部分的长度。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_robot_params</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;a11&#39;</span><span class="p">:</span> <span class="mf">135.0</span><span class="p">,</span> <span class="s1">&#39;a22&#39;</span><span class="p">:</span> <span class="mf">135.0</span><span class="p">,</span> <span class="s1">&#39;a33&#39;</span><span class="p">:</span> <span class="mf">135.0</span><span class="p">,</span>
+        <span class="s1">&#39;b11&#39;</span><span class="p">:</span> <span class="mf">570.0</span><span class="p">,</span> <span class="s1">&#39;b22&#39;</span><span class="p">:</span> <span class="mf">320.0</span><span class="p">,</span> <span class="s1">&#39;b33&#39;</span><span class="p">:</span> <span class="mf">320.0</span><span class="p">,</span>
+        <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="mf">345.0</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="inverse-kinematics">
+<h2>4. 位置逆解 (<code class="docutils literal notranslate"><span class="pre">inverse_kinematics</span></code>)<a class="headerlink" href="#inverse-kinematics" title="Link to this heading">¶</a></h2>
+<p>逆运动学（IK）解决的问题是：给定末端执行器（移动平台中心）期望的笛卡尔坐标 <span class="math notranslate nohighlight">\(x_p, y_p, z_p\)</span>，计算出机器人需要达到的关节变量。</p>
+<p><strong>输入</strong>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x_p, y_p, z_p\)</span>: 目标位置 (float)。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">params</span></code>: 包含机器人尺寸的字典。</p></li>
+</ul>
+<p><strong>输出</strong>:
+一个包含计算结果的字典：</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(q_1, q_2, q_3\)</span>: 计算得到的驱动杆“长度”(float)。<strong>注意</strong>: 根据代码中的公式，这可能不是物理连杆 <span class="math notranslate nohighlight">\(B_i\)</span> 到 <span class="math notranslate nohighlight">\(A'_i\)</span> 的直线距离，而是基于特定投影或定义的长度。</p></li>
+<li><p><span class="math notranslate nohighlight">\(q_4\)</span>: 中心柱的可变长度 (float)，即 <span class="math notranslate nohighlight">\(||r_p|| - e\)</span>。</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta_1, \theta_2\)</span>: 描述移动平台姿态的角度 (rad)。</p></li>
+<li><p><span class="math notranslate nohighlight">\(r_p\)</span>: 末端位置向量 <span class="math notranslate nohighlight">\(\begin{bmatrix} x_p \\ y_p \\ z_p \end{bmatrix}\)</span> (NumPy 数组)。</p></li>
+<li><p><span class="math notranslate nohighlight">\(R_4\)</span>: 移动平台的旋转矩阵 (3x3 NumPy 数组)，描述了平台坐标系相对于固定坐标系的姿态。</p></li>
+<li><p><span class="math notranslate nohighlight">\(w_4\)</span>: 中心柱方向的单位向量 (3x1 NumPy 数组)，即 <span class="math notranslate nohighlight">\(r_p / ||r_p||\)</span>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">error</span></code>: 错误信息字符串，如果无法求解则非空。</p></li>
+</ul>
+<p><strong>计算步骤</strong>:</p>
+<ol class="arabic simple">
+<li><p>计算 <span class="math notranslate nohighlight">\(r_p\)</span> 及其模长 <span class="math notranslate nohighlight">\(||r_p||\)</span>。</p></li>
+<li><p>检查目标点是否在固定中心柱长度 <span class="math notranslate nohighlight">\(e\)</span> 范围内，如果是则不可达。</p></li>
+<li><p>计算中心柱可变长度 <span class="math notranslate nohighlight">\(q_4 = ||r_p|| - e\)</span>。</p></li>
+<li><p>根据 <span class="math notranslate nohighlight">\(x_p\)</span> 和 <span class="math notranslate nohighlight">\(||r_p||\)</span> 计算 <span class="math notranslate nohighlight">\(\theta_2 = \arcsin(x_p / ||r_p||)\)</span>。</p></li>
+<li><p>根据 <span class="math notranslate nohighlight">\(y_p, z_p, ||r_p||, \theta_2\)</span> 计算 <span class="math notranslate nohighlight">\(\theta_1 = \operatorname{arctan2}(-y_p / (||r_p||\cos\theta_2), z_p / (||r_p||\cos\theta_2))\)</span>，并处理 <span class="math notranslate nohighlight">\(\cos\theta_2 \approx 0\)</span> 的情况。</p></li>
+<li><p>使用 <span class="math notranslate nohighlight">\(\theta_1, \theta_2\)</span> 构建旋转矩阵 <span class="math notranslate nohighlight">\(R_4\)</span>。</p></li>
+<li><p>计算固定平台和移动平台的连接点向量 (<span class="math notranslate nohighlight">\(b_i\)</span> 和 <span class="math notranslate nohighlight">\(a_i = R_4 a_{i0}\)</span>)。</p></li>
+<li><p>计算中心柱方向向量 <span class="math notranslate nohighlight">\(w_4\)</span>。</p></li>
+<li><p>根据代码中给出的特定公式计算 <span class="math notranslate nohighlight">\(q_1, q_2, q_3\)</span>：
+$<span class="math notranslate nohighlight">\( q_i = || r_p - b_i + a_i - e w_4 || \)</span><span class="math notranslate nohighlight">\(
+这对应于从 \)</span>B_i<span class="math notranslate nohighlight">\( 指向 \)</span>A’_i<span class="math notranslate nohighlight">\(（移动平台连接点在固定坐标系中的绝对位置）的向量，再减去固定中心柱向量 \)</span>e w_4$ 后的模长。</p></li>
+</ol>
+</section>
+<section id="forward-kinematics-fk">
+<h2>5. 位置正解 (Forward Kinematics - FK)<a class="headerlink" href="#forward-kinematics-fk" title="Link to this heading">¶</a></h2>
+<p>正运动学解决的问题是：给定驱动关节的输入值 <span class="math notranslate nohighlight">\(q_1, q_2, q_3\)</span>（根据 IK 中的定义），计算末端执行器的位置 <span class="math notranslate nohighlight">\(x_p, y_p, z_p\)</span> 和姿态 <span class="math notranslate nohighlight">\(\theta_1, \theta_2\)</span>。这通常比逆解更复杂，因为它涉及到求解非线性方程组。</p>
+<section id="define-symbolic-fk">
+<h3>5.1 符号设置与数值函数生成 (<code class="docutils literal notranslate"><span class="pre">define_symbolic_fk</span></code>)<a class="headerlink" href="#define-symbolic-fk" title="Link to this heading">¶</a></h3>
+<p>此函数使用 SymPy 库来建立正解所需的数学模型。</p>
+<p><strong>输入</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">params</span></code>: 机器人参数。</p></li>
+<li><p><span class="math notranslate nohighlight">\(q_{1,in}, q_{2,in}, q_{3,in}\)</span>: 输入的驱动杆计算长度。</p></li>
+</ul>
+<p><strong>输出</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Func_sym</span></code>: 包含三个符号约束方程 <span class="math notranslate nohighlight">\(F, G, H\)</span> 的 SymPy 矩阵。这些方程基于机器人的闭环几何约束，将已知的 <span class="math notranslate nohighlight">\(q_{1,in}, q_{2,in}, q_{3,in}\)</span> 与未知的 <span class="math notranslate nohighlight">\(q_4, \theta_1, \theta_2\)</span> 联系起来。其形式为 <span class="math notranslate nohighlight">\(|| L_i ||^2 - q_{i,in}^2 = 0\)</span>，其中 <span class="math notranslate nohighlight">\(L_i = q_4 w_4 + a_i - b_i\)</span>。代码中直接使用了展开后的简化形式（经验证与 <span class="math notranslate nohighlight">\(||L_i||^2\)</span> 定义一致）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">J_sym</span></code>: <span class="math notranslate nohighlight">\(F, G, H\)</span> 相对于未知变量 <span class="math notranslate nohighlight">\(X = [q_4, \theta_1, \theta_2]^T\)</span> 的符号雅可比矩阵 <span class="math notranslate nohighlight">\(J = \frac{\partial(F,G,H)}{\partial X}\)</span>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_func</span></code>, <code class="docutils literal notranslate"><span class="pre">num_jac</span></code>: 通过 <code class="docutils literal notranslate"><span class="pre">sp.lambdify</span></code> 将符号方程和雅可比矩阵转换为快速求值的 NumPy 函数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X_sym</span></code>: 包含符号变量 <span class="math notranslate nohighlight">\([q_4, \theta_1, \theta_2]^T\)</span> 的 SymPy 矩阵。</p></li>
+</ul>
+</section>
+<section id="forward-kinematics">
+<h3>5.2 牛顿迭代求解器 (<code class="docutils literal notranslate"><span class="pre">forward_kinematics</span></code>)<a class="headerlink" href="#forward-kinematics" title="Link to this heading">¶</a></h3>
+<p>此函数使用牛顿-拉弗森（Newton-Raphson）迭代法来数值求解由 <code class="docutils literal notranslate"><span class="pre">define_symbolic_fk</span></code> 建立的非线性方程组 <span class="math notranslate nohighlight">\(Func(X) = 0\)</span>。</p>
+<p><strong>输入</strong>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(q_{1,in}, q_{2,in}, q_{3,in}\)</span>: 输入的驱动杆计算长度。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">params</span></code>: 机器人参数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">initial_guess</span></code>: 对未知变量 <span class="math notranslate nohighlight">\([q_4, \theta_1, \theta_2]\)</span> 的初始猜测值。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_iter</span></code>, <code class="docutils literal notranslate"><span class="pre">tolerance</span></code>: 最大迭代次数和收敛容差。</p></li>
+</ul>
+<p><strong>输出</strong>:
+一个包含结果的字典：</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x_{p,fk}, y_{p,fk}, z_{p,fk}\)</span>: 计算得到的末端位置。</p></li>
+<li><p><span class="math notranslate nohighlight">\(q_{4,k}, \theta_{1,k}, \theta_{2,k}\)</span>: 计算得到的最终 <span class="math notranslate nohighlight">\(q_4, \theta_1, \theta_2\)</span> 值。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iterations</span></code>: 实际迭代次数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">final_error_norm</span></code>: 最终的方程误差范数 <span class="math notranslate nohighlight">\(||Func(X_k)||\)</span>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">converged</span></code>: 是否收敛 (bool)。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">error</span></code>: 错误信息。</p></li>
+</ul>
+<p><strong>计算步骤</strong>:</p>
+<ol class="arabic simple">
+<li><p>获取数值计算函数 <code class="docutils literal notranslate"><span class="pre">num_func</span></code> 和 <code class="docutils literal notranslate"><span class="pre">num_jac</span></code>。</p></li>
+<li><p>从初始猜测 <span class="math notranslate nohighlight">\(X_0\)</span> 开始迭代。</p></li>
+<li><p>在第 <span class="math notranslate nohighlight">\(k\)</span> 次迭代：
+a. 计算当前 <span class="math notranslate nohighlight">\(X_k\)</span> 下的函数值 <span class="math notranslate nohighlight">\(F_k = Func(X_k)\)</span>。
+b. 检查误差 <span class="math notranslate nohighlight">\(||F_k||\)</span> 是否小于容差，如果是则停止迭代。
+c. 计算当前 <span class="math notranslate nohighlight">\(X_k\)</span> 下的雅可比矩阵 <span class="math notranslate nohighlight">\(J_k = J(X_k)\)</span>。
+d. 求解线性方程组 <span class="math notranslate nohighlight">\(J_k \Delta X = -F_k\)</span> 得到步长 <span class="math notranslate nohighlight">\(\Delta X\)</span>。如果 <span class="math notranslate nohighlight">\(J_k\)</span> 奇异则报错。
+e. 更新解：<span class="math notranslate nohighlight">\(X_{k+1} = X_k + \Delta X\)</span>。</p></li>
+<li><p>如果达到最大迭代次数仍未收敛，则报告失败。</p></li>
+<li><p>如果收敛，使用最终得到的 <span class="math notranslate nohighlight">\(q_4, \theta_1, \theta_2\)</span> 计算末端位置：<span class="math notranslate nohighlight">\(r_p = (e + q_4) w_4\)</span>，其中 <span class="math notranslate nohighlight">\(w_4\)</span> 由 <span class="math notranslate nohighlight">\(\theta_1, \theta_2\)</span> 确定。</p></li>
+</ol>
+</section>
+</section>
+<section id="plot-robot">
+<h2>6. 可视化函数 (<code class="docutils literal notranslate"><span class="pre">plot_robot</span></code>)<a class="headerlink" href="#plot-robot" title="Link to this heading">¶</a></h2>
+<p>该函数使用 Matplotlib 在 3D 坐标系中绘制机器人的当前姿态。</p>
+<p><strong>输入</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ax</span></code>: Matplotlib 的 3D 坐标轴对象。</p></li>
+<li><p><span class="math notranslate nohighlight">\(r_p\)</span>: 当前末端位置向量。</p></li>
+<li><p><span class="math notranslate nohighlight">\(R_4\)</span>: 当前移动平台的旋转矩阵。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">params</span></code>: 机器人参数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">title</span></code>: 图表标题。</p></li>
+</ul>
+<p><strong>绘制内容</strong>:</p>
+<ul class="simple">
+<li><p>计算所有关键点（原点 O, 固定平台连接点 <span class="math notranslate nohighlight">\(B_i\)</span>, 移动平台连接点 <span class="math notranslate nohighlight">\(A'_i\)</span>, 末端点 P, 中心柱顶端 E）在固定坐标系中的坐标。</p></li>
+<li><p>绘制固定平台（灰色虚线三角形 <span class="math notranslate nohighlight">\(B_1B_2B_3\)</span>）。</p></li>
+<li><p>绘制移动平台（蓝色实线三角形 <span class="math notranslate nohighlight">\(A'_1A'_2A'_3\)</span>）。</p></li>
+<li><p>绘制物理驱动杆（红色实线 <span class="math notranslate nohighlight">\(B_iA'_i\)</span>）。</p></li>
+<li><p>绘制中心柱（绿色线段 OE 和 EP，分别代表固定部分和可变部分）。</p></li>
+<li><p>标记原点 O 和末端点 P。</p></li>
+<li><p>设置坐标轴标签、标题、图例和大致范围，并尝试设置等比例轴。</p></li>
+</ul>
+</section>
+<section id="s-s-velocity-motion">
+<h2>7. S 曲线速度轮廓生成 (<code class="docutils literal notranslate"><span class="pre">s_velocity_motion</span></code>)<a class="headerlink" href="#s-s-velocity-motion" title="Link to this heading">¶</a></h2>
+<p>此函数用于生成沿路径的运动轮廓，即规划位移 <span class="math notranslate nohighlight">\(s(t)\)</span>、速度 <span class="math notranslate nohighlight">\(v(t)\)</span> 和加速度 <span class="math notranslate nohighlight">\(a(t)\)</span>。</p>
+<p><strong>重要</strong>: 这个函数的实现<strong>严格复制了提供的 MATLAB 代码 <code class="docutils literal notranslate"><span class="pre">Svelocity_motion</span></code> 的逻辑</strong>，包括其独特的（可能非标准的）参数计算方法和分段函数公式。</p>
+<p><strong>输入</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vmax</span></code>: 路径上的最大速度。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TA</span></code>: 加速（或减速）阶段的总时间（用于推导 <span class="math notranslate nohighlight">\(a_{max}\)</span> 和 <span class="math notranslate nohighlight">\(j_e\)</span>）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sall</span></code>: 要移动的总路径长度。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ts</span></code>: 时间步长。</p></li>
+</ul>
+<p><strong>输出</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ac</span></code>, <code class="docutils literal notranslate"><span class="pre">vc</span></code>, <code class="docutils literal notranslate"><span class="pre">sc</span></code>: 包含加速度、速度、位移值的 NumPy 数组。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">time_vec</span></code>: 对应的时间点数组。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">params</span></code>: 包含中间计算参数（如 <span class="math notranslate nohighlight">\(T_1..T_5, j_e, a_{max}, t_1..t_5\)</span> 等）的字典。</p></li>
+</ul>
+<p><strong>计算逻辑</strong>:</p>
+<ol class="arabic simple">
+<li><p>根据 <code class="docutils literal notranslate"><span class="pre">vmax</span></code> 和 <code class="docutils literal notranslate"><span class="pre">TA</span></code> 计算 <span class="math notranslate nohighlight">\(a_{max} = vmax / TA\)</span>。</p></li>
+<li><p>根据 MATLAB 代码逻辑设置 <span class="math notranslate nohighlight">\(T_1 = T_2 = T_4 = T_5 = TA\)</span>。</p></li>
+<li><p>计算加加速度（Jerk） <span class="math notranslate nohighlight">\(j_e = a_{max} / T_1\)</span>。</p></li>
+<li><p><strong>根据 MATLAB 代码中的特定公式计算匀速阶段时间 <span class="math notranslate nohighlight">\(T_3 = (sall - 2 j_e T_1^3) / vmax\)</span></strong>。如果 <span class="math notranslate nohighlight">\(T_3 &lt; 0\)</span>，则打印警告并将 <span class="math notranslate nohighlight">\(T_3\)</span> 设为 0。</p></li>
+<li><p>计算各阶段的时间边界 <span class="math notranslate nohighlight">\(t_1, t_2, t_3, t_4, t_5\)</span>。</p></li>
+<li><p>生成时间向量 <code class="docutils literal notranslate"><span class="pre">time_vec</span></code>。</p></li>
+<li><p>初始化 <code class="docutils literal notranslate"><span class="pre">ac</span></code>, <code class="docutils literal notranslate"><span class="pre">vc</span></code>, <code class="docutils literal notranslate"><span class="pre">sc</span></code> 数组。</p></li>
+<li><p>遍历时间向量中的每个时间点 <span class="math notranslate nohighlight">\(t\)</span>，根据 <span class="math notranslate nohighlight">\(t\)</span> 所处的阶段（由 <span class="math notranslate nohighlight">\(t_1..t_5\)</span> 界定），<strong>应用 MATLAB 代码片段中给出的分段公式</strong>计算瞬时的 <span class="math notranslate nohighlight">\(a(t), v(t), s(t)\)</span>。</p></li>
+<li><p>函数结束时会检查最终位移是否接近 <code class="docutils literal notranslate"><span class="pre">sall</span></code>，并报告最终速度（根据 MATLAB 代码，最终速度可能不为零）。</p></li>
+</ol>
+</section>
+<section id="if-name-main">
+<h2>8. 主程序 (<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">&quot;__main__&quot;:</span></code>)<a class="headerlink" href="#if-name-main" title="Link to this heading">¶</a></h2>
+<p>这是脚本的执行入口。</p>
+<p><strong>流程</strong>:</p>
+<ol class="arabic simple">
+<li><p><strong>参数设置</strong>: 获取机器人参数，并设置轨迹参数（圆半径 <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(v_{max}\)</span>, <span class="math notranslate nohighlight">\(T_A\)</span>, <span class="math notranslate nohighlight">\(t_s\)</span>, 总路径长度 <span class="math notranslate nohighlight">\(s_{all}\)</span>, Z 高度 <code class="docutils literal notranslate"><span class="pre">z_level</span></code>, Y 偏移 <code class="docutils literal notranslate"><span class="pre">y_offset</span></code>）。这些参数与 MATLAB 代码中的注释/值一致。</p></li>
+<li><p><strong>生成运动轮廓</strong>: 调用 <code class="docutils literal notranslate"><span class="pre">s_velocity_motion</span></code> 函数得到 <span class="math notranslate nohighlight">\(s(t), v(t), a(t)\)</span> 曲线，并绘制这些曲线。</p></li>
+<li><p><strong>计算轨迹点和关节值 (IK 循环)</strong>:
+a. 遍历由运动轮廓生成的时间点。
+b. 对每个时间点 <code class="docutils literal notranslate"><span class="pre">ntt</span></code>：
+i.  计算当前沿圆弧的位移 <span class="math notranslate nohighlight">\(s_{current} = sc[ntt]\)</span>。
+ii. 计算对应的圆弧角度 <span class="math notranslate nohighlight">\(\alpha = s_{current} / r - \pi/2\)</span>。
+iii. 计算目标笛卡尔位置 <span class="math notranslate nohighlight">\((x_p, y_p, z_p) = (r\cos\alpha, r\sin\alpha + y_{offset}, z_{level})\)</span>。
+iv. 计算目标笛卡尔速度 <span class="math notranslate nohighlight">\((v_{xp}, v_{yp}, v_{zp})\)</span>，使用链式法则，基于 <span class="math notranslate nohighlight">\(v(t)\)</span>。
+v. 计算目标笛卡尔加速度 <span class="math notranslate nohighlight">\((a_{xp}, a_{yp}, a_{zp})\)</span>，考虑切向加速度 <span class="math notranslate nohighlight">\(a(t)\)</span> 和向心加速度 <span class="math notranslate nohighlight">\(v(t)^2 / r\)</span>。
+vi. 调用 <code class="docutils literal notranslate"><span class="pre">inverse_kinematics</span></code> 函数计算该笛卡尔点对应的关节变量 <span class="math notranslate nohighlight">\((q_1..q_4, \theta_1, \theta_2)\)</span> 和机器人姿态 <span class="math notranslate nohighlight">\((R_4, r_p)\)</span>。
+vii. 存储计算结果，并处理可能的 IK 错误。</p></li>
+<li><p><strong>计算关节速度</strong>: 使用有限差分法（中心差分、前向/后向差分）根据计算出的关节位置序列 <span class="math notranslate nohighlight">\(q_1(t), q_2(t), q_3(t)\)</span> 估算关节速度 <span class="math notranslate nohighlight">\(v_{q1}(t), v_{q2}(t), v_{q3}(t)\)</span>。</p></li>
+<li><p><strong>绘图</strong>:
+a. 绘制期望的 3D 笛卡尔轨迹（圆形）。
+b. 绘制关节空间轨迹（关节位置 <span class="math notranslate nohighlight">\(q_i\)</span> vs 时间，关节速度 <span class="math notranslate nohighlight">\(v_{qi}\)</span> vs 时间）。</p></li>
+<li><p><strong>动画</strong>:
+a. 创建一个 3D 绘图窗口。
+b. 遍历计算出的机器人姿态序列。
+c. 在每一帧，调用 <code class="docutils literal notranslate"><span class="pre">plot_robot</span></code> 绘制机器人在该时刻的姿态。
+d. 绘制已经过的轨迹路径。
+e. 暂停一小段时间，然后更新到下一帧，形成动画效果。</p></li>
+</ol>
+</section>
+<section id="id3">
+<h2>9. 总结<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>该脚本成功地将 MATLAB 中的特定机器人运动学模型和轨迹规划逻辑转换为了 Python 实现。它利用 NumPy 进行数值计算，SymPy 处理正解中的符号方程，Matplotlib 进行结果可视化。核心在于 <code class="docutils literal notranslate"><span class="pre">inverse_kinematics</span></code>、<code class="docutils literal notranslate"><span class="pre">forward_kinematics</span></code> 和 <code class="docutils literal notranslate"><span class="pre">s_velocity_motion</span></code> 函数，以及将它们串联起来计算并展示圆形轨迹的主程序逻辑。需要注意的是 <code class="docutils literal notranslate"><span class="pre">s_velocity_motion</span></code> 函数是为了精确复制源 MATLAB 代码的行为而编写的，其内部参数推导可能与标准的运动规划理论有所不同。</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="999.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">实验课2</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="99.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">实验课</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, brucekomike
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026 年 01 月 04 日</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+<div class="footer-contribute">
+  <ul>
+    <li>
+       <a href="https://github.com/brucekomike/furo-embeded">use this template</a>
+    </li>
+    <li>
+      <a href="https://github.com/brucekomike/robotics">Project Repo</a>
+   </li>
+  </ul>
+</div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Python 机器人运动学与轨迹规划代码解释</a><ul>
+<li><a class="reference internal" href="#id1">1. 概述</a></li>
+<li><a class="reference internal" href="#id2">2. 导入库</a></li>
+<li><a class="reference internal" href="#get-robot-params">3. 机器人参数 (<code class="docutils literal notranslate"><span class="pre">get_robot_params</span></code>)</a></li>
+<li><a class="reference internal" href="#inverse-kinematics">4. 位置逆解 (<code class="docutils literal notranslate"><span class="pre">inverse_kinematics</span></code>)</a></li>
+<li><a class="reference internal" href="#forward-kinematics-fk">5. 位置正解 (Forward Kinematics - FK)</a><ul>
+<li><a class="reference internal" href="#define-symbolic-fk">5.1 符号设置与数值函数生成 (<code class="docutils literal notranslate"><span class="pre">define_symbolic_fk</span></code>)</a></li>
+<li><a class="reference internal" href="#forward-kinematics">5.2 牛顿迭代求解器 (<code class="docutils literal notranslate"><span class="pre">forward_kinematics</span></code>)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plot-robot">6. 可视化函数 (<code class="docutils literal notranslate"><span class="pre">plot_robot</span></code>)</a></li>
+<li><a class="reference internal" href="#s-s-velocity-motion">7. S 曲线速度轮廓生成 (<code class="docutils literal notranslate"><span class="pre">s_velocity_motion</span></code>)</a></li>
+<li><a class="reference internal" href="#if-name-main">8. 主程序 (<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">&quot;__main__&quot;:</span></code>)</a></li>
+<li><a class="reference internal" href="#id3">9. 总结</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=b945c2e8"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/tabs.js?v=3ee01567"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="../../_static/tex-svg-full.js?v=fe9f5dce"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({"startOnLoad": true})</script>
+    </body>
+</html>
